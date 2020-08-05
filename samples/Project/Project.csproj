@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\FreeSql.Natasha.Extension\FreeSql.PgSql.Natasha.Extension.csproj" />
+  </ItemGroup>
+
 </Project>

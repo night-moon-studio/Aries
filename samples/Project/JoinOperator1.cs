@@ -8,9 +8,9 @@ namespace Project
     public class JoinOperator1<TEntity>
     {
 
-        public JoinResult<TEntity, TJoinEntity> LefJoin<TJoinEntity>()
+        public JoinResult<TEntity, TJoinEntity> LefJoin<TJoinEntity>(Expression<Func<TEntity, object>> expression, string fieldName = default)
         {
-
+            return new JoinResult<TEntity, TJoinEntity>() { Link = this };
         }
     }
 
@@ -21,11 +21,15 @@ namespace Project
         public string TypeName;
         public void Test()
         {
-            return WithResult(new {  })
+           
         }
-        public JoinOperator1<TEntity> WithResult(object instance)
+        public JoinOperator1<TEntity> ContactResult<TReturn>(Expression<Func<TJoinEntity,TReturn>> expression)
         {
-            TypeName = instance.GetType().Name;
+            TypeName = typeof(TReturn).Name;
+            return Link;
+        }
+        public JoinOperator1<TEntity> NoResult()
+        {
             return Link;
         }
     
