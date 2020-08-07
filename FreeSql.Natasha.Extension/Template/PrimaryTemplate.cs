@@ -1,14 +1,12 @@
-﻿using FreeSql.PgSql.Natasha.Extension.DBInfomation;
-
-namespace FreeSql.Natasha.Extension
+﻿namespace FreeSql.Natasha.Extension
 {
-    public class PrimaryTemplate<T> : PropTemplate<T>
+    public class PrimaryTemplate<TEntity> : PropTemplate<TEntity> where TEntity : class
     {
 
         protected static readonly string PrimaryKey;
         static PrimaryTemplate()
         {
-            PrimaryKey = TableInfomation<T>.PrimaryKey;
+            PrimaryKey = TableInfomation<TEntity>.PrimaryKey;
         }
         public PrimaryTemplate(IFreeSql freeSql) : base(freeSql)
         {

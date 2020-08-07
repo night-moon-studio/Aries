@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FreeSql.Natasha.Extension
+﻿namespace FreeSql.Natasha.Extension
 {
-    public class BaseTemplate<T>
+    public class BaseTemplate<TEntity> where TEntity : class
     {
         public readonly IFreeSql SqlHandler;
         public BaseTemplate(IFreeSql freeSql)

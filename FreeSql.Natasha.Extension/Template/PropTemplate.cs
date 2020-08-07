@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace FreeSql.Natasha.Extension
 {
-    public class PropTemplate<T> : BaseTemplate<T>
+    public class PropTemplate<TEntity> : BaseTemplate<TEntity> where TEntity : class
     {
         public PropTemplate(IFreeSql freeSql) : base(freeSql)
         {
@@ -13,7 +13,7 @@ namespace FreeSql.Natasha.Extension
         private static readonly ImmutableHashSet<string> _propMemberCache;
         static PropTemplate()
         {
-            var props = typeof(T).GetProperties().Select(item => item.Name);
+            var props = typeof(TEntity).GetProperties().Select(item => item.Name);
             _propMemberCache = ImmutableHashSet.CreateRange(props);
         }
 
