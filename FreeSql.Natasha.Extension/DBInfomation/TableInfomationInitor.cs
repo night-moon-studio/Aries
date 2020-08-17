@@ -1,4 +1,5 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql.Natasha.Extension;
+using Natasha.CSharp;
 using System;
 
 
@@ -47,7 +48,12 @@ public static class TableInfomationInitor<TEntity>
                     }
                     else if (column.CsType == typeof(string))
                     {
-                        freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).StringLength(column.MaxLength));
+
+                        if (PropertiesCache<TEntity>.PropMembers.Contains(column.Name))
+                        {
+                            freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).StringLength(column.MaxLength));
+                        }
+                        
                     }
 
                 }

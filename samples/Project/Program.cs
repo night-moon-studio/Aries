@@ -7,32 +7,50 @@ using System.Text;
 
 namespace Project
 {
+
+    public class IdQueryModel : QueryModel 
+    { 
+        public long Id { get; set; }
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
 
             var freesql = new FreeSql.FreeSqlBuilder()
-                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "")
+                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
                         .Build();
 
-            TableInfomationInitor.Initialize(freesql,typeof(Test),typeof(DomainFlags));
-            OrmNavigate<Test>.Join<Test2>(item => item.DomainFlags, item => item.Id);
+            //初始化扫描
+            TableInfomationInitor.Initialize(freesql,typeof(Test),typeof(Test2),typeof(Test3));
 
-            var sql = new JoinTemplate<Test>(freesql);
-            var result = sql.ToList(item => new
+            //配置 Join 关系
+            OrmNavigate<Test>.Join<Test2>(item => item.Domain, item => item.Id);
+            OrmNavigate<Test>.Join<Test3>(item => item.Type, item => item.Id);
+
+            //前端准备查询条件
+            QueryModel queryModel = new QueryModel();
+            queryModel.Size = 2;
+            queryModel.Orders = new OrderModel[] { new OrderModel() { FieldName = "Id", IsDesc = true } };
+            queryModel.Fuzzy = new FuzzyModel[] { new FuzzyModel { FieldName = "Name", FuzzyValue = "44" } };
+
+            //外联查询
+            var result = freesql.Select<Test>().QueryModel(queryModel,out long total).ToJoinList(item => new
             {
                 item.Id,
-                item.DomainFlags,
-                DomainName = RightJoin<DomainFlags>.MapFrom(item => item.Name)
+                item.Name,
+                DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
+                TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName)
             });
+            Console.WriteLine(total);
 
-            sql = new JoinTemplate<Test>(freesql);
-            var result1 = sql.ToList(item => new
+
+            var result1 = freesql.Select<Test>().ToJoinList(item => new
             {
                 item.Id,
-                item.DomainFlags,
-                DomainName = InnerJoin<DomainFlags>.MapFrom(item => item.Name)
+                DomainName = RightJoin<Test2>.MapFrom(item => item.Name),
+                TypeName = RightJoin<Test3>.MapFrom(item => item.TypeName)
             });
             Console.ReadKey();
         }
@@ -116,10 +134,20 @@ namespace Project
     public class Test
     {
         public long Id { get; set; }
-        public short DomainFlags { get; set; }
-        public string Content { get; set; }
+        public short Domain { get; set; }
+        public short Type { get; set; }
+        public string Name { get; set; }
     }
-
+    public class Test2
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class Test3
+    {
+        public long Id { get; set; }
+        public string TypeName { get; set; }
+    }
     public class Student
     {
         public long Id { get; set; }
