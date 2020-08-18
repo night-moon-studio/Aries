@@ -9,6 +9,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\FreeSql.Natasha.Extension\FreeSql.PgSql.Natasha.Extension.csproj" />
+	  <ProjectReference Include="..\..\src\FreeSql.Natasha.Extension\FreeSql.PgSql.Natasha.Extension.csproj" />
 	</ItemGroup>
 </Project>

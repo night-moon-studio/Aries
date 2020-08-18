@@ -6,6 +6,7 @@ namespace FreeSql.Natasha.Extension
 {
     public static class JoinExtension
     {
+
         public static IEnumerable<object> ToJoinList<TEntity, TReturn>(this ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression) where TEntity : class
         {
             return JoinOperator<TEntity>.ToList(select, expression);
@@ -19,6 +20,7 @@ namespace FreeSql.Natasha.Extension
     }
     public class ForwardJoin<TEntity, TReturn> where TEntity : class
     {
+
         private readonly ISelect<TEntity> _select;
         public ForwardJoin(ISelect<TEntity> select)
         {
@@ -29,5 +31,7 @@ namespace FreeSql.Natasha.Extension
         {
             return JoinOperator<TEntity, TReturn>.ToList(_select,expression);
         }
+
     }
+
 }

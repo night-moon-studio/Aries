@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9A154FFA-A8A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenchmarkProject", "test\BenchmarkProject\BenchmarkProject.csproj", "{BADB6031-8605-40B4-94BF-96256438A77C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeSql.PgSql.Natasha.Extension", "FreeSql.Natasha.Extension\FreeSql.PgSql.Natasha.Extension.csproj", "{0EC412BA-36CA-4A9C-B0BA-B377E00F656C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeSql.PgSql.Natasha.Extension", "src\FreeSql.Natasha.Extension\FreeSql.PgSql.Natasha.Extension.csproj", "{0EC412BA-36CA-4A9C-B0BA-B377E00F656C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PgFreeSqlWeb", "samples\PgFreeSqlWeb\PgFreeSqlWeb.csproj", "{E542C3F3-442D-4D37-B53C-369C93F55654}"
 EndProject

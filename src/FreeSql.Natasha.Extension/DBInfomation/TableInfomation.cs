@@ -1,11 +1,12 @@
-﻿using FreeSql.Natasha.Extension;
+﻿using FreeSql;
+using FreeSql.Natasha.Extension;
 using Natasha.CSharp;
 using System;
 
 
-public static class TableInfomationInitor
+public static class TableInfomation
 {
-    static TableInfomationInitor()
+    static TableInfomation()
     {
         NatashaInitializer.InitializeAndPreheating();
     }
@@ -13,22 +14,25 @@ public static class TableInfomationInitor
     public static void Initialize(IFreeSql freeSql, params Type[] types)
     {
 
+        var domain = DomainManagement.Random;
         foreach (var item in types)
         {
-            NDelegate
-            .DefaultDomain()
-            .Action<IFreeSql>($"TableInfomationInitor<{item.GetDevelopName()}>.Initialize(obj);")(freeSql);
+           NDelegate
+            .UseDomain(domain)
+            .Action<IFreeSql>($"TableInfomation<{item.GetDevelopName()}>.Initialize(obj);")(freeSql);
         }
-
+        domain.Dispose();
 
     }
 
 
 }
 
-public static class TableInfomationInitor<TEntity>
+public static class TableInfomation<TEntity> where TEntity : class
 {
-
+    public static string PrimaryKey;
+    public static Func<TEntity, long> GetPrimaryKey;
+    public static Func<IBaseRepository<TEntity>, TEntity, ISelect<TEntity>> FillPrimary;
     public static void Initialize(IFreeSql freeSql)
     {
         var tables = freeSql.DbFirst.GetTablesByDatabase();
@@ -43,8 +47,12 @@ public static class TableInfomationInitor<TEntity>
 
                     if (column.IsPrimary)
                     {
-                        TableInfomation<TEntity>.PrimaryKey = column.Name;
+
+                        PrimaryKey = column.Name;
+                        FillPrimary = NDelegate.DefaultDomain().Func<IBaseRepository<TEntity>, TEntity, ISelect<TEntity>>($"return arg1.Where(item=>item.{PrimaryKey} == arg2.{PrimaryKey});");
+                        GetPrimaryKey = NDelegate.DefaultDomain().Func<TEntity, long>($"return arg.{PrimaryKey};");
                         freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).IsIdentity(true));
+                    
                     }
                     else if (column.CsType == typeof(string))
                     {
@@ -74,9 +82,5 @@ public static class TableInfomationInitor<TEntity>
 
 }
 
-public class TableInfomation<TEntity>
-{
-    public static string PrimaryKey;
-}
 
 

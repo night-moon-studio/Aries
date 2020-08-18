@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Linq.Expressions;
 
 
-public static class OrmNavigate<TEntity>
+public static class OrmNavigate<TEntity> where TEntity : class
 {
     public static ImmutableDictionary<Type, (string src, string dst, string table)> JoinScriptMapping;
     static OrmNavigate()
@@ -13,7 +13,7 @@ public static class OrmNavigate<TEntity>
 
 
     #region 链接查询抽象
-    public static void Join<TJoinEntity>(string srcFieldName, string destFieldName = default)
+    public static void Join<TJoinEntity>(string srcFieldName, string destFieldName = default) where TJoinEntity : class
     {
 
         if (destFieldName == default)
@@ -21,18 +21,17 @@ public static class OrmNavigate<TEntity>
             destFieldName = TableInfomation<TJoinEntity>.PrimaryKey;
         }
         JoinScriptMapping = JoinScriptMapping.Add(typeof(TJoinEntity), (srcFieldName,destFieldName,typeof(TJoinEntity).Name));
-        //$"\"{typeof(TJoinEntity).Name}\" AS {InnerJoinHelper<TJoinEntity>.JoinAliasName} ON a.\"{srcFieldName}\" = {InnerJoinHelper<TJoinEntity>.JoinAliasName}.\"{destFieldName}\"")
 
     }
 
 
-    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> expression, string dstFieldName = default)
+    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> expression, string dstFieldName = default) where TJoinEntity : class
     {
         Join<TJoinEntity>(GetNameFromExpression(expression), dstFieldName);
     }
 
 
-    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> srcExpression, Expression<Func<TJoinEntity, object>> dstExpression)
+    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> srcExpression, Expression<Func<TJoinEntity, object>> dstExpression) where TJoinEntity : class
     {
         Join<TJoinEntity>(
             GetNameFromExpression(srcExpression), 

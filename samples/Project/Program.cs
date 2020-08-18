@@ -23,7 +23,7 @@ namespace Project
                         .Build();
 
             //初始化扫描
-            TableInfomationInitor.Initialize(freesql,typeof(Test),typeof(Test2),typeof(Test3));
+            TableInfomation.Initialize(freesql,typeof(Test),typeof(Test2),typeof(Test3));
 
             //配置 Join 关系
             OrmNavigate<Test>.Join<Test2>(item => item.Domain, item => item.Id);

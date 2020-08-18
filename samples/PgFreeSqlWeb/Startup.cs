@@ -33,12 +33,12 @@ namespace PgFreeSqlWeb
                         .Build();
 
             //初始化扫描
-            TableInfomationInitor.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
+            TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
 
             //配置 Join 关系
-            OrmNavigate<Test>.Join<Test2>(item => item.Domain, item => item.Id);
-            OrmNavigate<Test>.Join<Test3>(item => item.Type, item => item.Id);
-            OrmNavigate<Test>.Join<Test3>("Type", "Id");
+            OrmNavigate<Test>.Join<Test2>(test => test.Domain, test2 => test2.Id);
+            OrmNavigate<Test>.Join<Test3>(test => test.Type, test3 => test3.Id);
+            //OrmNavigate<Test>.Join<Test3>("Type", "Id");
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

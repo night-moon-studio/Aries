@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FreeSql.Natasha.Extension;
+﻿using FreeSql.Natasha.Extension;
+using FreeSql.PgSql.Natasha.Extension.Extension;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace PgFreeSqlWeb.Controllers
 {
@@ -54,6 +51,19 @@ namespace PgFreeSqlWeb.Controllers
                     TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName),
 
                 });
+
+        }
+
+
+        [HttpPost("increment")]
+        public bool Post2(Test instance)
+        {
+
+            var freesql = new FreeSql.FreeSqlBuilder()
+                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
+                        .Build();
+
+            return freesql.UpdateIncrement(instance);
 
         }
 
