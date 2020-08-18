@@ -31,7 +31,7 @@ namespace PgFreeSqlWeb
             var freesql = new FreeSql.FreeSqlBuilder()
                         .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
                         .Build();
-
+            services.AddSingleton(freesql);
             //≥ı ºªØ…®√Ë
             TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
 

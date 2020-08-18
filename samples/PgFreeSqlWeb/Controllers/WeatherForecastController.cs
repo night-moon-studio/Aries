@@ -1,5 +1,4 @@
 ﻿using FreeSql.Natasha.Extension;
-using FreeSql.PgSql.Natasha.Extension.Extension;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -9,15 +8,17 @@ namespace PgFreeSqlWeb.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-
+        private readonly IFreeSql _freeSql;
+        public WeatherForecastController(IFreeSql freeSql)
+        {
+            _freeSql = freeSql;
+        }
 
         [HttpPost]
         public IEnumerable<object> Post([FromQuery] Test instance,[FromBody] QueryModel query)
         {
-            var freesql = new FreeSql.FreeSqlBuilder()
-                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
-                        .Build();
-            return freesql
+           
+            return _freeSql
                 .Select<Test>()
                 .HttpQueryModel(Request.Query.Keys, instance)
                 .QueryModel(query)
@@ -35,10 +36,8 @@ namespace PgFreeSqlWeb.Controllers
         [HttpPost("test")]
         public IEnumerable<TestResult> Post1([FromQuery] Test instance, [FromBody] QueryModel query)
         {
-            var freesql = new FreeSql.FreeSqlBuilder()
-                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
-                        .Build();
-            return freesql
+
+            return _freeSql
                 .Select<Test>()
                 .HttpQueryModel(Request.Query.Keys, instance)
                 .QueryModel(query)
@@ -59,14 +58,19 @@ namespace PgFreeSqlWeb.Controllers
         public bool Post2(Test instance)
         {
 
-            var freesql = new FreeSql.FreeSqlBuilder()
-                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
-                        .Build();
-
-            return freesql.UpdateIncrement(instance);
+            return _freeSql.UpdateIncrement(instance);
 
         }
 
+
+        [HttpPost("insert")]
+        public Test Post3(Test instance)
+        {
+
+            _freeSql.SetInsertInit<Test>(item => item.Domain = 2);
+            return _freeSql.InsertWithInited(instance);
+
+        }
 
     }
     public class TestResult 

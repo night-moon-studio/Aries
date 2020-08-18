@@ -32,7 +32,9 @@ public static class TableInfomation<TEntity> where TEntity : class
 {
     public static string PrimaryKey;
     public static Func<TEntity, long> GetPrimaryKey;
+    public static Action<TEntity, long> SetPrimaryKey;
     public static Func<IBaseRepository<TEntity>, TEntity, ISelect<TEntity>> FillPrimary;
+
     public static void Initialize(IFreeSql freeSql)
     {
         var tables = freeSql.DbFirst.GetTablesByDatabase();
@@ -50,6 +52,7 @@ public static class TableInfomation<TEntity> where TEntity : class
 
                         PrimaryKey = column.Name;
                         FillPrimary = NDelegate.DefaultDomain().Func<IBaseRepository<TEntity>, TEntity, ISelect<TEntity>>($"return arg1.Where(item=>item.{PrimaryKey} == arg2.{PrimaryKey});");
+                        SetPrimaryKey = NDelegate.DefaultDomain().Action<TEntity, long>($"arg1.{PrimaryKey} = arg2;");
                         GetPrimaryKey = NDelegate.DefaultDomain().Func<TEntity, long>($"return arg.{PrimaryKey};");
                         freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).IsIdentity(true));
                     

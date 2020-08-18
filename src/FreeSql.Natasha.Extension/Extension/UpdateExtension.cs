@@ -1,4 +1,4 @@
-﻿namespace FreeSql.PgSql.Natasha.Extension.Extension
+﻿namespace FreeSql.Natasha.Extension
 {
     public static class UpdateExtension
     {

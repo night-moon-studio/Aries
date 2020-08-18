@@ -21,8 +21,7 @@ namespace FreeSql.Natasha.Extension
         {
 
             var code = expression.GetHashCode();
-            var type = typeof(TReturn);
-            HashSet<string> props = new HashSet<string>(type.GetProperties().Select(item => item.Name));
+            HashSet<string> props = new HashSet<string>(typeof(TReturn).GetProperties().Select(item => item.Name));
 
             //查询表达式树是否为之前处理过的
             if (!JoinExpressionMapping.ContainsKey(code))
@@ -93,6 +92,7 @@ namespace FreeSql.Natasha.Extension
                             props.Remove(members[i].Name);
                             script.Append($"a.\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
                         }
+
                     }
 
                 }
@@ -151,20 +151,19 @@ namespace FreeSql.Natasha.Extension
     public static class JoinOperator<TEntity> where TEntity : class
     {
 
-        public static ImmutableHashSet<long> JoinExpressionMapping;
+        public static ImmutableDictionary<long,string> JoinExpressionMapping;
         static JoinOperator()
         {
-            JoinExpressionMapping = ImmutableHashSet.Create<long>();
+            JoinExpressionMapping = ImmutableDictionary.Create<long, string>();
         }
 
         public static IEnumerable<object> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
         {
 
             var code = expression.GetHashCode();
-            var type = typeof(TReturn);
 
             //查询表达式树是否为之前处理过的
-            if (!JoinExpressionMapping.Contains(code))
+            if (!JoinExpressionMapping.ContainsKey(code))
             {
                 //给匿名类创建一个代理类
                 var nclass = NClass.DefaultDomain().Public();
@@ -253,7 +252,7 @@ namespace FreeSql.Natasha.Extension
 
                     script.Length -= 1;
                     var joinScript = script.ToString();
-                    JoinExpressionMapping = JoinExpressionMapping.Add(code);
+                    JoinExpressionMapping = JoinExpressionMapping.Add(code, joinScript);
 
                     var proxyClass = nclass.GetType();
                     //返回强类型的集合结果
@@ -299,6 +298,7 @@ namespace FreeSql.Natasha.Extension
             //调用 TReturn 的处理函数
             JoinFiller<TEntity, TReturn>.HandlerSelect(code, select);
             //返回执行结果
+            //return select.ToList<TReturn>(JoinExpressionMapping[code]);
             return ProxyCaller<TEntity, TReturn>.ToList(code, select);
 
         }
