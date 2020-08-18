@@ -10,9 +10,24 @@ namespace FreeSql.Natasha.Extension
         {
             return JoinOperator<TEntity>.ToList(select, expression);
         }
-        public static IEnumerable<TReturn> ToJoinList<TEntity, TReturn>(this ISelect<TEntity> select, object expression, TReturn instance = default) where TEntity : class
+
+        public static ForwardJoin<TEntity, TReturn> UseStrongClass<TEntity, TReturn>(this ISelect<TEntity> select) where TEntity : class
         {
-            return JoinOperator<TEntity, TReturn>.ToList(select, expression);
+            return  new ForwardJoin<TEntity, TReturn>(select);
+        }
+
+    }
+    public class ForwardJoin<TEntity, TReturn> where TEntity : class
+    {
+        private readonly ISelect<TEntity> _select;
+        public ForwardJoin(ISelect<TEntity> select)
+        {
+            _select = select;
+        }
+
+        public IEnumerable<TReturn> ToJoinList<TempReturn>(Expression<Func<TEntity, TempReturn>> expression)
+        {
+            return JoinOperator<TEntity, TReturn>.ToList(_select,expression);
         }
     }
 }

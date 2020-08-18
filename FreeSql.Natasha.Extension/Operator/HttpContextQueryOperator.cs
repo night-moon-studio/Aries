@@ -1,6 +1,7 @@
 ﻿using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FreeSql.Natasha.Extension
@@ -14,12 +15,12 @@ namespace FreeSql.Natasha.Extension
         {
 
             var stringBuilder = new StringBuilder();
-            var props = typeof(TEntity).GetProperties();
+            var props = typeof(TEntity).GetProperties().Select(item=>item.Name);
             stringBuilder.AppendLine("foreach(var field in arg2){");
             foreach (var item in props)
             {
 
-                stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item.Name}==arg3.{item.Name});  }}");
+                stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item}==arg3.{item});  }}");
                 stringBuilder.Append("else ");
 
             }

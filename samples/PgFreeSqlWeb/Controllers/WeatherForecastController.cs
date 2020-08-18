@@ -35,30 +35,34 @@ namespace PgFreeSqlWeb.Controllers
         }
 
 
-        //[HttpPost("test")]
-        //public IEnumerable<object> Post1([FromQuery] Test instance, [FromBody] QueryModel query)
-        //{
-        //    var freesql = new FreeSql.FreeSqlBuilder()
-        //                .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
-        //                .Build();
-        //    return freesql
-        //        .Select<Test>()
-        //        .HttpQueryModel(Request.Query.Keys, instance)
-        //        .QueryModel(query)
-        //        .ToJoinList<TestResult>(new
-        //        {
-        //            DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
-        //            TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName)
-        //        },null);
+        [HttpPost("test")]
+        public IEnumerable<TestResult> Post1([FromQuery] Test instance, [FromBody] QueryModel query)
+        {
+            var freesql = new FreeSql.FreeSqlBuilder()
+                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
+                        .Build();
+            return freesql
+                .Select<Test>()
+                .HttpQueryModel(Request.Query.Keys, instance)
+                .QueryModel(query)
+                .UseStrongClass<Test,TestResult>()
+                .ToJoinList(item=>new
+                {
 
-        //}
+                    TESTName = item.Name,
+                    DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
+                    TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName),
+
+                });
+
+        }
 
 
     }
     public class TestResult 
     {
         public long Id { get; set; }
-        public string Name { get; set; }
+        public string TESTName { get; set; }
         public string DomainName { get; set; }
         public string TypeName { get; set; }
     }

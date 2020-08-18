@@ -38,6 +38,7 @@ namespace PgFreeSqlWeb
             //≈‰÷√ Join πÿœµ
             OrmNavigate<Test>.Join<Test2>(item => item.Domain, item => item.Id);
             OrmNavigate<Test>.Join<Test3>(item => item.Type, item => item.Id);
+            OrmNavigate<Test>.Join<Test3>("Type", "Id");
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

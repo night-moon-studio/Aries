@@ -17,117 +17,131 @@ namespace FreeSql.Natasha.Extension
         {
             JoinExpressionMapping = ImmutableDictionary.Create<long, string>();
         }
-        public static IEnumerable<TReturn> ToList(ISelect<TEntity> select, object expression)
+        public static IEnumerable<TReturn> ToList<TempReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TempReturn>> expression)
         {
 
             var code = expression.GetHashCode();
-            //var type = typeof(TReturn);
+            var type = typeof(TReturn);
+            HashSet<string> props = new HashSet<string>(type.GetProperties().Select(item => item.Name));
 
-            ////查询表达式树是否为之前处理过的
-            //if (!JoinExpressionMapping.ContainsKey(code))
-            //{
-            //    //给匿名类创建一个代理类
-            //    StringBuilder script = new StringBuilder();
-            //    // 获取构造函数参数
-            //    var arguments = ((NewExpression)expression.Body).Arguments;
-            //    //获取匿名类成员
-            //    var members = ((NewExpression)expression.Body).Members;
-            //    var joinTypeFlagMapping = new Dictionary<Type, JoinTypeFlag>();
-            //    for (int i = 0; i < arguments.Count; i++)
-            //    {
-            //        // 方法类型参数
-            //        if (arguments[i].NodeType == ExpressionType.Call)
-            //        {
-            //            var methodExpression = (MethodCallExpression)arguments[i];
-            //            var methodDeclaringType = methodExpression.Method.DeclaringType;
-            //            if (methodDeclaringType.IsGenericType && methodDeclaringType.GetGenericTypeDefinition().Name.Contains("Join"))
-            //            {
+            //查询表达式树是否为之前处理过的
+            if (!JoinExpressionMapping.ContainsKey(code))
+            {
+                //给匿名类创建一个代理类
+                StringBuilder script = new StringBuilder();
+                // 获取构造函数参数
+                var arguments = ((NewExpression)expression.Body).Arguments;
+                //获取匿名类成员
+                var members = ((NewExpression)expression.Body).Members;
+                var joinTypeFlagMapping = new Dictionary<Type, JoinTypeFlag>();
+                for (int i = 0; i < arguments.Count; i++)
+                {
+                    // 方法类型参数
+                    if (arguments[i].NodeType == ExpressionType.Call)
+                    {
+                        var methodExpression = (MethodCallExpression)arguments[i];
+                        var methodDeclaringType = methodExpression.Method.DeclaringType;
+                        if (methodDeclaringType.IsGenericType && methodDeclaringType.GetGenericTypeDefinition().Name.Contains("Join"))
+                        {
 
-            //                var joinType = methodDeclaringType.GetGenericArguments()[0];
-            //                if (methodExpression.Arguments[0].NodeType == ExpressionType.Quote)
-            //                {
-            //                    var quoteExpression = (UnaryExpression)methodExpression.Arguments[0];
-            //                    if (quoteExpression.Operand.NodeType == ExpressionType.Lambda)
-            //                    {
-            //                        var lambdaExpression = (LambdaExpression)quoteExpression.Operand;
-            //                        if (lambdaExpression.Body.NodeType == ExpressionType.MemberAccess)
-            //                        {
-            //                            var memberExpression = (MemberExpression)lambdaExpression.Body;
-            //                            var definitionType = methodDeclaringType.GetGenericTypeDefinition();
-            //                            if (definitionType == typeof(InnerJoin<>))
-            //                            {
-            //                                joinTypeFlagMapping[joinType] = JoinTypeFlag.Inner;
-            //                                script.Append(InnerJoin.GetJoinScript(joinType));
-            //                            }
-            //                            else if (definitionType == typeof(LeftJoin<>))
-            //                            {
-            //                                joinTypeFlagMapping[joinType] = JoinTypeFlag.Left;
-            //                                script.Append(LeftJoin.GetJoinScript(joinType));
-            //                            }
-            //                            else if (definitionType == typeof(RightJoin<>))
-            //                            {
-            //                                joinTypeFlagMapping[joinType] = JoinTypeFlag.Right;
-            //                                script.Append(RightJoin.GetJoinScript(joinType));
-            //                            }
-            //                            script.Append($".\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
-            //                        }
+                            var joinType = methodDeclaringType.GetGenericArguments()[0];
+                            if (methodExpression.Arguments[0].NodeType == ExpressionType.Quote)
+                            {
+                                var quoteExpression = (UnaryExpression)methodExpression.Arguments[0];
+                                if (quoteExpression.Operand.NodeType == ExpressionType.Lambda)
+                                {
+                                    var lambdaExpression = (LambdaExpression)quoteExpression.Operand;
+                                    if (lambdaExpression.Body.NodeType == ExpressionType.MemberAccess)
+                                    {
+                                        var memberExpression = (MemberExpression)lambdaExpression.Body;
+                                        var definitionType = methodDeclaringType.GetGenericTypeDefinition();
+                                        if (definitionType == typeof(InnerJoin<>))
+                                        {
+                                            joinTypeFlagMapping[joinType] = JoinTypeFlag.Inner;
+                                            script.Append(InnerJoin.GetJoinScript(joinType));
+                                        }
+                                        else if (definitionType == typeof(LeftJoin<>))
+                                        {
+                                            joinTypeFlagMapping[joinType] = JoinTypeFlag.Left;
+                                            script.Append(LeftJoin.GetJoinScript(joinType));
+                                        }
+                                        else if (definitionType == typeof(RightJoin<>))
+                                        {
+                                            joinTypeFlagMapping[joinType] = JoinTypeFlag.Right;
+                                            script.Append(RightJoin.GetJoinScript(joinType));
+                                        }
+                                        props.Remove(members[i].Name);
+                                        script.Append($".\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
+                                    }
 
-            //                    }
-            //                }
-            //            }
+                                }
+                            }
+                        }
 
-            //        }
-            //        else if (arguments[i].NodeType == ExpressionType.MemberAccess)
-            //        {
+                    }
+                    else if (arguments[i].NodeType == ExpressionType.MemberAccess)
+                    {
 
-            //            var memberExpression = (MemberExpression)arguments[i];
-            //            script.Append($"a.\"{memberExpression.Member.Name}\",");
-            //        }
+                        var memberExpression = (MemberExpression)arguments[i];
+                        if (members[i].Name == memberExpression.Member.Name)
+                        {
+                            props.Remove(memberExpression.Member.Name);
+                            script.Append($"a.\"{memberExpression.Member.Name}\",");
+                        }
+                        else
+                        {
+                            props.Remove(members[i].Name);
+                            script.Append($"a.\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
+                        }
+                    }
 
-            //    }
-            //    if (script.Length > 1)
-            //    {
+                }
+                if (script.Length > 1)
+                {
+                    foreach (var item in props)
+                    {
+                        script.Append($"a.\"{item}\",");
+                    }
+                    script.Length -= 1;
+                    JoinExpressionMapping = JoinExpressionMapping.Add(code, script.ToString());
 
-            //        script.Length -= 1;
-            //        JoinExpressionMapping = JoinExpressionMapping.Add(code, script.ToString());
+                    var builder = new StringBuilder();
+                    foreach (var item in joinTypeFlagMapping)
+                    {
+                        var joinFieldCache = OrmNavigate<TEntity>.JoinScriptMapping[item.Key];
+                        string joinAlias = string.Empty;
+                        switch (item.Value)
+                        {
+                            case JoinTypeFlag.Left:
+                                joinAlias = LeftJoin.GetJoinScript(item.Key);
+                                builder.Append($"obj.LeftJoin(\"");
+                                break;
+                            case JoinTypeFlag.Inner:
+                                joinAlias = InnerJoin.GetJoinScript(item.Key);
+                                builder.Append($"obj.InnerJoin(\"");
+                                break;
+                            case JoinTypeFlag.Right:
+                                joinAlias = RightJoin.GetJoinScript(item.Key);
+                                builder.Append($"obj.RightJoin(\"");
+                                break;
+                            default:
+                                break;
+                        }
+                        var joinFieldScript = $"\"{item.Key.Name}\" AS {joinAlias} ON a.\"{joinFieldCache.src}\" = {joinAlias}.\"{joinFieldCache.dst}\"";
+                        builder.Append(joinFieldScript.Replace("\"", "\\\""));
+                        builder.AppendLine("\");");
+                    }
 
-            //        var builder = new StringBuilder();
-            //        foreach (var item in joinTypeFlagMapping)
-            //        {
-            //            var joinFieldCache = OrmNavigate<TEntity>.JoinScriptMapping[item.Key];
-            //            string joinAlias = string.Empty;
-            //            switch (item.Value)
-            //            {
-            //                case JoinTypeFlag.Left:
-            //                    joinAlias = LeftJoin.GetJoinScript(item.Key);
-            //                    builder.Append($"obj.LeftJoin(\"");
-            //                    break;
-            //                case JoinTypeFlag.Inner:
-            //                    joinAlias = InnerJoin.GetJoinScript(item.Key);
-            //                    builder.Append($"obj.InnerJoin(\"");
-            //                    break;
-            //                case JoinTypeFlag.Right:
-            //                    joinAlias = RightJoin.GetJoinScript(item.Key);
-            //                    builder.Append($"obj.RightJoin(\"");
-            //                    break;
-            //                default:
-            //                    break;
-            //            }
-            //            var joinFieldScript = $"\"{item.Key.Name}\" AS {joinAlias} ON a.\"{joinFieldCache.src}\" = {joinAlias}.\"{joinFieldCache.dst}\"";
-            //            builder.Append(joinFieldScript.Replace("\"", "\\\""));
-            //            builder.AppendLine("\");");
-            //        }
+                    JoinFiller<TEntity, TReturn>.Add(code, NDelegate
+                        .DefaultDomain()
+                        .Action<ISelect<TEntity>>(builder.ToString()));
 
-            //        JoinFiller<TEntity, TReturn>.Add(code, NDelegate
-            //            .DefaultDomain()
-            //            .Action<ISelect<TEntity>>(builder.ToString()));
+                }
 
-            //    }
-
-            //}
+            }
             var fieldScript = JoinExpressionMapping[code];
             ////调用 TReturn 的处理函数
-            //JoinFiller<TEntity, TReturn>.HandlerSelect(code, select);
+            JoinFiller<TEntity, TReturn>.HandlerSelect(code, select);
             //返回执行结果
             return select.ToList<TReturn>(fieldScript);
 
@@ -241,11 +255,11 @@ namespace FreeSql.Natasha.Extension
                     var joinScript = script.ToString();
                     JoinExpressionMapping = JoinExpressionMapping.Add(code);
 
-                    var tempClass = nclass.GetType();
+                    var proxyClass = nclass.GetType();
                     //返回强类型的集合结果
                     ProxyCaller<TEntity, TReturn>.Add(code, NDelegate
                         .DefaultDomain(item => item.LogSyntaxError())
-                        .Func<ISelect<TEntity>, IEnumerable<object>>($"return arg.ToList<{tempClass.GetDevelopName()}>(\"{joinScript.Replace("\"","\\\"")}\");"));
+                        .Func<ISelect<TEntity>, IEnumerable<object>>($"return arg.ToList<{proxyClass.GetDevelopName()}>(\"{joinScript.Replace("\"","\\\"")}\");"));
 
                     var builder = new StringBuilder();
                     foreach (var item in joinTypeFlagMapping)
