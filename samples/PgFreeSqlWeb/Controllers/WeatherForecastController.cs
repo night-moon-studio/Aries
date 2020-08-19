@@ -15,7 +15,7 @@ namespace PgFreeSqlWeb.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<object> Post([FromQuery] Test instance,[FromBody] QueryModel query)
+        public IEnumerable<object> Post([FromQuery] Test instance, [FromBody] QueryModel query)
         {
            
             return _freeSql
