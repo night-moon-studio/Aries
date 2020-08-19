@@ -20,8 +20,8 @@ namespace PgFreeSqlWeb.Controllers
            
             return _freeSql
                 .Select<Test>()
-                .HttpQueryModel(Request.Query.Keys, instance)
-                .QueryModel(query)
+                .QueryWithHttpEntity(Request.Query.Keys, instance)
+                .QueryWithModel(query)
                 .ToJoinList(item => new
                 {
                     item.Id,
@@ -33,15 +33,21 @@ namespace PgFreeSqlWeb.Controllers
         }
 
 
+        /// <summary>
+        /// 返回 TestResult 类型，并对 TestResult 部分字段进行特殊映射
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpPost("test")]
         public IEnumerable<TestResult> Post1([FromQuery] Test instance, [FromBody] QueryModel query)
         {
 
             return _freeSql
                 .Select<Test>()
-                .HttpQueryModel(Request.Query.Keys, instance)
-                .QueryModel(query)
-                .UseStrongClass<Test,TestResult>()
+                .QueryWithHttpEntity(Request.Query.Keys, instance)
+                .QueryWithModel(query)
+                .UseMappingClass<Test,TestResult>()
                 .ToJoinList(item=>new
                 {
 

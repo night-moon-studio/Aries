@@ -12,7 +12,7 @@ namespace FreeSql.Natasha.Extension
             return JoinOperator<TEntity>.ToList(select, expression);
         }
 
-        public static ForwardJoin<TEntity, TReturn> UseStrongClass<TEntity, TReturn>(this ISelect<TEntity> select) where TEntity : class
+        public static ForwardJoin<TEntity, TReturn> UseMappingClass<TEntity, TReturn>(this ISelect<TEntity> select) where TEntity : class
         {
             return  new ForwardJoin<TEntity, TReturn>(select);
         }

@@ -36,7 +36,7 @@ namespace Project
             queryModel.Fuzzy = new FuzzyModel[] { new FuzzyModel { FieldName = "Name", FuzzyValue = "44" } };
 
             //外联查询
-            var result = freesql.Select<Test>().QueryModel(queryModel,out long total).ToJoinList(item => new
+            var result = freesql.Select<Test>().QueryWithModel(queryModel,out long total).ToJoinList(item => new
             {
                 item.Id,
                 item.Name,
