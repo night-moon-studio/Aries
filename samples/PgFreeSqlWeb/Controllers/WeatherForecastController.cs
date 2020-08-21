@@ -1,6 +1,8 @@
 ﻿using FreeSql.Natasha.Extension;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Pipelines;
 
 namespace PgFreeSqlWeb.Controllers
 {
@@ -11,7 +13,7 @@ namespace PgFreeSqlWeb.Controllers
         private readonly IFreeSql _freeSql;
         public WeatherForecastController(IFreeSql freeSql)
         {
-            _freeSql = freeSql;
+             _freeSql = freeSql;
         }
 
         [HttpPost]

@@ -30,6 +30,7 @@ public static class TableInfomation
 
 public static class TableInfomation<TEntity> where TEntity : class
 {
+
     public static string PrimaryKey;
     public static Func<TEntity, long> GetPrimaryKey;
     public static Action<TEntity, long> SetPrimaryKey;
@@ -81,6 +82,7 @@ public static class TableInfomation<TEntity> where TEntity : class
                 break;
             }
         }
+
     }
 
 }
