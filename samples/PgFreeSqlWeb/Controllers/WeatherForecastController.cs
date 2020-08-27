@@ -62,6 +62,11 @@ namespace PgFreeSqlWeb.Controllers
         }
 
 
+        /// <summary>
+        /// 整体扫描的增量更新
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         [HttpPost("increment")]
         public bool Post2(Test instance)
         {
@@ -71,6 +76,25 @@ namespace PgFreeSqlWeb.Controllers
         }
 
 
+
+        /// <summary>
+        /// 按需更新 主键 作为更新条件，只更新参数中的字段
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
+        [HttpPost("updatebyfields")]
+        public bool Post4([FromQuery]Test instance)
+        {
+            return _freeSql.UpdateWithHttpModel(Request.Query.Keys, instance).WherePrimaryKeyFromEntity(instance).ExecuteAffrows()!=0;
+
+        }
+
+
+        /// <summary>
+        /// 设置初始化插入
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         [HttpPost("insert")]
         public Test Post3(Test instance)
         {

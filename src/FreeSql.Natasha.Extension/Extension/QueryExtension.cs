@@ -5,7 +5,6 @@ namespace FreeSql.Natasha.Extension
     public static class QueryExtension
     {
 
-
         public static ISelect<TEntity> QueryWithHttpEntity<TEntity>(this ISelect<TEntity> select, ICollection<string> collection, TEntity entity) where TEntity : class
         {
             HttpContextQueryOperator<TEntity>.SelectWhereHandler(select, collection, entity);

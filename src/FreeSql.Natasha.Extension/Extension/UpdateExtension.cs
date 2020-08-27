@@ -1,7 +1,17 @@
-﻿namespace FreeSql.Natasha.Extension
+﻿using System.Collections.Generic;
+
+namespace FreeSql.Natasha.Extension
 {
     public static class UpdateExtension
     {
+
+        public static IUpdate<TEntity> UpdateWithHttpModel<TEntity>(this IFreeSql freeSql, ICollection<string> collection, TEntity entity) where TEntity : class
+        {
+            var update = freeSql.Update<TEntity>();
+            HttpContextUpdateOperator<TEntity>.UpdateWhereHandler(update, collection, entity);
+            return update;
+        }
+
 
         /// <summary>
         /// 更新全部
@@ -10,8 +20,9 @@
         /// <param name="update"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static IUpdate<TEntity> UpdateAll<TEntity>(this IUpdate<TEntity> update,TEntity entity) where TEntity : class
+        public static IUpdate<TEntity> UpdateAll<TEntity>(this IFreeSql freeSql, TEntity entity) where TEntity : class
         {
+            var update = freeSql.Update<TEntity>();
             if (TableInfomation<TEntity>.PrimaryKey == default)
             {
                 update.SetDto(entity);
