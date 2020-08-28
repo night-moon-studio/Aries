@@ -38,7 +38,7 @@ PropertiesCache<Test>.SetWhereBlockFields("Domain");
 //更新时对实体进行单独处理
 PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添加可以累加
 //插入时对实体进行单独处理
- PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
+PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 ```
 
 ### 查询
