@@ -7,21 +7,21 @@ FreeSql 的 Natasha 扩展
 
 ### 配置
 
+#### 信息初始化配置
 ```C#
 //初始化主键等信息
 TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3)，.....);
 ```
 
+#### 关系初始化配置
 ```C#
 //配置关联关系
 OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
 OrmNavigate<Test>.Connect<Test3>(test => test.Type, test3 => test3.Id);
 ```
 
-
+#### 字段使用范围初始化配置
 ```C#
-//配置字段使用范围
-
 //配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
 PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
 
@@ -32,9 +32,8 @@ PropertiesCache<Test>.SetUpdateAllowFields("Domain");
 PropertiesCache<Test>.SetWhereBlockFields("Domain");
 ```
 
+#### 实体写操作初始化配置
 ```C#
-//配置初始化
-
 //更新时对实体进行单独处理
 PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添加可以累加
 //插入时对实体进行单独处理
