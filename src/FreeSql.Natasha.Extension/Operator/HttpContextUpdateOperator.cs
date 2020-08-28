@@ -25,7 +25,7 @@ namespace FreeSql.Natasha.Extension
                 if (item!=TableInfomation<TEntity>.PrimaryKey)
                 {
 
-                    if (TableInfomation<TEntity>.AllowUpdateFields.Contains(item))
+                    if (PropertiesCache<TEntity>.AllowUpdateFields.Contains(item))
                     {
                         stringBuilder.AppendLine($"if(field == \"{item}\"){{ arg1.Set(obj=>obj.{item}==arg3.{item}); }}");
                         stringBuilder.Append("else ");

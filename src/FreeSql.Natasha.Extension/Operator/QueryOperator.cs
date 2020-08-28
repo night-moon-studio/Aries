@@ -24,7 +24,7 @@ namespace FreeSql.Natasha.Extension
                 if (PropertiesCache<TEntity>.PropMembers.Contains(item.Name))
                 {
 
-                    if (!TableInfomation<TEntity>.BlockWhereFields.Contains(item.Name))
+                    if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item.Name))
                     {
                         if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                         {
@@ -75,7 +75,7 @@ namespace FreeSql.Natasha.Extension
                         foreach (var item in queryModel.Orders)
                         {
 
-                            if (!TableInfomation<TEntity>.BlockWhereFields.Contains(item.FieldName))
+                            if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item.FieldName))
                             {
 
                                 if (PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName))

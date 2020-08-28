@@ -100,7 +100,7 @@ namespace FreeSql.Natasha.Extension
                 {
                     foreach (var item in props)
                     {
-                        if (!TableInfomation<TEntity>.BlockSelectFields.Contains(item))
+                        if (!PropertiesCache<TEntity>.BlockSelectFields.Contains(item))
                         {
                             script.Append($"a.\"{item}\",");
                         }

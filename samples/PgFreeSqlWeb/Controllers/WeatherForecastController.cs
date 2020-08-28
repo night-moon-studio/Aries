@@ -1,8 +1,6 @@
 ﻿using FreeSql.Natasha.Extension;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Pipelines;
 
 namespace PgFreeSqlWeb.Controllers
 {
@@ -11,9 +9,25 @@ namespace PgFreeSqlWeb.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IFreeSql _freeSql;
+        static WeatherForecastController()
+        {
+            PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
+        }
         public WeatherForecastController(IFreeSql freeSql)
         {
              _freeSql = freeSql;
+        }
+
+        [HttpPost("normal")]
+        public IEnumerable<object> Post5([FromQuery] Test instance, [FromBody] QueryModel query)
+        {
+
+            return _freeSql
+                .Select<Test>()
+                .QueryWithHttpEntity(Request.Query.Keys, instance)
+                .QueryWithModel(query)
+                .ToLimitList();
+
         }
 
         [HttpPost]
@@ -119,6 +133,7 @@ namespace PgFreeSqlWeb.Controllers
         public short Domain { get; set; }
         public short Type { get; set; }
         public string Name { get; set; }
+        public string Address { get; set; }
     }
 
     public class Test2
