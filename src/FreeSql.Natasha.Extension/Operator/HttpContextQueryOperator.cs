@@ -20,9 +20,12 @@ namespace FreeSql.Natasha.Extension
             foreach (var item in props)
             {
 
-                stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item}==arg3.{item});  }}");
-                stringBuilder.Append("else ");
-
+                if (!TableInfomation<TEntity>.BlockWhereFields.Contains(item))
+                {
+                    stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item}==arg3.{item});  }}");
+                    stringBuilder.Append("else ");
+                }
+                
             }
             stringBuilder.Length -= 5;
             stringBuilder.Append("}");

@@ -1,6 +1,6 @@
 ﻿namespace FreeSql.Natasha.Extension
 {
-    public static class WherePriamryExtension
+    public static class WherePrimaryKeyExtension
     {
 
         public static IUpdate<TEntity> WherePrimaryKeyFromEntity<TEntity>(this IUpdate<TEntity> update, TEntity entity) where TEntity : class

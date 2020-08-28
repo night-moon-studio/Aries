@@ -2,10 +2,13 @@
 using FreeSql.Natasha.Extension;
 using Natasha.CSharp;
 using System;
-
+using System.Collections.Immutable;
+using System.Linq;
 
 public static class TableInfomation
 {
+
+    
     static TableInfomation()
     {
         NatashaInitializer.InitializeAndPreheating();
@@ -35,6 +38,31 @@ public static class TableInfomation<TEntity> where TEntity : class
     public static Func<TEntity, long> GetPrimaryKey;
     public static Action<TEntity, long> SetPrimaryKey;
     public static Func<IBaseRepository<TEntity>, TEntity, ISelect<TEntity>> FillPrimary;
+    public static ImmutableHashSet<string> BlockWhereFields;
+    public static ImmutableHashSet<string> BlockSelectFields;
+    public static ImmutableHashSet<string> AllowUpdateFields;
+    static TableInfomation()
+    {
+        BlockWhereFields = ImmutableHashSet.Create<string>();
+        AllowUpdateFields = ImmutableHashSet.CreateRange(typeof(TEntity).GetProperties().Select(item=>item.Name));
+        BlockSelectFields = ImmutableHashSet.Create<string>();
+    }
+    public static void SetSelectBlockFields(params string[] fields)
+    {
+        BlockSelectFields = ImmutableHashSet.CreateRange(fields);
+    }
+    public static void SetWhereBlockFields(params string[] fields)
+    {
+        BlockWhereFields = ImmutableHashSet.CreateRange(fields);
+    }
+    public static void SetUpdateAllowFields(params string[] fields)
+    {
+        AllowUpdateFields = ImmutableHashSet.CreateRange(fields);
+    }
+
+
+
+
 
     public static void Initialize(IFreeSql freeSql)
     {

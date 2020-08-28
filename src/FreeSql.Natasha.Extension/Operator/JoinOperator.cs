@@ -100,7 +100,11 @@ namespace FreeSql.Natasha.Extension
                 {
                     foreach (var item in props)
                     {
-                        script.Append($"a.\"{item}\",");
+                        if (!TableInfomation<TEntity>.BlockSelectFields.Contains(item))
+                        {
+                            script.Append($"a.\"{item}\",");
+                        }
+                       
                     }
                     script.Length -= 1;
                     JoinExpressionMapping = JoinExpressionMapping.Add(code, script.ToString());
@@ -229,17 +233,17 @@ namespace FreeSql.Natasha.Extension
                         if (members[i].Name == memberExpression.Member.Name)
                         {
                             nclass.Property(item => item
-                       .Public()
-                       .Type(((PropertyInfo)memberExpression.Member).PropertyType)
-                       .Name(memberExpression.Member.Name));
+                            .Public()
+                            .Type(((PropertyInfo)memberExpression.Member).PropertyType)
+                            .Name(memberExpression.Member.Name));
                             script.Append($"a.\"{memberExpression.Member.Name}\",");
                         }
                         else
                         {
                             nclass.Property(item => item
-                      .Public()
-                      .Type(((PropertyInfo)memberExpression.Member).PropertyType)
-                      .Name(members[i].Name));
+                            .Public()
+                            .Type(((PropertyInfo)memberExpression.Member).PropertyType)
+                            .Name(members[i].Name));
                             script.Append($"a.\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
                         }
 

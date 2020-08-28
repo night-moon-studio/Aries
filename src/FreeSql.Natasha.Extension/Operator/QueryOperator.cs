@@ -24,19 +24,22 @@ namespace FreeSql.Natasha.Extension
                 if (PropertiesCache<TEntity>.PropMembers.Contains(item.Name))
                 {
 
-                    if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                    if (!TableInfomation<TEntity>.BlockWhereFields.Contains(item.Name))
                     {
-                        stringBuilder.AppendLine($"if(arg2.{item.Name}!=null){{");
-                        stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}==arg2.{item.Name});");
-                        stringBuilder.AppendLine("}");
+                        if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            stringBuilder.AppendLine($"if(arg2.{item.Name}!=null){{");
+                            stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}==arg2.{item.Name});");
+                            stringBuilder.AppendLine("}");
+                        }
+                        else if (item.PropertyType == typeof(string))
+                        {
+                            stringBuilder.AppendLine($"if(arg2.{item.Name}!=default){{");
+                            stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}.Contains(arg2.{item.Name}));");
+                            stringBuilder.AppendLine("}");
+                        }
                     }
-                    else if (item.PropertyType == typeof(string)) 
-                    {
-                        stringBuilder.AppendLine($"if(arg2.{item.Name}!=default){{");
-                        stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}.Contains(arg2.{item.Name}));");
-                        stringBuilder.AppendLine("}");
-                    }
-
+                    
                 }
                 
             }
@@ -72,28 +75,32 @@ namespace FreeSql.Natasha.Extension
                         foreach (var item in queryModel.Orders)
                         {
 
-                            if (PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName))
+                            if (!TableInfomation<TEntity>.BlockWhereFields.Contains(item.FieldName))
                             {
 
-                                orderBuilder.Append($"a.\"{item.FieldName}\" ");
-                                if (item.IsDesc)
+                                if (PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName))
                                 {
-                                    orderBuilder.Append("DESC,");
-                                }
-                                else
-                                {
-                                    orderBuilder.Append("ASC,");
+
+                                    orderBuilder.Append($"a.\"{item.FieldName}\" ");
+                                    if (item.IsDesc)
+                                    {
+                                        orderBuilder.Append("DESC,");
+                                    }
+                                    else
+                                    {
+                                        orderBuilder.Append("ASC,");
+                                    }
+
                                 }
 
                             }
-                            if (orderBuilder.Length > 0)
-                            {
+                            
+                        }
+                        if (orderBuilder.Length > 0)
+                        {
 
-                                orderBuilder.Length -= 1;
-                                select.OrderBy(orderBuilder.ToString());
-
-                            }
-
+                            orderBuilder.Length -= 1;
+                            select.OrderBy(orderBuilder.ToString());
 
                         }
                     }
