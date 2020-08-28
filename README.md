@@ -17,7 +17,7 @@ TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3)�
 ```C#
 //配置关联关系
 OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
-// test=>test.Type, test3=>test3.Id
+//test=>test.Type, test3=>test3.Id
 OrmNavigate<Test>.Connect<Test3>("Type", "Id"); 
 ```
 
