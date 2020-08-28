@@ -1,15 +1,23 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
 namespace FreeSql.Natasha.Extension
 {
+
     public static class PropertiesCache<TEntity>
     {
+
         public static readonly ImmutableHashSet<string> PropMembers;
         public static ImmutableHashSet<string> BlockWhereFields;
         public static ImmutableHashSet<string> BlockSelectFields;
         public static ImmutableHashSet<string> AllowUpdateFields;
+        public static string[] AllowUpdateColumns;
+        public static Action<TEntity> UpdateInitFunc;
+        public static Action<TEntity> InsertInitFunc;
+
         static PropertiesCache()
         {
             PropMembers = ImmutableHashSet.CreateRange(typeof(TEntity).GetProperties().Select(item => item.Name));
@@ -30,6 +38,44 @@ namespace FreeSql.Natasha.Extension
         public static void SetUpdateAllowFields(params string[] fields)
         {
             AllowUpdateFields = ImmutableHashSet.CreateRange(fields);
+            AllowUpdateColumns = AllowUpdateFields.ToArray();
+        }
+
+
+        public static void SetUpdateInit(Action<TEntity> action)
+        {
+
+            UpdateInitFunc += action;
+
+        }
+
+        public static void SetInsertInit(Action<TEntity> action)
+        {
+
+            InsertInitFunc += action;
+
+        }
+
+
+        public static IEnumerable<string> GetUpdateFields(IEnumerable<string> keys)
+        {
+            var result = new HashSet<string>(keys);
+            result.IntersectWith(AllowUpdateFields);
+            return result;
+        }
+
+        public static IEnumerable<string> GetWhereFields(IEnumerable<string> keys)
+        {
+            var result = new HashSet<string>(keys);
+            result.ExceptWith(BlockWhereFields);
+            return result;
+        }
+
+        public static IEnumerable<string> GetSelectFields(IEnumerable<string> keys)
+        {
+            var result = new HashSet<string>(keys);
+            result.ExceptWith(BlockSelectFields);
+            return result;
         }
 
 

@@ -9,13 +9,19 @@ namespace PgFreeSqlWeb.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IFreeSql _freeSql;
-        static WeatherForecastController()
-        {
-            PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
-        }
+
         public WeatherForecastController(IFreeSql freeSql)
         {
              _freeSql = freeSql;
+        }
+        static WeatherForecastController()
+        {
+            PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
+            PropertiesCache<Test>.SetWhereBlockFields("Type");
+            PropertiesCache<Test>.SetUpdateAllowFields("Name");
+            PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");
+            PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
+
         }
 
         [HttpPost("normal")]
@@ -84,8 +90,8 @@ namespace PgFreeSqlWeb.Controllers
         [HttpPost("increment")]
         public bool Post2(Test instance)
         {
-
-            return _freeSql.UpdateIncrement(instance);
+            
+            return _freeSql.UpdateAll(instance).ExecuteAffrows() == 1;
 
         }
 
@@ -99,6 +105,7 @@ namespace PgFreeSqlWeb.Controllers
         [HttpPost("updatebyfields")]
         public bool Post4([FromQuery]Test instance)
         {
+
             return _freeSql.UpdateWithHttpModel(Request.Query.Keys, instance).WherePrimaryKeyFromEntity(instance).ExecuteAffrows()!=0;
 
         }
@@ -113,7 +120,6 @@ namespace PgFreeSqlWeb.Controllers
         public Test Post3(Test instance)
         {
 
-            _freeSql.SetInsertInit<Test>(item => item.Domain = 2);
             return _freeSql.InsertWithInited(instance);
 
         }

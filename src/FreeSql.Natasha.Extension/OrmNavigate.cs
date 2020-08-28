@@ -13,7 +13,7 @@ public static class OrmNavigate<TEntity> where TEntity : class
 
 
     #region 链接查询抽象
-    public static void Join<TJoinEntity>(string srcFieldName, string destFieldName = default) where TJoinEntity : class
+    public static void Connect<TJoinEntity>(string srcFieldName, string destFieldName = default) where TJoinEntity : class
     {
 
         if (destFieldName == default)
@@ -25,15 +25,15 @@ public static class OrmNavigate<TEntity> where TEntity : class
     }
 
 
-    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> expression, string dstFieldName = default) where TJoinEntity : class
+    public static void Connect<TJoinEntity>(Expression<Func<TEntity, object>> expression, string dstFieldName = default) where TJoinEntity : class
     {
-        Join<TJoinEntity>(GetNameFromExpression(expression), dstFieldName);
+        Connect<TJoinEntity>(GetNameFromExpression(expression), dstFieldName);
     }
 
 
-    public static void Join<TJoinEntity>(Expression<Func<TEntity, object>> srcExpression, Expression<Func<TJoinEntity, object>> dstExpression) where TJoinEntity : class
+    public static void Connect<TJoinEntity>(Expression<Func<TEntity, object>> srcExpression, Expression<Func<TJoinEntity, object>> dstExpression) where TJoinEntity : class
     {
-        Join<TJoinEntity>(
+        Connect<TJoinEntity>(
             GetNameFromExpression(srcExpression), 
             GetNameFromExpression(dstExpression)
             );

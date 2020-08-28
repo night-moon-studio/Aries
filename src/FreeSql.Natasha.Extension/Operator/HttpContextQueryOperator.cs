@@ -8,9 +8,9 @@ namespace FreeSql.Natasha.Extension
 {
     public static class HttpContextQueryOperator<TEntity> where TEntity : class
     {
-        public static readonly Action<ISelect<TEntity>, ICollection<string>, TEntity> SelectWhereHandler;
-        public static readonly Action<IUpdate<TEntity>, ICollection<string>, TEntity> UpdateWhereHandler;
-        public static readonly Action<IDelete<TEntity>, ICollection<string>, TEntity> DeleteWhereHandler;
+        public static readonly Action<ISelect<TEntity>, IEnumerable<string>, TEntity> SelectWhereHandler;
+        public static readonly Action<IUpdate<TEntity>, IEnumerable<string>, TEntity> UpdateWhereHandler;
+        public static readonly Action<IDelete<TEntity>, IEnumerable<string>, TEntity> DeleteWhereHandler;
         static HttpContextQueryOperator()
         {
 
@@ -32,15 +32,15 @@ namespace FreeSql.Natasha.Extension
             var result = stringBuilder.ToString();
             DeleteWhereHandler += NDelegate
    .DefaultDomain()
-   .Action<IDelete<TEntity>, ICollection<string>, TEntity>(result);
+   .Action<IDelete<TEntity>, IEnumerable<string>, TEntity>(result);
 
             UpdateWhereHandler += NDelegate
     .DefaultDomain()
-    .Action<IUpdate<TEntity>, ICollection<string>, TEntity>(result);
+    .Action<IUpdate<TEntity>, IEnumerable<string>, TEntity>(result);
 
             SelectWhereHandler += NDelegate
     .DefaultDomain()
-    .Action<ISelect<TEntity>, ICollection<string>, TEntity>(result);
+    .Action<ISelect<TEntity>, IEnumerable<string>, TEntity>(result);
 
 
         }

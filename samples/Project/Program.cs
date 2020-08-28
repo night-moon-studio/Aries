@@ -26,8 +26,8 @@ namespace Project
             TableInfomation.Initialize(freesql,typeof(Test),typeof(Test2),typeof(Test3));
 
             //配置 Join 关系
-            OrmNavigate<Test>.Join<Test2>(item => item.Domain, item => item.Id);
-            OrmNavigate<Test>.Join<Test3>(item => item.Type, item => item.Id);
+            OrmNavigate<Test>.Connect<Test2>(item => item.Domain, item => item.Id);
+            OrmNavigate<Test>.Connect<Test3>(item => item.Type, item => item.Id);
 
             //前端准备查询条件
             QueryModel queryModel = new QueryModel();

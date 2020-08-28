@@ -5,19 +5,19 @@ namespace FreeSql.Natasha.Extension
     public static class QueryExtension
     {
 
-        public static ISelect<TEntity> QueryWithHttpEntity<TEntity>(this ISelect<TEntity> select, ICollection<string> collection, TEntity entity) where TEntity : class
+        public static ISelect<TEntity> QueryWithHttpEntity<TEntity>(this ISelect<TEntity> select, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.SelectWhereHandler(select, collection, entity);
+            HttpContextQueryOperator<TEntity>.SelectWhereHandler(select, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return select;
         }
-        public static IUpdate<TEntity> QueryWithHttpEntity<TEntity>(this IUpdate<TEntity> update, ICollection<string> collection, TEntity entity) where TEntity : class
+        public static IUpdate<TEntity> QueryWithHttpEntity<TEntity>(this IUpdate<TEntity> update, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.UpdateWhereHandler(update, collection, entity);
+            HttpContextQueryOperator<TEntity>.UpdateWhereHandler(update, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return update;
         }
-        public static IDelete<TEntity> QueryWithHttpEntity<TEntity>(this IDelete<TEntity> delete, ICollection<string> collection, TEntity entity) where TEntity : class
+        public static IDelete<TEntity> QueryWithHttpEntity<TEntity>(this IDelete<TEntity> delete, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.DeleteWhereHandler(delete, collection, entity);
+            HttpContextQueryOperator<TEntity>.DeleteWhereHandler(delete, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return delete;
         }
 

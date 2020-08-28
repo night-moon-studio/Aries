@@ -8,15 +8,6 @@ namespace FreeSql.Natasha.Extension
     public static class InsertExtension
     {
 
-        public static IFreeSql SetInsertInit<TEntity>(this IFreeSql freeSql, Action<TEntity> action)
-        {
-
-            InsertOperator<TEntity>.InsertInitFunc = action;
-            return freeSql;
-
-        }
-
-
         public static TEntity InsertWithInited<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
         {
              
