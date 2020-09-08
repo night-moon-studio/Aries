@@ -7,7 +7,7 @@ using System.Text;
 namespace FreeSql.Natasha.Extension
 {
 
-    public static class PropertiesCache<TEntity>
+    public static class PropertiesCache<TEntity> where TEntity :class
     {
 
         public static readonly ImmutableHashSet<string> PropMembers;
@@ -17,6 +17,7 @@ namespace FreeSql.Natasha.Extension
         public static string[] AllowUpdateColumns;
         public static Action<TEntity> UpdateInitFunc;
         public static Action<TEntity> InsertInitFunc;
+        public static Action<ISelect<TEntity>> SelectInitFunc;
 
         static PropertiesCache()
         {
@@ -55,7 +56,12 @@ namespace FreeSql.Natasha.Extension
             InsertInitFunc += action;
 
         }
+        public static void SetSelectInit(Action<ISelect<TEntity>> action)
+        {
 
+            SelectInitFunc += action;
+
+        }
 
         public static IEnumerable<string> GetUpdateFields(IEnumerable<string> keys)
         {
