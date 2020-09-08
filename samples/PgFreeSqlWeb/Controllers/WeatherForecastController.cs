@@ -9,11 +9,13 @@ namespace PgFreeSqlWeb.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private readonly IFreeSql _freeSql;
-
+        public static string Sql;
         public WeatherForecastController(IFreeSql freeSql)
         {
              _freeSql = freeSql;
         }
+
+
         static WeatherForecastController()
         {
             PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
@@ -22,6 +24,12 @@ namespace PgFreeSqlWeb.Controllers
             PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");
             PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 
+        }
+
+        [HttpGet]
+        public string ShowSql()
+        {
+            return Sql;
         }
 
         [HttpPost("normal")]

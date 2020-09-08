@@ -31,6 +31,7 @@ namespace PgFreeSqlWeb
             var freesql = new FreeSql.FreeSqlBuilder()
                         .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
                         .Build();
+            freesql.Aop.CurdBefore += Aop_CurdBefore;
             services.AddSingleton(freesql);
             //≥ı ºªØ…®√Ë
             TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
@@ -46,6 +47,11 @@ namespace PgFreeSqlWeb
                 //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, SwaggerConfiguration.XmlName));
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
+        }
+
+        private void Aop_CurdBefore(object sender, FreeSql.Aop.CurdBeforeEventArgs e)
+        {
+            WeatherForecastController.Sql = e.Sql;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

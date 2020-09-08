@@ -11,7 +11,7 @@ namespace FreeSql.Natasha.Extension
         public static TEntity InsertWithInited<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
         {
              
-            InsertOperator<TEntity>.InsertInitFunc?.Invoke(entity);
+            PropertiesCache<TEntity>.InsertInitFunc?.Invoke(entity);
             if (TableInfomation<TEntity>.PrimaryKey!=default)
             {
                 return freeSql.GetRepository<TEntity>().Insert(entity);
