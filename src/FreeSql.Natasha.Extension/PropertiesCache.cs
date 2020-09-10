@@ -47,6 +47,28 @@ namespace FreeSql.Natasha.Extension
         {
             BlockWhereFields = ImmutableHashSet.CreateRange(fields);
         }
+        public static void SetWhereBlockAllExcept(params string[] fields)
+        {
+            var temp = new HashSet<string>(PropMembers);
+            temp.ExceptWith(fields);
+            BlockWhereFields = ImmutableHashSet.CreateRange(temp);
+        }
+        /// <summary>
+        /// 设置where查询字段黑名单，在黑名单中的字段不会作为条件进行查询
+        /// </summary>
+        /// <param name="fields"></param>
+        public static void SetWhereAllowFields(params string[] fields)
+        {
+
+            if (BlockWhereFields.Count>0)
+            {
+                for (int i = 0; i < fields.Length; i++)
+                {
+                    BlockWhereFields = BlockWhereFields.Remove(fields[i]);
+                }
+            }   
+              
+        }
 
 
         /// <summary>
