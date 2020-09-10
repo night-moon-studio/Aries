@@ -18,6 +18,7 @@ namespace PgFreeSqlWeb.Controllers
 
         static WeatherForecastController()
         {
+
             PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
             PropertiesCache<Test>.SetWhereBlockFields("Type");
             PropertiesCache<Test>.SetUpdateAllowFields("Name");
@@ -29,6 +30,7 @@ namespace PgFreeSqlWeb.Controllers
         [HttpGet]
         public string ShowSql()
         {
+            var context = new WeatherForecastController(_freeSql).HttpContext;
             return Sql;
         }
 

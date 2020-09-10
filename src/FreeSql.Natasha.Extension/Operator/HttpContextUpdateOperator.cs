@@ -12,7 +12,7 @@ namespace FreeSql.Natasha.Extension
     /// <typeparam name="TEntity"></typeparam>
     public static class HttpContextUpdateOperator<TEntity> where TEntity : class
     {
-        public static readonly Action<IUpdate<TEntity>, IEnumerable<string>, TEntity> UpdateWhereHandler;
+        public static readonly Action<IUpdate<TEntity>, IEnumerable<string>, TEntity> UpdateFieldsHandler;
         static HttpContextUpdateOperator()
         {
 
@@ -38,7 +38,7 @@ namespace FreeSql.Natasha.Extension
             stringBuilder.Append("}");
             var result = stringBuilder.ToString();
 
-            UpdateWhereHandler += NDelegate
+            UpdateFieldsHandler += NDelegate
     .DefaultDomain()
     .Action<IUpdate<TEntity>, IEnumerable<string>, TEntity>(result);
 
