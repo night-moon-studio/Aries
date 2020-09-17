@@ -10,6 +10,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Aries\Aries.csproj" />
+	  <ProjectReference Include="..\..\src\Aries.Web\Aries.Web.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,43 @@
+﻿{
+  "queryModel": {
+    "page": 0,
+    "size": 0,
+    "total": true,
+    "orders": [
+      {
+        "fieldName": "Id",
+        "isDesc": false
+      }
+    ],
+    "fuzzy": [
+      {
+        "fieldName": "Name",
+        "fuzzyValue": "a"
+      }
+    ]
+  },
+  "queryInstance": {
+    "instance": {
+      "id": 0,
+      "domain": 2,
+      "type": 0,
+      "name": "string",
+      "address": "string"
+    },
+    "fields": [
+      "Domain"
+    ]
+  },
+  "modifyInstance": {
+    "instance": {
+      "id": 0,
+      "domain": 0,
+      "type": 0,
+      "name": "string",
+      "address": "string"
+    },
+    "fields": [
+      "string"
+    ]
+  }
+}
