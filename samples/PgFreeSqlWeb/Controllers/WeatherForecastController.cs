@@ -19,11 +19,15 @@ namespace PgFreeSqlWeb.Controllers
 
         static WeatherForecastController()
         {
-
+            //显示返回的字段
             PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
+            //限制查询条件
             PropertiesCache<Test>.SetWhereBlockFields("Type");
+            //允许更新的字段
             PropertiesCache<Test>.SetUpdateAllowFields("Name");
+            //初始化更新字段
             PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");
+            //初始化插入字段
             PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 
         }

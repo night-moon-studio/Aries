@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FreeSql.Natasha.Extension\Aries.csproj" />
+    <ProjectReference Include="..\..\src\Aries\Aries.csproj" />
   </ItemGroup>
 
 </Project>

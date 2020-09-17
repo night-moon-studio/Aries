@@ -25,7 +25,6 @@
   <ItemGroup>
     <PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="1.0.0" />
     <PackageReference Include="FreeSql" Version="1.9.0-preview0906" />
-    <!--<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="1.9.0-preview0906" />-->
     <PackageReference Include="FreeSql.Repository" Version="1.9.0-preview0906" />
   </ItemGroup>
 
