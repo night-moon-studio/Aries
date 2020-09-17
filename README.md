@@ -3,7 +3,7 @@
 
 FreeSql 的 Natasha 扩展
 
-## 前端传值结构
+## 前端传值结构（Aries 模型）
 ![Struct](https://github.com/night-moon-studio/Aries/blob/master/images/Aries1.png)  
 
 ## 使用
@@ -43,6 +43,19 @@ PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添�
 //插入时对实体进行单独处理
 PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 ```
+
+### 高度封装的扩展操作入口
+
+```C#
+//插入实体
+InsertWithInited<TEntity>(TEntity entity)
+//通过 Aries 模型更新实体
+ModifyFromSqlModel<TEntity>(SqlModel<TEntity> model);
+//通过 Aries 模型查询实体
+QueryFromSqlModel<TEntity>(SqlModel<TEntity> model);
+//通过 Aries 模型删除实体
+DeleteFromSqlModel<TEntity>(SqlModel<TEntity> model);
+```  
 
 ### 查询
 
