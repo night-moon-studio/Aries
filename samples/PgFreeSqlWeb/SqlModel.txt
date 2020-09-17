@@ -34,10 +34,10 @@
       "domain": 0,
       "type": 0,
       "name": "string",
-      "address": "string"
+      "address": "haha1"
     },
     "fields": [
-      "string"
+      "Address"
     ]
   }
 }

@@ -19,5 +19,17 @@ namespace Aries
             FuzzyQueryOperator<TEntity>.FuzzyQueryModel(select, model);
 
         }
+        public static void FuzzyQuery<TEntity>(this IUpdate<TEntity> update, FuzzyModel model) where TEntity : class
+        {
+
+            FuzzyQueryOperator<TEntity>.FuzzyQueryModel(update, model);
+
+        }
+        public static void FuzzyQuery<TEntity>(this IDelete<TEntity> delete, FuzzyModel model) where TEntity : class
+        {
+
+            FuzzyQueryOperator<TEntity>.FuzzyQueryModel(delete, model);
+
+        }
     }
 }

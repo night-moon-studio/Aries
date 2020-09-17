@@ -47,8 +47,15 @@ namespace Aries
         }
 
 
-
-
+        /// <summary>
+        /// 针对IUpdate的查询模型
+        /// 会受到 PropertiesCache<TEntity>.BlockWhereFields 的影响
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TQueryModel"></typeparam>
+        /// <param name="select">操作句柄</param>
+        /// <param name="queryModel">查询模型</param>
+        /// <returns></returns>
         public static ISelect<TEntity> QueryWithModel<TEntity, TQueryModel>(this ISelect<TEntity> select, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             QueryOperator<TEntity, TQueryModel>.SelectWhereHandler(select, queryModel);
@@ -75,8 +82,17 @@ namespace Aries
         public static IUpdate<TEntity> QueryWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             QueryOperator<TEntity, TQueryModel>.UpdateWhereHandler(update, queryModel);
+            if (queryModel.Fuzzy != null)
+            {
+                foreach (var model in queryModel.Fuzzy)
+                {
+                    update.FuzzyQuery(model);
+                }
+            }
             return update;
         }
+
+
         /// <summary>
         /// 针对IDelete的查询模型
         /// 会受到 PropertiesCache<TEntity>.BlockWhereFields 的影响
@@ -88,6 +104,13 @@ namespace Aries
         public static IDelete<TEntity> QueryWithModel<TEntity, TQueryModel>(this IDelete<TEntity> delete, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
+            if (queryModel.Fuzzy != null)
+            {
+                foreach (var model in queryModel.Fuzzy)
+                {
+                    delete.FuzzyQuery(model);
+                }
+            }
             return delete;
         }
 
