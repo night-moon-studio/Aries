@@ -81,7 +81,7 @@ namespace Aries
         /// <returns></returns>
         public static IUpdate<TEntity> QueryWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
-            QueryOperator<TEntity, TQueryModel>.UpdateWhereHandler(update, queryModel);
+            //QueryOperator<TEntity, TQueryModel>.UpdateWhereHandler(update, queryModel);
             if (queryModel.Fuzzy != null)
             {
                 foreach (var model in queryModel.Fuzzy)
@@ -103,7 +103,7 @@ namespace Aries
         /// <param name="queryModel">查询模型</param>
         public static IDelete<TEntity> QueryWithModel<TEntity, TQueryModel>(this IDelete<TEntity> delete, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
-            QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
+            //QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
             if (queryModel.Fuzzy != null)
             {
                 foreach (var model in queryModel.Fuzzy)

@@ -15,48 +15,48 @@ namespace Aries
         static QueryOperator()
         {
 
-            var stringBuilder = new StringBuilder();
-            var props = typeof(TQueryModel).GetProperties();
+   //         var stringBuilder = new StringBuilder();
+   //         var props = typeof(TQueryModel).GetProperties();
 
             
-            foreach (var item in props)
-            {
+   //         foreach (var item in props)
+   //         {
 
-                if (PropertiesCache<TEntity>.PropMembers.Contains(item.Name))
-                {
+   //             if (PropertiesCache<TEntity>.PropMembers.Contains(item.Name))
+   //             {
 
-                    if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item.Name))
-                    {
-                        if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                        {
-                            stringBuilder.AppendLine($"if(arg2.{item.Name}!=null){{");
-                            stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}==arg2.{item.Name});");
-                            stringBuilder.AppendLine("}");
-                        }
-                        else if (item.PropertyType == typeof(string))
-                        {
-                            stringBuilder.AppendLine($"if(arg2.{item.Name}!=default){{");
-                            stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}.Contains(arg2.{item.Name}));");
-                            stringBuilder.AppendLine("}");
-                        }
-                    }
+   //                 if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item.Name))
+   //                 {
+   //                     if (item.PropertyType.IsGenericType && item.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+   //                     {
+   //                         stringBuilder.AppendLine($"if(arg2.{item.Name}!=null){{");
+   //                         stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}==arg2.{item.Name});");
+   //                         stringBuilder.AppendLine("}");
+   //                     }
+   //                     else if (item.PropertyType == typeof(string))
+   //                     {
+   //                         stringBuilder.AppendLine($"if(arg2.{item.Name}!=default){{");
+   //                         stringBuilder.AppendLine($"arg1.Where(obj=>obj.{item.Name}.Contains(arg2.{item.Name}));");
+   //                         stringBuilder.AppendLine("}");
+   //                     }
+   //                 }
                     
-                }
+   //             }
                 
-            }
-            var result = stringBuilder.ToString();
+   //         }
+   //         var result = stringBuilder.ToString();
 
-            DeleteWhereHandler += NDelegate
-   .DefaultDomain()
-   .Action<IDelete<TEntity>, TQueryModel>(result);
+   //         DeleteWhereHandler += NDelegate
+   //.DefaultDomain()
+   //.Action<IDelete<TEntity>, TQueryModel>(result);
 
-            UpdateWhereHandler += NDelegate
-    .DefaultDomain()
-    .Action<IUpdate<TEntity>, TQueryModel>(result);
+   //         UpdateWhereHandler += NDelegate
+   // .DefaultDomain()
+   // .Action<IUpdate<TEntity>, TQueryModel>(result);
 
-            SelectWhereHandler += NDelegate
-    .DefaultDomain()
-    .Action<ISelect<TEntity>, TQueryModel>(result);
+   //         SelectWhereHandler += NDelegate
+   // .DefaultDomain()
+   // .Action<ISelect<TEntity>, TQueryModel>(result);
 
 
             if (typeof(QueryModel).IsAssignableFrom(typeof(TQueryModel)))
