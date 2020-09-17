@@ -1,10 +1,11 @@
-﻿using System;
+﻿using FreeSql;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
 
     public static class PropertiesCache<TEntity> where TEntity :class

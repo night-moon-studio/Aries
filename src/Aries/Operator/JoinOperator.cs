@@ -1,4 +1,5 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql;
+using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -7,7 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     public static class JoinOperator<TEntity, TReturn> where TEntity : class
     {

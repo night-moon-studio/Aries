@@ -1,8 +1,9 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql;
+using Natasha.CSharp;
 using System;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
 
     public static class QueryOperator<TEntity, TQueryModel> where TEntity : class where TQueryModel : QueryModel, new()

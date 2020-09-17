@@ -1,4 +1,6 @@
-﻿namespace FreeSql.Natasha.Extension
+﻿using FreeSql;
+
+namespace Aries
 {
     public static class WherePrimaryKeyExtension
     {

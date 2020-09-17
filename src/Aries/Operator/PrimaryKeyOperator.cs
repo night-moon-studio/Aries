@@ -1,7 +1,8 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql;
+using Natasha.CSharp;
 using System;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
 
     public static class PrimaryKeyOperator<TEntity,TPrimary> where TEntity : class

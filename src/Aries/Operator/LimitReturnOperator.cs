@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     public static class LimitReturnOperator<TEntity>
     {

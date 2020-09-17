@@ -1,5 +1,5 @@
 ﻿using FreeSql;
-using FreeSql.Natasha.Extension;
+using Aries;
 using Natasha.CSharp;
 using System;
 

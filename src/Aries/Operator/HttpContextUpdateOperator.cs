@@ -1,10 +1,11 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql;
+using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     /// <summary>
     /// 将遍历属性，排除主键，针对上传的字段进行更新。

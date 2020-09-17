@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using FreeSql;
+using System.Collections.Generic;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     public static class QueryExtension
     {

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using FreeSql;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     public static class JoinExtension
     {

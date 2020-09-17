@@ -1,5 +1,6 @@
-﻿using FreeSql.Natasha.Extension;
+﻿using Aries;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace PgFreeSqlWeb.Controllers
@@ -30,7 +31,6 @@ namespace PgFreeSqlWeb.Controllers
         [HttpGet]
         public string ShowSql()
         {
-            var context = new WeatherForecastController(_freeSql).HttpContext;
             return Sql;
         }
 

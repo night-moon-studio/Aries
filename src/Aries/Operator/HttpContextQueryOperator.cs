@@ -1,10 +1,11 @@
-﻿using Natasha.CSharp;
+﻿using FreeSql;
+using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FreeSql.Natasha.Extension
+namespace Aries
 {
     public static class HttpContextQueryOperator<TEntity> where TEntity : class
     {
