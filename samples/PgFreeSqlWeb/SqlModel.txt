@@ -18,14 +18,13 @@
   },
   "queryInstance": {
     "instance": {
-      "id": 1,
+      "id": 0,
       "domain": 2,
       "type": 0,
       "name": "string",
       "address": "string"
     },
     "fields": [
-    "Id",
       "Domain"
     ]
   },
