@@ -24,9 +24,9 @@ namespace PgFreeSqlWeb.Controllers
             //限制查询条件
             PropertiesCache<Test>.SetWhereBlockFields("Type");
             //允许更新的字段
-            PropertiesCache<Test>.SetUpdateAllowFields("Name");
+            PropertiesCache<Test>.SetUpdateAllowFields("Name", "Address");
             //初始化更新字段
-            PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");
+            //PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");
             //初始化插入字段
             PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 
@@ -109,7 +109,19 @@ namespace PgFreeSqlWeb.Controllers
 
         }
 
-
+        /// <summary>
+        /// 按需更新
+        /// </summary>
+        /// <param name="updateEntity"></param>
+        /// <returns></returns>
+        [HttpPost("modifybyid")]
+        public long ModifyById([FromQuery] Test updateEntity)
+        {
+            return _freeSql
+                .UpdateWithHttpModel(Request.Query.Keys, updateEntity)
+                .WherePrimaryKeyFromEntity(updateEntity)
+                .ExecuteAffrows();
+        }
 
         /// <summary>
         /// 按需更新 主键 作为更新条件，只更新参数中的字段

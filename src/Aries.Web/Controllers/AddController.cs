@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Aries.Web.Controllers
 {
 
+    /// <summary>
+    /// 新增路由 需要被继承
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class AddController<T> : ModifyController<T> where T : class
     {
 

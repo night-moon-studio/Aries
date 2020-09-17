@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Aries.Web.Controllers
 {
-
+    /// <summary>
+    /// 查询路由 需要被继承
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class QueryController<T> : ResultController where T : class
     {
 
@@ -20,22 +23,12 @@ namespace Aries.Web.Controllers
 
 
         [HttpPost("query")]
-        public ApiReturnPageResult Query([FromQuery] T instance, [FromBody] QueryModel query)
+        public ApiReturnPageResult Query([FromBody] SqlModel<T> query)
         {
             return Result(_freeSql
                 .Select<T>()
-                .QueryWithHttpEntity(Request.Query.Keys, instance)
+                .QueryWithHttpEntity(query.QueryInstance.Fields, query.QueryInstance.Instance)
                 .QueryWithModel(query,out long totle)
-                .ToLimitList(), totle);
-        }
-
-        [HttpPost("modify")]
-        public ApiReturnPageResult Modify([FromQuery] T instance, [FromBody] QueryModel query)
-        {
-            return Result(_freeSql
-                .Select<T>()
-                .QueryWithHttpEntity(Request.Query.Keys, instance)
-                .QueryWithModel(query, out long totle)
                 .ToLimitList(), totle);
         }
 

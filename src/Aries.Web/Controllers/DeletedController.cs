@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Aries.Web.Controllers
 {
 
+    /// <summary>
+    /// 删除路由，需要被继承
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class DeletedController<T> : ModifyController<T> where T : class
     {
 
@@ -19,11 +23,21 @@ namespace Aries.Web.Controllers
 
 
         [HttpPost("delete")]
-        public ApiReturnResult Deleted([FromQuery] T instance)
+        public ApiReturnResult DeleteByCondition([FromQuery] T entity, [FromBody] QueryModel query)
         {
             return Result(_freeSql
-                .Delete<T>().QueryWithHttpEntity(Request.Query.Keys, instance)
+                .Delete<T>().QueryWithHttpEntity(Request.Query.Keys, entity)
+                .QueryWithModel(query)
                 .ExecuteAffrows());
+        }
+
+        [HttpPost("deletebyid")]
+        public ApiReturnResult DeleteById([FromQuery] T entity)
+        {
+            return BoolResult(_freeSql
+                .Delete<T>()
+                .WherePrimaryKeyFromEntity(entity)
+                .ExecuteAffrows() != 0);
         }
 
     }
