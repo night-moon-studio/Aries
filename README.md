@@ -3,6 +3,9 @@
 
 FreeSql 的 Natasha 扩展
 
+## 前端传值结构
+![Struct](https://github.com/night-moon-studio/Aries/blob/master/images/Aries1.png)  
+
 ## 使用
 
 ### 配置
