@@ -5,7 +5,7 @@
 
     public int Size { get; set; }
 
-    public bool? Total { get; set; }
+    public bool Total { get; set; }
 
     public OrderModel[] Orders { get; set; }
 

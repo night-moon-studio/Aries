@@ -64,29 +64,6 @@ namespace Aries
 
 
         /// <summary>
-        /// 针对ISelect的查询模型
-        /// 会受到 PropertiesCache<TEntity>.BlockWhereFields 的影响
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <typeparam name="TQueryModel"></typeparam>
-        /// <param name="select">操作句柄</param>
-        /// <param name="queryModel">查询模型</param>
-        /// <returns></returns>
-        public static ISelect<TEntity> QueryWithModel<TEntity,TQueryModel>(this ISelect<TEntity> select, TQueryModel queryModel,out long total) where TEntity : class where TQueryModel : QueryModel, new()
-        {
-            QueryOperator<TEntity, TQueryModel>.SelectWhereHandler(select, queryModel);
-            if (queryModel.Fuzzy!=null)
-            {
-                foreach (var model in queryModel.Fuzzy)
-                {
-                    select.FuzzyQuery(model);
-                }
-            }
-            select.Count(out total);
-            return select;
-        }
-
-        /// <summary>
         /// 针对IUpdate的查询模型
         /// 会受到 PropertiesCache<TEntity>.BlockWhereFields 的影响
         /// </summary>

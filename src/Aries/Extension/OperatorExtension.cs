@@ -38,23 +38,10 @@ namespace Aries
         }
 
 
-        public static ISelect<TEntity> QueryFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model, out long total) where TEntity : class
+        public static ISelect<TEntity> QueryFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model,out long total) where TEntity : class
         {
 
             var handler = freesql.Select<TEntity>();
-            if (model.QueryModel != null)
-            {
-
-                handler.QueryWithModel(model.QueryModel,out total);
-
-            }
-            else
-            {
-
-                total = 0;
-
-            }
-
 
             if (model.QueryInstance != null)
             {
@@ -62,6 +49,26 @@ namespace Aries
                 handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
             }
+
+            if (model.QueryModel != null)
+            {
+
+                handler.QueryWithModel(model.QueryModel);
+                if (model.QueryModel.Total)
+                {
+                    handler.Count(out total);
+                }
+                else
+                {
+                    total = 0;
+                }
+
+            }
+            else
+            {
+                total = 0;
+            }
+
             return handler;
 
         }
