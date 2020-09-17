@@ -1,11 +1,8 @@
 ﻿using FreeSql;
-using Natasha.CSharp;
-using System;
-using System.Collections.Immutable;
 
 namespace Aries
 {
-    
+
     public static class FuzzyQueryExtensions
     {
 

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using FreeSql;
+using System.Collections.Generic;
 
-namespace Aries.Extension
+namespace Aries
 {
     public static class OperatorExtension
     {
 
-        public static long ModifyFromQueryModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
+        public static IUpdate<TEntity> ModifyFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
         {
 
             if (model.ModifyInstance != null)
@@ -29,15 +30,15 @@ namespace Aries.Extension
                 }
 
 
-                return handler.ExecuteAffrows();
+                return handler;
             }
-            return -1;
+            return null;
 
 
         }
 
 
-        public static IEnumerable<TEntity> QueryFromQueryModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model, out long total) where TEntity : class
+        public static ISelect<TEntity> QueryFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model, out long total) where TEntity : class
         {
 
             var handler = freesql.Select<TEntity>();
@@ -61,12 +62,12 @@ namespace Aries.Extension
                 handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
             }
-            return handler.ToLimitList();
+            return handler;
 
         }
 
 
-        public static long DeleteFromQueryModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
+        public static IDelete<TEntity> DeleteFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
         {
 
             var handler = freesql.Delete<TEntity>();
@@ -84,7 +85,7 @@ namespace Aries.Extension
                 handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
             }   
-            return handler.ExecuteAffrows();
+            return handler;
         }
 
     }
