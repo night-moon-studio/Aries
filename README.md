@@ -16,14 +16,6 @@ FreeSql 的 Natasha 扩展
 TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3)，.....);
 ```
 
-#### 关系初始化配置
-```C#
-//配置关联关系
-OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
-//test=>test.Type, test3=>test3.Id
-OrmNavigate<Test>.Connect<Test3>("Type", "Id"); 
-```
-
 #### 字段使用范围初始化配置
 ```C#
 //配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
@@ -44,8 +36,21 @@ PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添�
 PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 ```
 
+### 查询
+
+ - QueryWithHttpEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
+ - QueryWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
+ - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == {value})， 生成 Where 主键 = xxx 的查询条件。
+ 
+### 更新
+
+ - UpdateAll(entity); 通过前端传来的实体，进行更新。
+ - UpdateWithHttpModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
+
+
 ### 高度封装的扩展操作入口
 
+一下方法封装了 XXXWithHttpEntity / QueryWithModel 可以在查询的同时完成更新/删除等操作
 ```C#
 //插入实体
 InsertWithInited<TEntity>(TEntity entity)
@@ -57,32 +62,32 @@ QueryFromSqlModel<TEntity>(SqlModel<TEntity> model);
 DeleteFromSqlModel<TEntity>(SqlModel<TEntity> model);
 ```  
 
-### 查询
-
- - QueryWithHttpEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码。
- - QueryWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询。
- - WherePrimaryKeyFromEntity(entity); 生成 Where 主键 = xxx 的查询条件代码。
- 
-### 更新
-
- - UpdateAll(entity); 通过前端传来的实体，进行更新。
- - UpdateWithHttpModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新。
 
 ## 链表查询
 
+### 关系初始化配置
+
 ```C#
-return _freeSql.Select<Test>()
-          .QueryWithHttpEntity(Request.Query.Keys, instance)
-          .QueryWithModel(query)
-          .UseMappingClass<Test,TestResult>()
-          .ToJoinList(item=>new
-          {
-
-               TESTName = item.Name,
-               DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
-               TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName),
-
-          });
+//配置关联关系
+OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
+//test=>test.Type, test3=>test3.Id
+OrmNavigate<Test>.Connect<Test3>("Type", "Id"); 
 ```
+
+### 使用 ToJoinList
+```C#
+[HttpPost("join")]
+public ApiReturnPageResult GetJoinList(SqlModel<Test> sqlModel)
+{
+    return Result( _freeSql.QueryFromSqlModel(sqlModel,out long total).ToJoinList(item => new
+        {
+            item.Id,
+           TestName = item.Name,
+           DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
+           TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName)
+        }),total);
+}
+```
+
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_large)
