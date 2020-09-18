@@ -38,14 +38,14 @@ PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 
 ### 查询
 
- - QueryWithHttpEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码。
- - QueryWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询。
- - WherePrimaryKeyFromEntity(entity); 生成 Where 主键 = xxx 的查询条件代码。
+ - QueryWithHttpEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
+ - QueryWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
+ - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == {value})， 生成 Where 主键 = xxx 的查询条件。
  
 ### 更新
 
  - UpdateAll(entity); 通过前端传来的实体，进行更新。
- - UpdateWithHttpModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新。
+ - UpdateWithHttpModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
 
 
 ### 高度封装的扩展操作入口
