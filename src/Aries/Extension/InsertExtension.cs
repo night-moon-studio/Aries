@@ -7,7 +7,6 @@ namespace Aries
 
     public static class InsertExtension
     {
-
         /// <summary>
         /// 初始化实体并插入
         /// 会受到 PropertiesCache<TEntity>.InsertInitFunc 的影响
@@ -22,7 +21,9 @@ namespace Aries
             PropertiesCache<TEntity>.InsertInitFunc?.Invoke(entity);
             if (TableInfomation<TEntity>.PrimaryKey!=default)
             {
-                return freeSql.GetRepository<TEntity>().Insert(entity);
+                var id = freeSql.Insert(entity).IgnoreColumns(new string[] { TableInfomation<TEntity>.PrimaryKey }).ExecuteIdentity();
+                TableInfomation<TEntity>.SetPrimaryKey(entity, id);
+                return entity;
             }
 
             if (freeSql.Insert(entity).ExecuteAffrows() == 1)

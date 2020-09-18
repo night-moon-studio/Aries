@@ -51,23 +51,5 @@ namespace Aries
             return update;
         }
 
-
-        /// <summary>
-        /// 增量更新
-        /// 会受到 PropertiesCache<TEntity>.UpdateInitFunc 的影响
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <param name="freeSql">freesql实例</param>
-        /// <param name="entity">实体类</param>
-        /// <returns></returns>
-        public static bool UpdateIncrement<TEntity>(this IFreeSql freeSql, TEntity entity) where TEntity : class
-        {
-            PropertiesCache<TEntity>.UpdateInitFunc?.Invoke(entity);
-            var repo = freeSql.GetRepository<TEntity>();
-            //通过仓储和主键查询出一个实体
-            TableInfomation<TEntity>.FillPrimary(repo,entity).First();
-            return repo.Update(entity) != 0;
-
-        }
     }
 }
