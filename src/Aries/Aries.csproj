@@ -5,7 +5,7 @@
 	  <Product>FreeSql.PgSql.Natasha.Extension</Product>
 	  <Description>基于 Freesql 和 Natasha 的 PGSQL ORM扩展。</Description>
 	  <Copyright>NMSAzulX</Copyright>
-	  <PackageId>FreeSql.PgSql.Natasha.Extension</PackageId>
+	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <PackageReleaseNotes>正式版</PackageReleaseNotes>
 	  <Version>1.0.0</Version>
