@@ -16,7 +16,7 @@ namespace Microsoft.AspNetCore.Mvc
         }
 
 
-        [HttpPost("add")]
+        [HttpPost("aries_add")]
         public ApiReturnResult Add(T instance)
         {
             return Result(_freeSql.InsertWithInited(instance));

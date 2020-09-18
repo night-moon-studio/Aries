@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="queryEntity">查询实体</param>
         /// <param name="queryModel">查询模型</param>
         /// <returns></returns>
-        [HttpPost("modifybyquery")]
+        [HttpPost("aries_modify")]
         public ApiReturnResult ModifyByCondition([FromBody] SqlModel<T> queryModel)
         {
 
