@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Aries.Web
 {
@@ -25,25 +21,6 @@ namespace Aries.Web
             var types = assembly.GetTypes();
 
             TableInfomation.Initialize(freeSql, types);
-
-            //var repositoryJoinQueryType = typeof(QEJoinQueryRepository<>);
-            //var repositoryAuditType = typeof(QEStatusRepository<>);
-            //var repositoryWriteType = typeof(QEWriteRepository<>);
-            //var repositoryPublishType = typeof(QEPublishRepository<>);
-
-
-            //foreach (var item in types)
-            //{
-                
-            //    if (item.IsClass)
-            //    {
-            //        services.AddScoped(repositoryAuditType.MakeGenericType(item));
-            //        services.AddScoped(repositoryPublishType.MakeGenericType(item));
-            //        services.AddScoped(repositoryJoinQueryType.MakeGenericType(item));
-            //        services.AddScoped(repositoryWriteType.MakeGenericType(item));
-            //    }
-
-            //}
 
         }
     }

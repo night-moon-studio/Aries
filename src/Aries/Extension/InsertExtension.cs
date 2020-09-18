@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 
 namespace Aries
 {
@@ -19,14 +17,15 @@ namespace Aries
         {
              
             PropertiesCache<TEntity>.InsertInitFunc?.Invoke(entity);
+            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertFields.ToArray());
             if (TableInfomation<TEntity>.PrimaryKey!=default)
             {
-                var id = freeSql.Insert(entity).IgnoreColumns(new string[] { TableInfomation<TEntity>.PrimaryKey }).ExecuteIdentity();
+                var id = insert.ExecuteIdentity();
                 TableInfomation<TEntity>.SetPrimaryKey(entity, id);
                 return entity;
             }
 
-            if (freeSql.Insert(entity).ExecuteAffrows() == 1)
+            if (insert.ExecuteAffrows() == 1)
             {
                 return entity;
             }

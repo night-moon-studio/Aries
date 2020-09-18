@@ -15,6 +15,7 @@ namespace Aries
         public static ImmutableHashSet<string> BlockWhereFields;
         public static ImmutableHashSet<string> BlockSelectFields;
         public static ImmutableHashSet<string> AllowUpdateFields;
+        public static ImmutableHashSet<string> BlockInsertFields;
         public static string[] AllowUpdateColumns;
         public static Action<TEntity> UpdateInitFunc;
         public static Action<TEntity> InsertInitFunc;
@@ -23,8 +24,19 @@ namespace Aries
         static PropertiesCache()
         {
             PropMembers = ImmutableHashSet.CreateRange(typeof(TEntity).GetProperties().Select(item => item.Name));
+            var props = PropMembers;
+            if (TableInfomation<TEntity>.PrimaryKey != default)
+	        {
+                props = PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
+                BlockInsertFields = ImmutableHashSet.Create(TableInfomation<TEntity>.PrimaryKey);
+            }
+            else
+            {
+                BlockInsertFields = ImmutableHashSet.Create<string>();
+            }
+
             BlockWhereFields = ImmutableHashSet.Create<string>();
-            AllowUpdateFields = ImmutableHashSet.CreateRange(PropMembers);
+            AllowUpdateFields = ImmutableHashSet.CreateRange(props);
             BlockSelectFields = ImmutableHashSet.Create<string>();
         }
 
