@@ -54,11 +54,11 @@ PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
 ```C#
 //插入实体
 InsertWithInited<TEntity>(TEntity entity)
-//通过 Aries 模型更新实体
+//通过 Aries 模型查询并更新实体
 ModifyFromSqlModel<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询实体
 QueryFromSqlModel<TEntity>(SqlModel<TEntity> model);
-//通过 Aries 模型删除实体
+//通过 Aries 模型查询并删除实体
 DeleteFromSqlModel<TEntity>(SqlModel<TEntity> model);
 ```  
 
