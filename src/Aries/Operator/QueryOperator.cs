@@ -1,5 +1,4 @@
 ﻿using FreeSql;
-using Natasha.CSharp;
 using System;
 using System.Text;
 

@@ -1,5 +1,4 @@
 ﻿using FreeSql;
-using System.Collections.Generic;
 
 namespace Aries
 {
