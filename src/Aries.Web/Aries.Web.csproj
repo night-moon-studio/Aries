@@ -1,26 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <OutputType>Library</OutputType>
-    <Product>Aries.Web</Product>
-    <Description>Aries 的 Web 版本</Description>
-    <Copyright>NMSAzulX</Copyright>
-    <PackageId>NMS.Aries.Web</PackageId>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>正式发布</PackageReleaseNotes>
-    <Version>1.0.0</Version>
-    <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
-    <PackageTags>Natasha;Freesql;Web</PackageTags>
-    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <Company>AzulX</Company>
-    <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
-    <Authors>AzulX</Authors>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<OutputType>Library</OutputType>
+		<Product>Aries.Web</Product>
+		<Description>Aries 的 Web 版本</Description>
+		<Copyright>NMSAzulX</Copyright>
+		<PackageId>NMS.Aries.Web</PackageId>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<PackageReleaseNotes>正式发布</PackageReleaseNotes>
+		<Version>1.0.0.3</Version>
+		<PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
+		<PackageTags>Natasha;Freesql;Web;Aries;</PackageTags>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Company>AzulX</Company>
+		<PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
+		<Authors>AzulX</Authors>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Aries\Aries.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Aries\Aries.csproj" />
+	</ItemGroup>
+
 
 </Project>

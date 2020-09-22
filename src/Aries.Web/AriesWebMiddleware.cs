@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 
-namespace Aries.Web
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AriesWebMiddleware
     {
 
-        public static void UseAries(this IServiceCollection services, IFreeSql freeSql, string path)
+        public static void AddAries(this IServiceCollection services, IFreeSql freeSql, string path)
         {
 
             NatashaInitializer.InitializeAndPreheating();

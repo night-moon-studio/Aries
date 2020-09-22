@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Mvc
 
 
         [HttpPost("aries_query")]
-        public ApiReturnPageResult Query([FromBody] SqlModel<T> query)
+        public virtual ApiReturnPageResult Query([FromBody] SqlModel<T> query)
         {
             return Result(_freeSql.QueryFromSqlModel(query,out var total).ToLimitList(), total);
         }

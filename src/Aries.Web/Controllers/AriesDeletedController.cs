@@ -17,13 +17,13 @@ namespace Microsoft.AspNetCore.Mvc
 
 
         [HttpPost("aries_delete")]
-        public ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
+        public virtual ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
         {
             return Result(_freeSql.DeleteFromSqlModel(model).ExecuteAffrows());
         }
 
         [HttpPost("aries_deletebyid")]
-        public ApiReturnResult DeleteById([FromQuery] T entity)
+        public virtual ApiReturnResult DeleteById([FromQuery] T entity)
         {
             return BoolResult(_freeSql
                 .Delete<T>()

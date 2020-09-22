@@ -7,8 +7,8 @@
 	  <Copyright>NMSAzulX</Copyright>
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <PackageReleaseNotes>正式版</PackageReleaseNotes>
-	  <Version>1.0.0</Version>
+	  <PackageReleaseNotes>正式版  使用Freesql 1.5.0</PackageReleaseNotes>
+	  <Version>1.0.0.1</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql</PackageTags>
@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="1.0.0" />
-    <PackageReference Include="FreeSql" Version="1.9.0-preview0906" />
+    <PackageReference Include="FreeSql" Version="1.5.0" />
   </ItemGroup>
 
 </Project>
