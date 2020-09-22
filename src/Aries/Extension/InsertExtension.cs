@@ -17,7 +17,7 @@ namespace Aries
         {
              
             PropertiesCache<TEntity>.InsertInitFunc?.Invoke(entity);
-            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertFields.ToArray());
+            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
 
             if (TableInfomation<TEntity>.PrimaryKey!=default)
             {

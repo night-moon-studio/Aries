@@ -99,9 +99,10 @@ namespace Aries
                 }
                 if (script.Length > 1)
                 {
+                    var blockWhereList = PropertiesCache<TEntity>.GetBlockSelectFields();
                     foreach (var item in props)
                     {
-                        if (!PropertiesCache<TEntity>.BlockSelectFields.Contains(item))
+                        if (!blockWhereList.Contains(item))
                         {
                             script.Append($"a.\"{item}\",");
                         }

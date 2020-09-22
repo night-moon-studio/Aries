@@ -8,10 +8,10 @@
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <PackageReleaseNotes>正式版  使用Freesql 1.5.0</PackageReleaseNotes>
-	  <Version>1.0.0.1</Version>
+	  <Version>1.0.1</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
-	  <PackageTags>Natasha;Freesql;Pgsql</PackageTags>
+	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
 	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	  <Company>NMSAzulX</Company>
 	  <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>

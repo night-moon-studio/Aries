@@ -12,10 +12,10 @@ namespace Aries
     {
 
         public static readonly ImmutableHashSet<string> PropMembers;
-        public static ImmutableHashSet<string> BlockWhereFields;
-        public static ImmutableHashSet<string> BlockSelectFields;
-        public static ImmutableHashSet<string> AllowUpdateFields;
-        public static ImmutableHashSet<string> BlockInsertFields;
+        private static ImmutableHashSet<string> _blockWhereFields;
+        private static ImmutableHashSet<string> _blockSelectFields;
+        private static ImmutableHashSet<string> _allowUpdateFields;
+        private static ImmutableHashSet<string> _blockInsertFields;
         public static string[] AllowUpdateColumns;
         public static Action<TEntity> UpdateInitFunc;
         public static Action<TEntity> InsertInitFunc;
@@ -28,73 +28,114 @@ namespace Aries
             if (TableInfomation<TEntity>.PrimaryKey != default)
 	        {
                 props = PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
-                BlockInsertFields = ImmutableHashSet.Create(TableInfomation<TEntity>.PrimaryKey);
+                _blockInsertFields = ImmutableHashSet.Create(TableInfomation<TEntity>.PrimaryKey);
             }
             else
             {
-                BlockInsertFields = ImmutableHashSet.Create<string>();
+                _blockInsertFields = ImmutableHashSet.Create<string>();
             }
 
-            BlockWhereFields = ImmutableHashSet.Create<string>();
-            AllowUpdateFields = ImmutableHashSet.CreateRange(props);
-            BlockSelectFields = ImmutableHashSet.Create<string>();
+            _blockWhereFields = ImmutableHashSet.Create<string>();
+            _allowUpdateFields = ImmutableHashSet.CreateRange(props);
+            _blockSelectFields = ImmutableHashSet.Create<string>();
         }
 
-
-        /// <summary>
-        /// 设置查询字段黑名单，在黑名单中的字段可能不会参与结果返回
-        /// </summary>
-        /// <param name="fields"></param>
-        public static void SetSelectBlockFields(params string[] fields)
+        public static ImmutableHashSet<string> GetBlockWhereFields()
         {
-            BlockSelectFields = ImmutableHashSet.CreateRange(fields);
-            ResetSelectScript();
+            return _blockWhereFields;
         }
-
-
-        /// <summary>
-        /// 设置where查询字段黑名单，在黑名单中的字段不会作为条件进行查询
-        /// </summary>
-        /// <param name="fields"></param>
-        public static void SetWhereBlockFields(params string[] fields)
+        public static ImmutableHashSet<string> GetBlockSelectFields()
         {
-            BlockWhereFields = ImmutableHashSet.CreateRange(fields);
+            return _blockSelectFields;
         }
-        public static void SetWhereBlockAllExcept(params string[] fields)
+        public static ImmutableHashSet<string> GetBlockInsertFields()
         {
-            var temp = new HashSet<string>(PropMembers);
-            temp.ExceptWith(fields);
-            BlockWhereFields = ImmutableHashSet.CreateRange(temp);
+            return _blockInsertFields;
         }
-        /// <summary>
-        /// 设置where查询字段黑名单，在黑名单中的字段不会作为条件进行查询
-        /// </summary>
-        /// <param name="fields"></param>
-        public static void SetWhereAllowFields(params string[] fields)
+        public static ImmutableHashSet<string> GetAllowUpdateFields()
         {
-
-            if (BlockWhereFields.Count>0)
-            {
-                for (int i = 0; i < fields.Length; i++)
-                {
-                    BlockWhereFields = BlockWhereFields.Remove(fields[i]);
-                }
-            }   
-              
+            return _allowUpdateFields;
         }
 
-
-        /// <summary>
-        /// 更新字段白名单，在白名单中的字段才允许参与更新操作
-        /// 默认所有字段均参与更新
-        /// </summary>
-        /// <param name="fields"></param>
-        public static void SetUpdateAllowFields(params string[] fields)
+        #region 黑名单操作
+        public static void BlockAllUpdateFields()
         {
-            AllowUpdateFields = ImmutableHashSet.CreateRange(fields);
-            AllowUpdateColumns = AllowUpdateFields.ToArray();
+            _allowUpdateFields = ImmutableHashSet.Create<string>();
+            AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
+        public static void BlockAllWhereFields()
+        {
+            _blockWhereFields = ImmutableHashSet.CreateRange(PropMembers);
+        }
+        public static void BlockAllSelectFields()
+        {
+            _blockSelectFields = ImmutableHashSet.CreateRange(PropMembers);
+        }
+        public static void BlockAllInsertFields()
+        {
+            _blockInsertFields = ImmutableHashSet.CreateRange(PropMembers);
+        }
+        #endregion
 
+        #region 白名单操作
+        public static void AllowAllUpdateFields()
+        {
+            _allowUpdateFields = ImmutableHashSet.CreateRange(PropMembers);
+            AllowUpdateColumns = _allowUpdateFields.ToArray();
+        }
+        public static void AllowAllWhereFields()
+        {
+            _blockWhereFields = ImmutableHashSet.Create<string>();
+        }
+        public static void AllowAllSelectFields()
+        {
+            _blockSelectFields = ImmutableHashSet.Create<string>();
+        }
+        public static void AllowAllInsertFields()
+        {
+            _blockInsertFields = ImmutableHashSet.Create<string>();
+        }
+        #endregion
+
+
+        #region 增加白名单
+        public static void AllowUpdateFields(params string[] fields)
+        {
+            _allowUpdateFields = _allowUpdateFields.Union(fields);
+        }
+        public static void AllowWhereFields(params string[] fields)
+        {
+            _blockWhereFields = _blockWhereFields.Except(fields);
+        }
+        public static void AllowSelectFields(params string[] fields)
+        {
+            _blockSelectFields = _blockSelectFields.Except(fields);
+        }
+        public static void AllowInsertFields(params string[] fields)
+        {
+            _blockInsertFields = _blockInsertFields.Except(fields);
+        }
+        #endregion
+
+        #region 增加黑名单
+        public static void BlockUpdateFields(params string[] fields)
+        {
+            _allowUpdateFields = _allowUpdateFields.Except(fields);
+        }
+        public static void BlockWhereFields(params string[] fields)
+        {
+            _blockWhereFields = _blockWhereFields.Union(fields);
+        }
+        public static void BlockSelectFields(params string[] fields)
+        {
+            _blockSelectFields = _blockSelectFields.Union(fields);
+        }
+        public static void BlockInsertFields(params string[] fields)
+        {
+            _blockInsertFields = _blockInsertFields.Union(fields);
+        }
+        #endregion
+        
 
         /// <summary>
         /// 设置更新初始化委托，在实体类更新之前将对实体类进行默认值设置
@@ -140,7 +181,7 @@ namespace Aries
         public static IEnumerable<string> GetUpdateFields(IEnumerable<string> keys)
         {
             var result = new HashSet<string>(keys);
-            result.IntersectWith(AllowUpdateFields);
+            result.IntersectWith(_allowUpdateFields);
             return result;
         }
 
@@ -153,7 +194,7 @@ namespace Aries
         public static IEnumerable<string> GetWhereFields(IEnumerable<string> keys)
         {
             var result = new HashSet<string>(keys);
-            result.ExceptWith(BlockWhereFields);
+            result.ExceptWith(_blockWhereFields);
             return result;
         }
 
@@ -166,7 +207,7 @@ namespace Aries
         public static IEnumerable<string> GetSelectFields(IEnumerable<string> keys)
         {
             var result = new HashSet<string>(keys);
-            result.ExceptWith(BlockSelectFields);
+            result.ExceptWith(_blockSelectFields);
             return result;
         }
 
@@ -179,7 +220,7 @@ namespace Aries
             StringBuilder script = new StringBuilder();
             foreach (var item in PropMembers)
             {
-                if (!BlockSelectFields.Contains(item))
+                if (!_blockSelectFields.Contains(item))
                 {
                     script.Append($"a.\"{item}\",");
                 }

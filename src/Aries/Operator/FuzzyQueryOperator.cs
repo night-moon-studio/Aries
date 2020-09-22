@@ -29,7 +29,7 @@ namespace Aries
 
             }
             else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.BlockWhereFields.Contains(model.FieldName))
+                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
             {
                 Action<ISelect<TEntity>, string> action = NDelegate
                     .DefaultDomain()
@@ -51,7 +51,7 @@ namespace Aries
 
             }
             else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.BlockWhereFields.Contains(model.FieldName))
+                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
             {
                 Action<IUpdate<TEntity>, string> action = NDelegate
                     .DefaultDomain()
@@ -73,7 +73,7 @@ namespace Aries
 
             }
             else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.BlockWhereFields.Contains(model.FieldName))
+                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
             {
                 Action<IDelete<TEntity>, string> action = NDelegate
                     .DefaultDomain()

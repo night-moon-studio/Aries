@@ -18,10 +18,11 @@ namespace Aries
             var stringBuilder = new StringBuilder();
             var props = typeof(TEntity).GetProperties().Select(item=>item.Name);
             stringBuilder.AppendLine("foreach(var field in arg2){");
+            var blockWhereList = PropertiesCache<TEntity>.GetBlockWhereFields();
             foreach (var item in props)
             {
 
-                if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item))
+                if (!blockWhereList.Contains(item))
                 {
                     stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item}==arg3.{item});  }}");
                     stringBuilder.Append("else ");

@@ -20,13 +20,14 @@ namespace Aries
             var stringBuilder = new StringBuilder();
             var props = typeof(TEntity).GetProperties().Select(item=>item.Name);
             stringBuilder.AppendLine("foreach(var field in arg2){");
+            var allowList = PropertiesCache<TEntity>.GetAllowUpdateFields();
             foreach (var item in props)
             {
 
                 if (item!=TableInfomation<TEntity>.PrimaryKey)
                 {
 
-                    if (PropertiesCache<TEntity>.AllowUpdateFields.Contains(item))
+                    if (allowList.Contains(item))
                     {
                         stringBuilder.AppendLine($"if(field == \"{item}\"){{ arg1.Set(obj=>obj.{item}==arg3.{item}); }}");
                         stringBuilder.Append("else ");

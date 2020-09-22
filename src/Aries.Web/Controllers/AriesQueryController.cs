@@ -22,5 +22,11 @@ namespace Microsoft.AspNetCore.Mvc
             return Result(_freeSql.QueryFromSqlModel(query,out var total).ToLimitList(), total);
         }
 
+        [HttpPost("aries_query_count")]
+        public virtual ApiReturnResult QueryCount([FromBody] SqlModel<T> query)
+        {
+            return Result(_freeSql.QueryFromSqlModel(query, out var total).Count());
+        }
+
     }
 }

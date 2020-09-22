@@ -72,10 +72,11 @@ namespace Aries
                             select.Page(queryModel.Page, queryModel.Size);
                         }
                         var orderBuilder = new StringBuilder(queryModel.Orders.Length * 8);
+                        var blockWhereList = PropertiesCache<TEntity>.GetBlockWhereFields();
                         foreach (var item in queryModel.Orders)
                         {
 
-                            if (!PropertiesCache<TEntity>.BlockWhereFields.Contains(item.FieldName))
+                            if (!blockWhereList.Contains(item.FieldName))
                             {
 
                                 if (PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName))
