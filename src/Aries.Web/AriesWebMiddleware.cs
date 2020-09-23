@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new FileNotFoundException("没有发现实体类文件！");
             }
 
-            var assembly = Assembly.LoadFrom(path);
+            var assembly = Assembly.Load(path);
             var types = assembly.GetTypes();
 
             TableInfomation.Initialize(freeSql, types);

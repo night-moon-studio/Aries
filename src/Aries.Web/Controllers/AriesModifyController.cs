@@ -23,7 +23,7 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="queryModel">查询模型</param>
         /// <returns></returns>
         [HttpPost("aries_modify")]
-        public virtual ApiReturnResult ModifyByCondition([FromBody] SqlModel<T> queryModel)
+        public virtual ApiReturnResult Modify([FromBody] SqlModel<T> queryModel)
         {
 
             return Result(_freeSql.ModifyFromSqlModel(queryModel).ExecuteAffrows());

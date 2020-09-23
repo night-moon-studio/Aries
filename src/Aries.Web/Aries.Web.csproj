@@ -9,7 +9,7 @@
 		<PackageId>NMS.Aries.Web</PackageId>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<PackageReleaseNotes>正式发布</PackageReleaseNotes>
-		<Version>1.0.1</Version>
+		<Version>1.1.0.2</Version>
 		<PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 		<PackageTags>Natasha;Freesql;Web;Aries;</PackageTags>
@@ -23,6 +23,4 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Aries\Aries.csproj" />
 	</ItemGroup>
-
-
 </Project>
