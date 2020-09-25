@@ -8,7 +8,7 @@ namespace Aries
 
         /// <summary>
         /// 按需更新，不自带条件，需要补充查询条件
-        /// 会受到 PropertiesCache<TEntity>.UpdateInitFunc 以及 PropertiesCache<TEntity>.AllowUpdateColumns
+        /// 会受到 PropertiesCache<TEntity>.AllowUpdateColumns
         /// 的影响
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -18,7 +18,6 @@ namespace Aries
         /// <returns></returns>
         public static IUpdate<TEntity> UpdateWithHttpModel<TEntity>(this IFreeSql freeSql, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            PropertiesCache<TEntity>.UpdateInitFunc?.Invoke(entity);
             var update = freeSql.Update<TEntity>();
             HttpContextUpdateOperator<TEntity>.UpdateFieldsHandler(update, PropertiesCache<TEntity>.GetUpdateFields(collection), entity);
             return update;
@@ -27,7 +26,7 @@ namespace Aries
 
         /// <summary>
         /// 更新全部
-        /// 会受到 PropertiesCache<TEntity>.UpdateInitFunc 以及 PropertiesCache<TEntity>.AllowUpdateColumns
+        /// 会受到 PropertiesCache<TEntity>.AllowUpdateColumns
         /// 的影响
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
@@ -36,7 +35,6 @@ namespace Aries
         /// <returns></returns>
         public static IUpdate<TEntity> UpdateAll<TEntity>(this IFreeSql freeSql, TEntity entity) where TEntity : class
         {
-            PropertiesCache<TEntity>.UpdateInitFunc?.Invoke(entity);
             var update = freeSql.Update<TEntity>();
             if (TableInfomation<TEntity>.PrimaryKey == default)
             {

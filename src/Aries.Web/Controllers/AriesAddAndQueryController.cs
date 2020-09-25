@@ -15,6 +15,11 @@ namespace Microsoft.AspNetCore.Mvc
            
         }
 
+        /// <summary>
+        /// 增加实体
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
 
         [HttpPost("aries_add")]
         public virtual ApiReturnResult Add(T instance)

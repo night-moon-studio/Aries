@@ -6,7 +6,7 @@ using System;
 public static class TableInfomation
 {
 
-    
+
     static TableInfomation()
     {
         NatashaInitializer.InitializeAndPreheating();
@@ -18,9 +18,13 @@ public static class TableInfomation
         var domain = DomainManagement.Random;
         foreach (var item in types)
         {
-           NDelegate
-            .UseDomain(domain)
-            .Action<IFreeSql>($"TableInfomation<{item.GetDevelopName()}>.Initialize(obj);")(freeSql);
+            if (item.IsClass)
+            {
+                NDelegate
+                   .UseDomain(domain)
+                   .Action<IFreeSql>($"TableInfomation<{item.GetDevelopName()}>.Initialize(obj);")(freeSql);
+            }
+
         }
         domain.Dispose();
 
@@ -57,7 +61,7 @@ public static class TableInfomation<TEntity> where TEntity : class
                         SetPrimaryKey = NDelegate.DefaultDomain().Action<TEntity, long>($"arg1.{PrimaryKey} = arg2;");
                         GetPrimaryKey = NDelegate.DefaultDomain().Func<TEntity, long>($"return arg.{PrimaryKey};");
                         freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).IsIdentity(true));
-                    
+
                     }
                     else if (column.CsType == typeof(string))
                     {
@@ -66,7 +70,7 @@ public static class TableInfomation<TEntity> where TEntity : class
                         {
                             freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).StringLength(column.MaxLength));
                         }
-                        
+
                     }
 
                 }

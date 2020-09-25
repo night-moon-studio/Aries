@@ -17,16 +17,16 @@ namespace Microsoft.AspNetCore.Mvc
 
 
         /// <summary>
-        /// 更新整个实体，实体再 query 参数中 Instance
+        /// 根据 Aries 操作模型更新实体
         /// </summary>
         /// <param name="queryEntity">查询实体</param>
         /// <param name="queryModel">查询模型</param>
         /// <returns></returns>
         [HttpPost("aries_modify")]
-        public virtual ApiReturnResult Modify([FromBody] SqlModel<T> queryModel)
+        public virtual ApiReturnResult Modify([FromBody] SqlModel<T> opModel)
         {
 
-            return Result(_freeSql.ModifyFromSqlModel(queryModel).ExecuteAffrows());
+            return Result(_freeSql.ModifyFromSqlModel(opModel).ExecuteAffrows());
 
         }
 

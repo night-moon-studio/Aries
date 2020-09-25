@@ -7,17 +7,19 @@ namespace Aries
     {
 
         /// <summary>
-        /// 获取初始化后的查询句柄
-        /// 会受到  PropertiesCache<TEntity>.SelectInitFunc 的影响
+        /// 通过主键获取实体
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="freeSql"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public static ISelect<TEntity> GetInitedSelect<TEntity>(this IFreeSql freeSql) where TEntity : class
+        public static TEntity GetByPrimaryKey<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
         {
-            var select = freeSql.Select<TEntity>();
-            PropertiesCache<TEntity>.SelectInitFunc?.Invoke(select);
-            return select;
+            return freeSql.Select<TEntity>().WherePrimaryKeyFromEntity(entity).First();
+        }
+        public static TEntity GetByPrimaryKey<TEntity,TPrimaryKey>(this IFreeSql freeSql, TPrimaryKey key) where TEntity : class
+        {
+            return freeSql.Select<TEntity>().WherePrimaryKey(key).First();
         }
 
 

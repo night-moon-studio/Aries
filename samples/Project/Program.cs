@@ -36,22 +36,6 @@ namespace Project
             queryModel.Fuzzy = new FuzzyModel[] { new FuzzyModel { FieldName = "Name", FuzzyValue = "44" } };
 
             //外联查询
-            var result = freesql.Select<Test>().QueryWithModel(queryModel).Count(out long total).ToJoinList(item => new
-            {
-                item.Id,
-                item.Name,
-                DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
-                TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName)
-            });
-            Console.WriteLine(total);
-
-
-            var result1 = freesql.Select<Test>().ToJoinList(item => new
-            {
-                item.Id,
-                DomainName = RightJoin<Test2>.MapFrom(item => item.Name),
-                TypeName = RightJoin<Test3>.MapFrom(item => item.TypeName)
-            });
             Console.ReadKey();
         }
 

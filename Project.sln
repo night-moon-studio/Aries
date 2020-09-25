@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aries", "src\Aries\Aries.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PgFreeSqlWeb", "samples\PgFreeSqlWeb\PgFreeSqlWeb.csproj", "{E542C3F3-442D-4D37-B53C-369C93F55654}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Web", "src\Aries.Web\Aries.Web.csproj", "{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aries.Web", "src\Aries.Web\Aries.Web.csproj", "{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLib", "TestLib\TestLib.csproj", "{13958353-A597-413A-BDBF-02455E8BE22E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13958353-A597-413A-BDBF-02455E8BE22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13958353-A597-413A-BDBF-02455E8BE22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13958353-A597-413A-BDBF-02455E8BE22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13958353-A597-413A-BDBF-02455E8BE22E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{0EC412BA-36CA-4A9C-B0BA-B377E00F656C} = {9A154FFA-A8AE-473E-8940-7020D44B9141}
 		{E542C3F3-442D-4D37-B53C-369C93F55654} = {84977F43-7A74-4310-B07F-D4FBF5D0333F}
 		{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A} = {9A154FFA-A8AE-473E-8940-7020D44B9141}
+		{13958353-A597-413A-BDBF-02455E8BE22E} = {84977F43-7A74-4310-B07F-D4FBF5D0333F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E330F2E1-7532-4657-A941-C1782EAE9D1C}

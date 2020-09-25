@@ -16,12 +16,35 @@ namespace Microsoft.AspNetCore.Mvc
         }
 
 
-        [HttpPost("aries_query")]
-        public virtual ApiReturnPageResult Query([FromBody] SqlModel<T> query)
+        /// <summary>
+        /// 根据 Aries 操作模型 进行列表查询
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost("aries_query_list")]
+        public virtual ApiReturnPageResult QueryList([FromBody] SqlModel<T> query)
         {
             return Result(_freeSql.QueryFromSqlModel(query,out var total).ToLimitList(), total);
         }
 
+
+        /// <summary>
+        /// 根据 Aries 操作模型 进行单个实体查询
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost("aries_query_single")]
+        public virtual ApiReturnPageResult QuerySingle([FromBody] SqlModel<T> query)
+        {
+            return Result(_freeSql.QueryFromSqlModel(query, out var total).ToLimitFirst(), total);
+        }
+
+
+        /// <summary>
+        /// 根据 Aries 操作模型 进行数量查询
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpPost("aries_query_count")]
         public virtual ApiReturnResult QueryCount([FromBody] SqlModel<T> query)
         {

@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PgFreeSqlWeb.Controllers;
+using System;
+using System.IO;
+using TestLib;
 
 namespace PgFreeSqlWeb
 {
@@ -27,6 +30,7 @@ namespace PgFreeSqlWeb
             freesql.Aop.CurdBefore += Aop_CurdBefore;
             services.AddSingleton(freesql);
             //初始化扫描
+            services.AddAries(freesql,"TestLib");
             TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
 
             //配置 Join 关系

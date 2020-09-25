@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq.Expressions;
 
 
 public static class OrmNavigate<TEntity> where TEntity : class
 {
+
     public static ImmutableDictionary<Type, (string src, string dst, string table)> JoinScriptMapping;
     static OrmNavigate()
     {

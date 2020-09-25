@@ -11,5 +11,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\src\Aries.Web\Aries.Web.csproj" />
+	  <ProjectReference Include="..\..\TestLib\TestLib.csproj" />
 	</ItemGroup>
 </Project>

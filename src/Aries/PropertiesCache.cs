@@ -17,9 +17,6 @@ namespace Aries
         private static ImmutableHashSet<string> _allowUpdateFields;
         private static ImmutableHashSet<string> _blockInsertFields;
         public static string[] AllowUpdateColumns;
-        public static Action<TEntity> UpdateInitFunc;
-        public static Action<TEntity> InsertInitFunc;
-        public static Action<ISelect<TEntity>> SelectInitFunc;
 
         static PropertiesCache()
         {
@@ -136,43 +133,6 @@ namespace Aries
         }
         #endregion
         
-
-        /// <summary>
-        /// 设置更新初始化委托，在实体类更新之前将对实体类进行默认值设置
-        /// </summary>
-        /// <param name="action"></param>
-        public static void SetUpdateInit(Action<TEntity> action)
-        {
-
-            UpdateInitFunc += action;
-
-        }
-
-
-        /// <summary>
-        /// 设置插入初始化委托，在实体类插入之前对实体类进行默认值设置
-        /// </summary>
-        /// <param name="action"></param>
-        public static void SetInsertInit(Action<TEntity> action)
-        {
-
-            InsertInitFunc += action;
-
-        }
-
-
-        /// <summary>
-        /// 设置选择初始化委托，在查询之前，设置固定的 Where 查询语句
-        /// </summary>
-        /// <param name="action"></param>
-        public static void SetSelectInit(Action<ISelect<TEntity>> action)
-        {
-
-            SelectInitFunc += action;
-
-        }
-
-
         /// <summary>
         /// 与更新白名单做比较，获取允许被更新的字段
         /// </summary>

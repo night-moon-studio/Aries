@@ -6,8 +6,7 @@ namespace Aries
     public static class InsertExtension
     {
         /// <summary>
-        /// 初始化实体并插入
-        /// 会受到 PropertiesCache<TEntity>.InsertInitFunc 的影响
+        /// 初始化实体并插入,返回：如果带有主键，成功则返回带主键的实体，不带主键，成功则返回原实体
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="freeSql">freesql 句柄</param>
@@ -16,7 +15,6 @@ namespace Aries
         public static TEntity InsertWithInited<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
         {
              
-            PropertiesCache<TEntity>.InsertInitFunc?.Invoke(entity);
             var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
 
             if (TableInfomation<TEntity>.PrimaryKey!=default)

@@ -16,12 +16,23 @@ namespace Microsoft.AspNetCore.Mvc
         }
 
 
+        /// <summary>
+        /// 根据 Aries 操作模型删除实体
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost("aries_delete")]
         public virtual ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
         {
             return Result(_freeSql.DeleteFromSqlModel(model).ExecuteAffrows());
         }
 
+
+        /// <summary>
+        /// 根据实体主键删除实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         [HttpPost("aries_deletebyid")]
         public virtual ApiReturnResult DeleteById([FromQuery] T entity)
         {

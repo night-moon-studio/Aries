@@ -10,12 +10,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
 
             NatashaInitializer.InitializeAndPreheating();
-
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException("没有发现实体类文件！");
-            }
-
             var assembly = Assembly.Load(path);
             var types = assembly.GetTypes();
 
