@@ -67,10 +67,6 @@ namespace Aries
                     if (queryModel.Orders != null)
                     {
 
-                        if (queryModel.Size != 0)
-                        {
-                            select.Page(queryModel.Page, queryModel.Size);
-                        }
                         var orderBuilder = new StringBuilder(queryModel.Orders.Length * 8);
                         var blockWhereList = PropertiesCache<TEntity>.GetBlockWhereFields();
                         foreach (var item in queryModel.Orders)

@@ -62,6 +62,10 @@ namespace Aries
                     total = 0;
                 }
 
+                if (model.QueryModel.Size != 0)
+                {
+                    handler.Page(model.QueryModel.Page, model.QueryModel.Size);
+                }
             }
             else
             {

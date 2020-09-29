@@ -34,9 +34,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="query"></param>
         /// <returns></returns>
         [HttpPost("aries_query_single")]
-        public virtual ApiReturnPageResult QuerySingle([FromBody] SqlModel<T> query)
+        public virtual ApiReturnResult QuerySingle([FromBody] SqlModel<T> query)
         {
-            return Result(_freeSql.QueryFromSqlModel(query, out var total).ToLimitFirst(), total);
+            return Result(_freeSql.QueryFromSqlModel(query, out _).ToLimitFirst());
         }
 
 
