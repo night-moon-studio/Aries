@@ -21,15 +21,13 @@ TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3)�
 ```
 
 #### 字段使用范围初始化配置
+
+PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作的字段限制，允许参与或不参与，详情请看方法注释。
 ```C#
 //配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
-PropertiesCache<Test>.SetSelectBlockFields("Domain", "Address");
+ PropertiesCache<Test>.AllowSelectFields("Name","Age");
+ //允许 Name / Age 返回。
 
-//配置业务允许更新的字段 作用于 UpdateWithHttpModel / UpdateAll 
-PropertiesCache<Test>.SetUpdateAllowFields("Domain");
-
-//配置业务允许查询的字段 作用于 QueryWithHttpEntity / QueryWithModel / FuzzyQuery
-PropertiesCache<Test>.SetWhereBlockFields("Domain");
 ```
 
 #### 实体写操作初始化配置
@@ -69,29 +67,26 @@ DeleteFromSqlModel<TEntity>(SqlModel<TEntity> model);
 
 ## 链表查询
 
-### 关系初始化配置
+### 使用ToJoinList
 
 ```C#
-//配置关联关系
-OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
-//test=>test.Type, test3=>test3.Id
-OrmNavigate<Test>.Connect<Test3>("Type", "Id"); 
+_freeSql.Select<Test>().ToJoinList(item => new {
+                TestName = item.Name,
+                DomainId = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Id,
+                DomainName = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+                TypeName = item.Type.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+}));
+//翻译成：
+SELECT 
+  a."Name" AS "TestName",
+  Test2_AriesInnerJoin_Domain."Id" AS "DomainId",
+  Test2_AriesInnerJoin_Domain."Name" AS "DomainName",
+  Test2_AriesInnerJoin_Type."Name" AS "TypeName" 
+FROM "Test" a 
+  INNER JOIN "Test2" AS Test2_AriesInnerJoin_Domain ON a."Domain" = Test2_AriesInnerJoin_Domain."Id" 
+  INNER JOIN "Test2" AS Test2_AriesInnerJoin_Type ON a."Type" = Test2_AriesInnerJoin_Type."Id"
 ```
 
-### 使用 ToJoinList
-```C#
-[HttpPost("join")]
-public ApiReturnPageResult GetJoinList(SqlModel<Test> sqlModel)
-{
-    return Result( _freeSql.QueryFromSqlModel(sqlModel,out long total).ToJoinList(item => new
-        {
-            item.Id,
-           TestName = item.Name,
-           DomainName = InnerJoin<Test2>.MapFrom(item => item.Name),
-           TypeName = InnerJoin<Test3>.MapFrom(item => item.TypeName)
-        }),total);
-}
-```
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_large)
