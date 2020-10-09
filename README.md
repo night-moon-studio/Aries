@@ -28,15 +28,8 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
  PropertiesCache<Test>.AllowSelectFields("Name","Age");
  //允许 Name / Age 返回。
 
-```
+```  
 
-#### 实体写操作初始化配置
-```C#
-//更新时对实体进行单独处理
-PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添加可以累加
-//插入时对实体进行单独处理
-PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
-```
 
 ### 查询
 
