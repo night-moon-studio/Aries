@@ -28,40 +28,33 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
  PropertiesCache<Test>.AllowSelectFields("Name","Age");
  //允许 Name / Age 返回。
 
-```
+```  
 
-#### 实体写操作初始化配置
-```C#
-//更新时对实体进行单独处理
-PropertiesCache<Test>.SetUpdateInit(item => item.Address = "null");//多次添加可以累加
-//插入时对实体进行单独处理
-PropertiesCache<Test>.SetInsertInit(item => item.Domain = 2);
-```
 
 ### 查询
 
- - QueryWithHttpEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
- - QueryWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
+ - WhereWithEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
+ - WhereWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
  - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == {value})， 生成 Where 主键 = xxx 的查询条件。
  
 ### 更新
 
  - UpdateAll(entity); 通过前端传来的实体，进行更新。
- - UpdateWithHttpModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
+ - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
 
 
 ### 高度封装的扩展操作入口
 
-一下方法封装了 XXXWithHttpEntity / QueryWithModel 可以在查询的同时完成更新/删除等操作
+一下方法封装了 XXXWithEntity / WhereWithModel 可以在查询的同时完成更新/删除等操作
 ```C#
 //插入实体
-InsertWithInited<TEntity>(TEntity entity)
+AriesInsert<TEntity>(TEntity entity)
 //通过 Aries 模型查询并更新实体
-ModifyFromSqlModel<TEntity>(SqlModel<TEntity> model);
+AriesModify<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询实体
-QueryFromSqlModel<TEntity>(SqlModel<TEntity> model);
+AriesQuery<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询并删除实体
-DeleteFromSqlModel<TEntity>(SqlModel<TEntity> model);
+AriesDelete<TEntity>(SqlModel<TEntity> model);
 ```  
 
 
