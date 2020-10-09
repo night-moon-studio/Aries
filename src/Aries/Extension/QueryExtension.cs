@@ -103,7 +103,7 @@ namespace Aries
         /// <typeparam name="TQueryModel"></typeparam>
         /// <param name="delete">操作句柄</param>
         /// <param name="queryModel">查询模型</param>
-        public static IDelete<TEntity> QueryWithModel<TEntity, TQueryModel>(this IDelete<TEntity> delete, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
+        public static IDelete<TEntity> WhereWithModel<TEntity, TQueryModel>(this IDelete<TEntity> delete, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             //QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
             if (queryModel.Fuzzy != null)
