@@ -16,7 +16,7 @@ namespace Aries
         /// <param name="collection">需要更新的字段</param>
         /// <param name="entity">更新的实体</param>
         /// <returns></returns>
-        public static IUpdate<TEntity> UpdateWithHttpModel<TEntity>(this IFreeSql freeSql, IEnumerable<string> collection, TEntity entity) where TEntity : class
+        public static IUpdate<TEntity> UpdateWithEntity<TEntity>(this IFreeSql freeSql, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
             var update = freeSql.Update<TEntity>();
             HttpContextUpdateOperator<TEntity>.UpdateFieldsHandler(update, PropertiesCache<TEntity>.GetUpdateFields(collection), entity);

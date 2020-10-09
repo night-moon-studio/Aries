@@ -12,7 +12,7 @@ namespace Aries
         /// <param name="freeSql">freesql 句柄</param>
         /// <param name="entity">要被插入的实体类</param>
         /// <returns></returns>
-        public static TEntity InsertWithInited<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
+        public static TEntity AriesInsert<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
         {
              
             var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());

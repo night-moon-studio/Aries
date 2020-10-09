@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_query_list")]
         public virtual ApiReturnPageResult QueryList([FromBody] SqlModel<T> query)
         {
-            return Result(_freeSql.QueryFromSqlModel(query,out var total).ToLimitList(), total);
+            return Result(_freeSql.AriesQuery(query,out var total).ToLimitList(), total);
         }
 
 
@@ -36,7 +36,7 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_query_single")]
         public virtual ApiReturnResult QuerySingle([FromBody] SqlModel<T> query)
         {
-            return Result(_freeSql.QueryFromSqlModel(query, out _).ToLimitFirst());
+            return Result(_freeSql.AriesQuery(query, out _).ToLimitFirst());
         }
 
 
@@ -48,7 +48,7 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_query_count")]
         public virtual ApiReturnResult QueryCount([FromBody] SqlModel<T> query)
         {
-            return Result(_freeSql.QueryFromSqlModel(query, out var total).Count());
+            return Result(_freeSql.AriesQuery(query, out var total).Count());
         }
 
     }

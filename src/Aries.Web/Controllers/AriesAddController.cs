@@ -25,7 +25,7 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_add")]
         public virtual ApiReturnResult Add(T instance)
         {
-            return Result(_freeSql.InsertWithInited(instance));
+            return Result(_freeSql.AriesInsert(instance));
         }
 
     }

@@ -45,8 +45,8 @@ namespace PgFreeSqlWeb.Controllers
 
             return _freeSql
                 .Select<Test>()
-                .QueryWithHttpEntity(Request.Query.Keys, instance)
-                .QueryWithModel(query)
+                .WhereWithEntity(Request.Query.Keys, instance)
+                .WhereWithModel(query)
                 .ToLimitList();
 
         }
@@ -93,7 +93,7 @@ namespace PgFreeSqlWeb.Controllers
         public long ModifyById([FromQuery] Test updateEntity)
         {
             return _freeSql
-                .UpdateWithHttpModel(Request.Query.Keys, updateEntity)
+                .UpdateWithEntity(Request.Query.Keys, updateEntity)
                 .WherePrimaryKeyFromEntity(updateEntity)
                 .ExecuteAffrows();
         }
@@ -107,7 +107,7 @@ namespace PgFreeSqlWeb.Controllers
         public bool Post4([FromQuery]Test instance)
         {
 
-            return _freeSql.UpdateWithHttpModel(Request.Query.Keys, instance).WherePrimaryKeyFromEntity(instance).ExecuteAffrows()!=0;
+            return _freeSql.UpdateWithEntity(Request.Query.Keys, instance).WherePrimaryKeyFromEntity(instance).ExecuteAffrows()!=0;
 
         }
 
@@ -121,7 +121,7 @@ namespace PgFreeSqlWeb.Controllers
         public Test Post3(Test instance)
         {
 
-            return _freeSql.InsertWithInited(instance);
+            return _freeSql.AriesInsert(instance);
 
         }
 

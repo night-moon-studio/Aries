@@ -5,18 +5,18 @@ namespace Aries
     public static class OperatorExtension
     {
 
-        public static IUpdate<TEntity> ModifyFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
+        public static IUpdate<TEntity> AriesModify<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
         {
 
             if (model.ModifyInstance != null)
             {
 
 
-                var handler = freesql.UpdateWithHttpModel(model.ModifyInstance.Fields, model.ModifyInstance.Instance);
+                var handler = freesql.UpdateWithEntity(model.ModifyInstance.Fields, model.ModifyInstance.Instance);
                 if (model.QueryModel != null)
                 {
 
-                    handler.QueryWithModel(model.QueryModel);
+                    handler.WhereWithModel(model.QueryModel);
 
                 }
 
@@ -24,7 +24,7 @@ namespace Aries
                 if (model.QueryInstance != null)
                 {
 
-                    handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                    handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
                 }
 
@@ -37,7 +37,7 @@ namespace Aries
         }
 
 
-        public static ISelect<TEntity> QueryFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model,out long total) where TEntity : class
+        public static ISelect<TEntity> AriesQuery<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model,out long total) where TEntity : class
         {
 
             var handler = freesql.Select<TEntity>();
@@ -45,14 +45,14 @@ namespace Aries
             if (model.QueryInstance != null)
             {
 
-                handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
             }
 
             if (model.QueryModel != null)
             {
 
-                handler.QueryWithModel(model.QueryModel);
+                handler.WhereWithModel(model.QueryModel);
                 if (model.QueryModel.Total)
                 {
                     handler.Count(out total);
@@ -77,14 +77,14 @@ namespace Aries
         }
 
 
-        public static IDelete<TEntity> DeleteFromSqlModel<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
+        public static IDelete<TEntity> AriesDelete<TEntity>(this IFreeSql freesql, SqlModel<TEntity> model) where TEntity : class
         {
 
             var handler = freesql.Delete<TEntity>();
             if (model.QueryModel!=null)
             {
 
-                handler.QueryWithModel(model.QueryModel);
+                handler.WhereWithModel(model.QueryModel);
 
             }
 
@@ -92,7 +92,7 @@ namespace Aries
             if (model.QueryInstance!=null)
             {
 
-                handler.QueryWithHttpEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
 
             }   
             return handler;

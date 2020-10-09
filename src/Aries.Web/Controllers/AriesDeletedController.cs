@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_delete")]
         public virtual ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
         {
-            return Result(_freeSql.DeleteFromSqlModel(model).ExecuteAffrows());
+            return Result(_freeSql.AriesDelete(model).ExecuteAffrows());
         }
 
 

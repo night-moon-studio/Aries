@@ -32,17 +32,17 @@ namespace Aries
         /// <param name="collection">指定要查询的集合</param>
         /// <param name="entity">携带信息的实体</param>
         /// <returns></returns>
-        public static ISelect<TEntity> QueryWithHttpEntity<TEntity>(this ISelect<TEntity> select, IEnumerable<string> collection, TEntity entity) where TEntity : class
+        public static ISelect<TEntity> WhereWithEntity<TEntity>(this ISelect<TEntity> select, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
             HttpContextQueryOperator<TEntity>.SelectWhereHandler(select, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return select;
         }
-        public static IUpdate<TEntity> QueryWithHttpEntity<TEntity>(this IUpdate<TEntity> update, IEnumerable<string> collection, TEntity entity) where TEntity : class
+        public static IUpdate<TEntity> WhereWithEntity<TEntity>(this IUpdate<TEntity> update, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
             HttpContextQueryOperator<TEntity>.UpdateWhereHandler(update, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return update;
         }
-        public static IDelete<TEntity> QueryWithHttpEntity<TEntity>(this IDelete<TEntity> delete, IEnumerable<string> collection, TEntity entity) where TEntity : class
+        public static IDelete<TEntity> WhereWithEntity<TEntity>(this IDelete<TEntity> delete, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
             HttpContextQueryOperator<TEntity>.DeleteWhereHandler(delete, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
             return delete;
@@ -58,7 +58,7 @@ namespace Aries
         /// <param name="select">操作句柄</param>
         /// <param name="queryModel">查询模型</param>
         /// <returns></returns>
-        public static ISelect<TEntity> QueryWithModel<TEntity, TQueryModel>(this ISelect<TEntity> select, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
+        public static ISelect<TEntity> WhereWithModel<TEntity, TQueryModel>(this ISelect<TEntity> select, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             QueryOperator<TEntity, TQueryModel>.SelectWhereHandler(select, queryModel);
             if (queryModel.Fuzzy != null)
@@ -81,7 +81,7 @@ namespace Aries
         /// <param name="update">操作句柄</param>
         /// <param name="queryModel">查询模型</param>
         /// <returns></returns>
-        public static IUpdate<TEntity> QueryWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
+        public static IUpdate<TEntity> WhereWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             //QueryOperator<TEntity, TQueryModel>.UpdateWhereHandler(update, queryModel);
             if (queryModel.Fuzzy != null)

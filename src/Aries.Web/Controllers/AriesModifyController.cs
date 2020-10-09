@@ -26,7 +26,7 @@ namespace Microsoft.AspNetCore.Mvc
         public virtual ApiReturnResult Modify([FromBody] SqlModel<T> opModel)
         {
 
-            return Result(_freeSql.ModifyFromSqlModel(opModel).ExecuteAffrows());
+            return Result(_freeSql.AriesModify(opModel).ExecuteAffrows());
 
         }
 
