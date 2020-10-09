@@ -50,73 +50,94 @@ namespace Aries
                 
                 for (int i = 0; i < arguments.Count; i++)
                 {
-                    // 方法类型参数
-                    if (arguments[i].NodeType == ExpressionType.Call)
-                    {
-                       
-                        string targetMemberName = default;
-                        //var member = item.ToString().Split('.')[1];
-                        var methodExp = (MethodCallExpression)arguments[i];
-                        if (methodExp.Arguments[0].NodeType == ExpressionType.Quote)
-                        {
-                            var unaryExp = (UnaryExpression)(methodExp.Arguments[0]);
-                            if (unaryExp.NodeType == ExpressionType.Quote)
-                            {
-                                var lbdExp = (LambdaExpression)(unaryExp.Operand);
-                                var memberExp = (MemberExpression)(lbdExp.Body);
-                                targetMemberName = memberExp.Member.Name;
-
-                            }
-                        }
-                        if (!tempCache.ContainsKey(arguments[i].ToString()))
-                        {
-                            if (methodExp.Object.NodeType == ExpressionType.Call)
-                            {
-                                var callerExp = (MethodCallExpression)(methodExp.Object);
-                                var joinTableName = callerExp.Method.GetGenericArguments()[0].Name;
-                                var joinType = callerExp.Method.Name;
-                                if (callerExp.Arguments[0].NodeType == ExpressionType.MemberAccess)
-                                {
-                                    var memberExp = (MemberExpression)(callerExp.Arguments[0]);
-                                    var sourceMemberName = memberExp.Member.Name;
-
-                                    if (joinType == "AriesInnerJoin")
-                                    {
-                                        joinScript.Append("obj.InnerJoin(\"");
-                                    }
-                                    else if (joinType == "AriesLeftJoin")
-                                    {
-                                        joinScript.Append("obj.LeftJoin(\"");
-                                    }
-                                    else if (joinType == "AriesRightJoin")
-                                    {
-                                        joinScript.Append("obj.RightJoin(\"");
-                                    }
-
-                                    var joinAliasScript = $"{joinTableName}_{joinType}_{sourceMemberName}";
-                                    tempCache[arguments[i].ToString()] = joinAliasScript;
-                                    joinScript.Append($"\"{joinTableName}\" AS {joinAliasScript} ON a.\"{sourceMemberName}\" == {joinAliasScript}.\"{targetMemberName}\"".Replace("\"", "\\\""));
-                                    joinScript.AppendLine("\");");
-
-                                }
-                            }
-                        }
-                        fieldsScript.Append($"{tempCache[arguments[i].ToString()]}.\"{targetMemberName}\" AS  \"{members[i].Name}\",");
-
-                    }
-                    else if (arguments[i].NodeType == ExpressionType.MemberAccess)
+                    
+                    if (arguments[i].NodeType == ExpressionType.MemberAccess)
                     {
                        
                         var memberExpression = (MemberExpression)arguments[i];
-                        if (members[i].Name == memberExpression.Member.Name)
+                        var memberName = memberExpression.Member.Name;
+                        // 方法类型参数
+                        if (memberExpression.Expression.NodeType == ExpressionType.Convert ||
+                            memberExpression.Expression.NodeType == ExpressionType.Call)
                         {
 
-                            fieldsScript.Append($"a.\"{memberExpression.Member.Name}\",");
+                            string targetMemberName = default;
+                            //var member = item.ToString().Split('.')[1];
+                            var methodExp = (MethodCallExpression)memberExpression.Expression;
+                            if (methodExp.Arguments[0].NodeType == ExpressionType.Quote)
+                            {
+                                var unaryExp = (UnaryExpression)(methodExp.Arguments[0]);
+                                if (unaryExp.NodeType == ExpressionType.Quote)
+                                {
+
+                                    var lbdExp = (LambdaExpression)(unaryExp.Operand);
+                                    var memberExp = (MemberExpression)(lbdExp.Body);
+                                    targetMemberName = memberExp.Member.Name;
+
+                                }
+                            }
+                            var scriptKey = memberExpression.Expression.ToString();
+                            if (!tempCache.ContainsKey(scriptKey))
+                            {
+                                if (methodExp.Object.NodeType == ExpressionType.Call)
+                                {
+                                    var callerExp = (MethodCallExpression)(methodExp.Object);
+                                    var joinTableName = callerExp.Method.GetGenericArguments()[0].Name;
+                                    var joinType = callerExp.Method.Name;
+                                    
+                                    MemberExpression memberExp = default;
+                                    if (callerExp.Arguments[0].NodeType == ExpressionType.Convert)
+                                    {
+
+                                        memberExp = (MemberExpression)((UnaryExpression)(callerExp.Arguments[0])).Operand;
+
+                                    }
+                                    else if (callerExp.Arguments[0].NodeType == ExpressionType.MemberAccess)
+                                    {
+                                        memberExp = (MemberExpression)(callerExp.Arguments[0]);
+                                    }
+                                    if (memberExp != default)
+                                    {
+                                        var sourceMemberName = memberExp.Member.Name;
+
+                                        if (joinType == "AriesInnerJoin")
+                                        {
+                                            joinScript.Append("obj.InnerJoin(\"");
+                                        }
+                                        else if (joinType == "AriesLeftJoin")
+                                        {
+                                            joinScript.Append("obj.LeftJoin(\"");
+                                        }
+                                        else if (joinType == "AriesRightJoin")
+                                        {
+                                            joinScript.Append("obj.RightJoin(\"");
+                                        }
+
+                                        var joinAliasScript = $"{joinTableName}_{joinType}_{sourceMemberName}";
+                                        tempCache[scriptKey] = joinAliasScript;
+                                        joinScript.Append($"\"{joinTableName}\" AS {joinAliasScript} ON a.\"{sourceMemberName}\" = {joinAliasScript}.\"{targetMemberName}\"".Replace("\"", "\\\""));
+                                        joinScript.AppendLine("\");");
+
+                                    }
+                                }
+                            }
+                            fieldsScript.Append($"{tempCache[scriptKey]}.\"{memberName}\" AS \"{members[i].Name}\",");
+
                         }
                         else
                         {
-                            fieldsScript.Append($"a.\"{memberExpression.Member.Name}\" AS \"{members[i].Name}\",");
+                            if (members[i].Name == memberName)
+                            {
+
+                                fieldsScript.Append($"a.\"{memberName}\",");
+                            }
+                            else
+                            {
+                                fieldsScript.Append($"a.\"{memberName}\" AS \"{members[i].Name}\",");
+                            }
                         }
+
+
 
                     }
                 }
@@ -159,23 +180,23 @@ namespace Aries
 
     public class InnerJoin<OutEntity>
     {
-        public TReturn MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
+        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
         {
-            return default(TReturn);
+            return default(OutEntity);
         }
     }
     public class LeftJoin<OutEntity>
     {
-        public TReturn MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
+        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
         {
-            return default(TReturn);
+            return default(OutEntity);
         }
     }
     public class RightJoin<OutEntity>
     {
-        public TReturn MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
+        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
         {
-            return default(TReturn);
+            return default(OutEntity);
         }
     }
 }

@@ -14,15 +14,16 @@ namespace PgFreeSqlWeb.Controllers
         }
 
         [HttpDelete]
-        public void Test()
+        public ApiReturnResult Test()
         {
 
-            Student student = new Student();
-            _freeSql.Select<Student>().ToJoinList(item => new { 
-                Age = item.Age,
-                Address = item.Address.AriesLeftJoin<Test2>().MapFrom(c => c.Name),
-                Name = item.Name.AriesInnerJoin<Test>().MapFrom(c => c.Id) 
-            });
+            return Result(_freeSql.Select<Test>().ToJoinList(item => new {
+                TestName = item.Name,
+                DomainId = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Id,
+                DomainName = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+                TypeName = item.Type.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+            }));
+
         }
 
         //[HttpPost("join")]

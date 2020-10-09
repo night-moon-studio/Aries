@@ -55,19 +55,31 @@ namespace Aries
         }
 
         #region 黑名单操作
+        /// <summary>
+        /// 屏蔽所有字段，不让其进行更新操作
+        /// </summary>
         public static void BlockAllUpdateFields()
         {
             _allowUpdateFields = ImmutableHashSet.Create<string>();
             AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
+        /// <summary>
+        /// 屏蔽所有字段，不让其参与WHERE操作
+        /// </summary>
         public static void BlockAllWhereFields()
         {
             _blockWhereFields = ImmutableHashSet.CreateRange(PropMembers);
         }
+        /// <summary>
+        /// 屏蔽所有字段，不让其参与SELECT返回操作
+        /// </summary>
         public static void BlockAllSelectFields()
         {
             _blockSelectFields = ImmutableHashSet.CreateRange(PropMembers);
         }
+        /// <summary>
+        /// 屏蔽所有字段，不让其参与新增操作
+        /// </summary>
         public static void BlockAllInsertFields()
         {
             _blockInsertFields = ImmutableHashSet.CreateRange(PropMembers);
@@ -75,19 +87,31 @@ namespace Aries
         #endregion
 
         #region 白名单操作
+        /// <summary>
+        /// 允许所有字段参与更新操作
+        /// </summary>
         public static void AllowAllUpdateFields()
         {
             _allowUpdateFields = ImmutableHashSet.CreateRange(PropMembers);
             AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
+        /// <summary>
+        /// 允许所有字段参与WHERE查询
+        /// </summary>
         public static void AllowAllWhereFields()
         {
             _blockWhereFields = ImmutableHashSet.Create<string>();
         }
+        /// <summary>
+        /// 允许所有字段在SELECT查询后返回
+        /// </summary>
         public static void AllowAllSelectFields()
         {
             _blockSelectFields = ImmutableHashSet.Create<string>();
         }
+        /// <summary>
+        /// 允许所有字段插入更新
+        /// </summary>
         public static void AllowAllInsertFields()
         {
             _blockInsertFields = ImmutableHashSet.Create<string>();
@@ -96,18 +120,34 @@ namespace Aries
 
 
         #region 增加白名单
+        /// <summary>
+        /// 允许参数中的字段参与更新操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void AllowUpdateFields(params string[] fields)
         {
             _allowUpdateFields = _allowUpdateFields.Union(fields);
         }
+        /// <summary>
+        /// 允许参数中的字段参与WHERE查询操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void AllowWhereFields(params string[] fields)
         {
             _blockWhereFields = _blockWhereFields.Except(fields);
         }
+        /// <summary>
+        /// 允许参数中的字段在SELECT时返回
+        /// </summary>
+        /// <param name="fields"></param>
         public static void AllowSelectFields(params string[] fields)
         {
             _blockSelectFields = _blockSelectFields.Except(fields);
         }
+        /// <summary>
+        /// 允许参数中的字段参与插入操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void AllowInsertFields(params string[] fields)
         {
             _blockInsertFields = _blockInsertFields.Except(fields);
@@ -115,18 +155,34 @@ namespace Aries
         #endregion
 
         #region 增加黑名单
+        /// <summary>
+        /// 不允许参数中的字段参与更新操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void BlockUpdateFields(params string[] fields)
         {
             _allowUpdateFields = _allowUpdateFields.Except(fields);
         }
+        /// <summary>
+        /// 不允许参数中的字段参与WHERE查询操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void BlockWhereFields(params string[] fields)
         {
             _blockWhereFields = _blockWhereFields.Union(fields);
         }
+        /// <summary>
+        /// 不允许参数中的字段在SELECT时返回
+        /// </summary>
+        /// <param name="fields"></param>
         public static void BlockSelectFields(params string[] fields)
         {
             _blockSelectFields = _blockSelectFields.Union(fields);
         }
+        /// <summary>
+        /// 不允许参数中的字段参与插入操作
+        /// </summary>
+        /// <param name="fields"></param>
         public static void BlockInsertFields(params string[] fields)
         {
             _blockInsertFields = _blockInsertFields.Union(fields);
