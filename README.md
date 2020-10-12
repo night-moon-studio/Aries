@@ -8,6 +8,15 @@ FreeSql 的 Natasha 扩展
 
 ## 使用
 
+### Natasha 初始化
+
+  ```C#
+  //仅仅注册组件
+  NatashaInitializer.Initialize();
+  //注册组件+预热组件 , 之后编译会更加快速
+  await NatashaInitializer.InitializeAndPreheating();
+  ```
+
 ### 配置
 
 #### 引用 Provider
