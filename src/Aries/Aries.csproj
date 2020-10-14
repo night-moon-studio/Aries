@@ -3,12 +3,12 @@
   <PropertyGroup>
 	  <TargetFrameworks>netstandard2.0;netcoreapp3.0;</TargetFrameworks>
 	  <Product>FreeSql.PgSql.Natasha.Extension</Product>
-	  <Description>基于 Freesql 和 Natasha 的 PGSQL ORM扩展。</Description>
+	  <Description>基于 Freesql 和 Natasha 的 SQL ORM扩展。</Description>
 	  <Copyright>NMSAzulX</Copyright>
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <PackageReleaseNotes>正式版  使用Freesql 1.5.0</PackageReleaseNotes>
-	  <Version>1.2.0</Version>
+	  <PackageReleaseNotes>正式版  使用Freesql 1.9.0</PackageReleaseNotes>
+	  <Version>1.4.0</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
@@ -18,12 +18,12 @@
 	  <Authors>NMSAzulX</Authors>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
+  <ItemGroup>
+    <Compile Remove="OrmNavigate.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="1.0.0" />
+    <PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="2.0.0" />
     <PackageReference Include="FreeSql" Version="1.9.0" />
   </ItemGroup>
 

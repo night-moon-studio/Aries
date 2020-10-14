@@ -118,7 +118,7 @@ namespace PgFreeSqlWeb.Controllers
         /// <param name="instance"></param>
         /// <returns></returns>
         [HttpPost("insert")]
-        public Test Post3(Test instance)
+        public bool Post3(Test instance)
         {
 
             return _freeSql.AriesInsert(instance);

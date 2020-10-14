@@ -34,8 +34,8 @@ namespace PgFreeSqlWeb
             TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
 
             //≈‰÷√ Join πÿœµ
-            OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
-            OrmNavigate<Test>.Connect<Test3>(test => test.Type, test3 => test3.Id);
+            //OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
+            //OrmNavigate<Test>.Connect<Test3>(test => test.Type, test3 => test3.Id);
             //OrmNavigate<Test>.Join<Test3>("Type", "Id");
 
             services.AddControllers();

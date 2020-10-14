@@ -11,45 +11,45 @@ namespace Aries
     public static class PropertiesCache<TEntity> where TEntity :class
     {
 
-        public static readonly ImmutableHashSet<string> PropMembers;
-        private static ImmutableHashSet<string> _blockWhereFields;
-        private static ImmutableHashSet<string> _blockSelectFields;
-        private static ImmutableHashSet<string> _allowUpdateFields;
-        private static ImmutableHashSet<string> _blockInsertFields;
+        public static readonly HashSet<string> PropMembers;
+        private readonly static HashSet<string> _blockWhereFields;
+        private readonly static HashSet<string> _blockSelectFields;
+        private readonly static HashSet<string> _allowUpdateFields;
+        private readonly static HashSet<string> _blockInsertFields;
         public static string[] AllowUpdateColumns;
 
         static PropertiesCache()
         {
-            PropMembers = ImmutableHashSet.CreateRange(typeof(TEntity).GetProperties().Select(item => item.Name));
-            var props = PropMembers;
+            PropMembers = new HashSet<string>(typeof(TEntity).GetProperties().Select(item => item.Name));
             if (TableInfomation<TEntity>.PrimaryKey != default)
 	        {
-                props = PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
-                _blockInsertFields = ImmutableHashSet.Create(TableInfomation<TEntity>.PrimaryKey);
+                PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
+                _blockInsertFields = new HashSet<string>();
+                _blockInsertFields.Add(TableInfomation<TEntity>.PrimaryKey);
             }
             else
             {
-                _blockInsertFields = ImmutableHashSet.Create<string>();
+                _blockInsertFields = new HashSet<string>();
             }
 
-            _blockWhereFields = ImmutableHashSet.Create<string>();
-            _allowUpdateFields = ImmutableHashSet.CreateRange(props);
-            _blockSelectFields = ImmutableHashSet.Create<string>();
+            _blockWhereFields = new HashSet<string>();
+            _allowUpdateFields = new HashSet<string>(PropMembers);
+            _blockSelectFields = new HashSet<string>();
         }
 
-        public static ImmutableHashSet<string> GetBlockWhereFields()
+        public static HashSet<string> GetBlockWhereFields()
         {
             return _blockWhereFields;
         }
-        public static ImmutableHashSet<string> GetBlockSelectFields()
+        public static HashSet<string> GetBlockSelectFields()
         {
             return _blockSelectFields;
         }
-        public static ImmutableHashSet<string> GetBlockInsertFields()
+        public static HashSet<string> GetBlockInsertFields()
         {
             return _blockInsertFields;
         }
-        public static ImmutableHashSet<string> GetAllowUpdateFields()
+        public static HashSet<string> GetAllowUpdateFields()
         {
             return _allowUpdateFields;
         }
@@ -60,7 +60,7 @@ namespace Aries
         /// </summary>
         public static void BlockAllUpdateFields()
         {
-            _allowUpdateFields = ImmutableHashSet.Create<string>();
+            _allowUpdateFields.Clear();
             AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
         /// <summary>
@@ -68,21 +68,21 @@ namespace Aries
         /// </summary>
         public static void BlockAllWhereFields()
         {
-            _blockWhereFields = ImmutableHashSet.CreateRange(PropMembers);
+            _blockWhereFields.UnionWith(PropMembers);
         }
         /// <summary>
         /// 屏蔽所有字段，不让其参与SELECT返回操作
         /// </summary>
         public static void BlockAllSelectFields()
         {
-            _blockSelectFields = ImmutableHashSet.CreateRange(PropMembers);
+            _blockSelectFields.UnionWith(PropMembers);
         }
         /// <summary>
         /// 屏蔽所有字段，不让其参与新增操作
         /// </summary>
         public static void BlockAllInsertFields()
         {
-            _blockInsertFields = ImmutableHashSet.CreateRange(PropMembers);
+            _blockInsertFields.UnionWith(PropMembers);
         }
         #endregion
 
@@ -92,7 +92,7 @@ namespace Aries
         /// </summary>
         public static void AllowAllUpdateFields()
         {
-            _allowUpdateFields = ImmutableHashSet.CreateRange(PropMembers);
+            _allowUpdateFields.UnionWith(PropMembers);
             AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
         /// <summary>
@@ -100,21 +100,21 @@ namespace Aries
         /// </summary>
         public static void AllowAllWhereFields()
         {
-            _blockWhereFields = ImmutableHashSet.Create<string>();
+            _blockWhereFields.Clear();
         }
         /// <summary>
         /// 允许所有字段在SELECT查询后返回
         /// </summary>
         public static void AllowAllSelectFields()
         {
-            _blockSelectFields = ImmutableHashSet.Create<string>();
+            _blockSelectFields.Clear();
         }
         /// <summary>
         /// 允许所有字段插入更新
         /// </summary>
         public static void AllowAllInsertFields()
         {
-            _blockInsertFields = ImmutableHashSet.Create<string>();
+            _blockInsertFields.Clear();
         }
         #endregion
 
@@ -126,7 +126,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void AllowUpdateFields(params string[] fields)
         {
-            _allowUpdateFields = _allowUpdateFields.Union(fields);
+            _allowUpdateFields.UnionWith(fields);
         }
         /// <summary>
         /// 允许参数中的字段参与WHERE查询操作
@@ -134,7 +134,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void AllowWhereFields(params string[] fields)
         {
-            _blockWhereFields = _blockWhereFields.Except(fields);
+            _blockWhereFields.ExceptWith(fields);
         }
         /// <summary>
         /// 允许参数中的字段在SELECT时返回
@@ -142,7 +142,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void AllowSelectFields(params string[] fields)
         {
-            _blockSelectFields = _blockSelectFields.Except(fields);
+            _blockSelectFields.ExceptWith(fields);
         }
         /// <summary>
         /// 允许参数中的字段参与插入操作
@@ -150,7 +150,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void AllowInsertFields(params string[] fields)
         {
-            _blockInsertFields = _blockInsertFields.Except(fields);
+            _blockInsertFields.ExceptWith(fields);
         }
         #endregion
 
@@ -161,7 +161,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void BlockUpdateFields(params string[] fields)
         {
-            _allowUpdateFields = _allowUpdateFields.Except(fields);
+            _allowUpdateFields.ExceptWith(fields);
         }
         /// <summary>
         /// 不允许参数中的字段参与WHERE查询操作
@@ -169,7 +169,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void BlockWhereFields(params string[] fields)
         {
-            _blockWhereFields = _blockWhereFields.Union(fields);
+            _blockWhereFields.UnionWith(fields);
         }
         /// <summary>
         /// 不允许参数中的字段在SELECT时返回
@@ -177,7 +177,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void BlockSelectFields(params string[] fields)
         {
-            _blockSelectFields = _blockSelectFields.Union(fields);
+            _blockSelectFields.UnionWith(fields);
         }
         /// <summary>
         /// 不允许参数中的字段参与插入操作
@@ -185,7 +185,7 @@ namespace Aries
         /// <param name="fields"></param>
         public static void BlockInsertFields(params string[] fields)
         {
-            _blockInsertFields = _blockInsertFields.Union(fields);
+            _blockInsertFields.UnionWith(fields);
         }
         #endregion
         

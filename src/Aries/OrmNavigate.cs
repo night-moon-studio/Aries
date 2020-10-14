@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq.Expressions;
@@ -7,10 +8,10 @@ using System.Linq.Expressions;
 public static class OrmNavigate<TEntity> where TEntity : class
 {
 
-    public static ImmutableDictionary<Type, (string src, string dst, string table)> JoinScriptMapping;
+    public static ConcurrentDictionary<Type, (string src, string dst, string table)> JoinScriptMapping;
     static OrmNavigate()
     {
-        JoinScriptMapping = ImmutableDictionary.Create<Type, (string src, string dst, string table)>();
+        JoinScriptMapping = new ConcurrentDictionary<Type, (string src, string dst, string table)>();
     }
 
 

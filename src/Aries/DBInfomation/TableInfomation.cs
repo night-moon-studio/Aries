@@ -75,15 +75,15 @@ public static class TableInfomation<TEntity> where TEntity : class
 
                 }
 
-                if (item.ForeignsDict != null)
-                {
-                    foreach (var foreigns in item.ForeignsDict)
-                    {
-                        NDelegate
-                            .RandomDomain()
-                            .Action($"OrmNavigate<{typeof(TEntity).Name}>.Join<{foreigns.Value.ReferencedTable.Name}>(\"{foreigns.Value.Columns[0].Name}\",\"{foreigns.Value.ReferencedColumns[0].Name}\");")();
-                    }
-                }
+                //if (item.ForeignsDict != null)
+                //{
+                //    foreach (var foreigns in item.ForeignsDict)
+                //    {
+                //        NDelegate
+                //            .RandomDomain()
+                //            .Action($"OrmNavigate<{typeof(TEntity).Name}>.Join<{foreigns.Value.ReferencedTable.Name}>(\"{foreigns.Value.Columns[0].Name}\",\"{foreigns.Value.ReferencedColumns[0].Name}\");")();
+                //    }
+                //}
                 break;
             }
         }

@@ -12,23 +12,24 @@ namespace Aries
         /// <param name="freeSql">freesql 句柄</param>
         /// <param name="entity">要被插入的实体类</param>
         /// <returns></returns>
-        public static TEntity AriesInsert<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
+        public static bool AriesInsert<TEntity>(this IFreeSql freeSql,params TEntity[] entity) where TEntity : class
         {
-             
-            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
 
+            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
             if (TableInfomation<TEntity>.PrimaryKey!=default)
             {
-                var id = insert.ExecuteIdentity();
-                TableInfomation<TEntity>.SetPrimaryKey(entity, id);
-                return entity;
-            }
 
-            if (insert.ExecuteAffrows() == 1)
-            {
-                return entity;
+                var id = insert.ExecuteIdentity();
+                TableInfomation<TEntity>.SetPrimaryKey(entity[entity.Length-1], id);
+                return id != 0;
+
             }
-            return null;
+            else
+            {
+
+                return insert.ExecuteAffrows() == entity.Length;
+               
+            }
 
         }
 
