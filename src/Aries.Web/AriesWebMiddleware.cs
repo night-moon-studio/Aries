@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using FreeSql;
+using FreeSql.Aop;
+using System;
+using System.IO;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -6,14 +9,63 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class AriesWebMiddleware
     {
 
-        public static void AddAries(this IServiceCollection services, IFreeSql freeSql, string path)
+        public static IFreeSql FreeSqlHandler;
+        public static void AddAriesMySql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
+            AddAriesFreeSql(services, DataType.MySql, connectionString, callBack);
+        }
+        public static void AddAriesSqlServer(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        {
+            AddAriesFreeSql(services, DataType.SqlServer, connectionString, callBack);
+        }
+        public static void AddAriesOracle(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        {
+            AddAriesFreeSql(services, DataType.Oracle, connectionString, callBack);
+        }
+        public static void AddAriesSqlite(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        {
+            AddAriesFreeSql(services, DataType.Sqlite, connectionString, callBack);
+        }
+        public static void AddAriesPgSql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        {
+            AddAriesFreeSql(services, DataType.PostgreSQL, connectionString, callBack);
+        }
+        public static void AddAriesFreeSql(this IServiceCollection services, DataType sqlType,string connectionString,Action<IFreeSql> callBack=null)
+        {
+            FreeSqlHandler = new FreeSql.FreeSqlBuilder()
+                .UseConnectionString(sqlType, connectionString)
+                .Build();
+            callBack?.Invoke(FreeSqlHandler);
+            services.AddSingleton(FreeSqlHandler);
+        }
+
+
+        public static void AddAriesEntities(this IServiceCollection services, params Type[] types)
+        {
+
+            if (FreeSqlHandler == default)
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
+            TableInfomation.Initialize(FreeSqlHandler, types);
+
+        }
+
+
+        public static void AddAriesAssembly(this IServiceCollection services, string path)
+        {
+
+            if (FreeSqlHandler == default)
+	        {
+               throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+	        }   
+
 
             NatashaInitializer.InitializeAndPreheating();
             var assembly = Assembly.Load(path);
             var types = assembly.GetTypes();
 
-            TableInfomation.Initialize(freeSql, types);
+            TableInfomation.Initialize(FreeSqlHandler, types);
 
         }
     }

@@ -24,14 +24,17 @@ namespace PgFreeSqlWeb
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var freesql = new FreeSql.FreeSqlBuilder()
-                        .UseConnectionString(FreeSql.DataType.PostgreSQL, "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1")
-                        .Build();
-            freesql.Aop.CurdBefore += Aop_CurdBefore;
-            services.AddSingleton(freesql);
+            services.AddAriesPgSql(
+                "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456; Database=test;Pooling=true;Minimum Pool Size=1",
+                freeSql => { 
+
+                    freeSql.Aop.CurdBefore += Aop_CurdBefore;
+
+                });
+
             //初始化扫描
-            services.AddAries(freesql,"TestLib");
-            TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3));
+            services.AddAriesAssembly("TestLib");
+           
 
             //配置 Join 关系
             //OrmNavigate<Test>.Connect<Test2>(test => test.Domain, test2 => test2.Id);
