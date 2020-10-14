@@ -10,37 +10,38 @@ namespace Microsoft.Extensions.DependencyInjection
     {
 
         public static IFreeSql FreeSqlHandler;
-        public static void AddAriesMySql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        public static IServiceCollection AddAriesMySql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
-            AddAriesFreeSql(services, DataType.MySql, connectionString, callBack);
+            return AddAriesFreeSql(services, DataType.MySql, connectionString, callBack);
         }
-        public static void AddAriesSqlServer(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        public static IServiceCollection AddAriesSqlServer(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
-            AddAriesFreeSql(services, DataType.SqlServer, connectionString, callBack);
+            return AddAriesFreeSql(services, DataType.SqlServer, connectionString, callBack);
         }
-        public static void AddAriesOracle(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        public static IServiceCollection AddAriesOracle(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
-            AddAriesFreeSql(services, DataType.Oracle, connectionString, callBack);
+            return AddAriesFreeSql(services, DataType.Oracle, connectionString, callBack);
         }
-        public static void AddAriesSqlite(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        public static IServiceCollection AddAriesSqlite(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
-            AddAriesFreeSql(services, DataType.Sqlite, connectionString, callBack);
+            return AddAriesFreeSql(services, DataType.Sqlite, connectionString, callBack);
         }
-        public static void AddAriesPgSql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
+        public static IServiceCollection AddAriesPgSql(this IServiceCollection services, string connectionString, Action<IFreeSql> callBack = null)
         {
-            AddAriesFreeSql(services, DataType.PostgreSQL, connectionString, callBack);
+            return AddAriesFreeSql(services, DataType.PostgreSQL, connectionString, callBack);
         }
-        public static void AddAriesFreeSql(this IServiceCollection services, DataType sqlType,string connectionString,Action<IFreeSql> callBack=null)
+        public static IServiceCollection AddAriesFreeSql(this IServiceCollection services, DataType sqlType,string connectionString,Action<IFreeSql> callBack=null)
         {
             FreeSqlHandler = new FreeSql.FreeSqlBuilder()
                 .UseConnectionString(sqlType, connectionString)
                 .Build();
             callBack?.Invoke(FreeSqlHandler);
             services.AddSingleton(FreeSqlHandler);
+            return services;
         }
 
 
-        public static void AddAriesEntities(this IServiceCollection services, params Type[] types)
+        public static IServiceCollection AddAriesEntities(this IServiceCollection services, params Type[] types)
         {
 
             if (FreeSqlHandler == default)
@@ -48,11 +49,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
             }
             TableInfomation.Initialize(FreeSqlHandler, types);
+            return services;
 
         }
 
 
-        public static void AddAriesAssembly(this IServiceCollection services, string path)
+        public static IServiceCollection AddAriesAssembly(this IServiceCollection services, string path)
         {
 
             if (FreeSqlHandler == default)
@@ -66,6 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var types = assembly.GetTypes();
 
             TableInfomation.Initialize(FreeSqlHandler, types);
+            return services;
 
         }
     }
