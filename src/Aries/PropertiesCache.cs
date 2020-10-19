@@ -20,21 +20,19 @@ namespace Aries
 
         static PropertiesCache()
         {
+
             PropMembers = new HashSet<string>(typeof(TEntity).GetProperties().Select(item => item.Name));
+            _blockInsertFields = new HashSet<string>();
             if (TableInfomation<TEntity>.PrimaryKey != default)
 	        {
                 PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
-                _blockInsertFields = new HashSet<string>();
                 _blockInsertFields.Add(TableInfomation<TEntity>.PrimaryKey);
-            }
-            else
-            {
-                _blockInsertFields = new HashSet<string>();
             }
 
             _blockWhereFields = new HashSet<string>();
             _allowUpdateFields = new HashSet<string>(PropMembers);
             _blockSelectFields = new HashSet<string>();
+            AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
 
         public static HashSet<string> GetBlockWhereFields()
@@ -127,6 +125,7 @@ namespace Aries
         public static void AllowUpdateFields(params string[] fields)
         {
             _allowUpdateFields.UnionWith(fields);
+            AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
         /// <summary>
         /// 允许参数中的字段参与WHERE查询操作
@@ -162,6 +161,7 @@ namespace Aries
         public static void BlockUpdateFields(params string[] fields)
         {
             _allowUpdateFields.ExceptWith(fields);
+            AllowUpdateColumns = _allowUpdateFields.ToArray();
         }
         /// <summary>
         /// 不允许参数中的字段参与WHERE查询操作
