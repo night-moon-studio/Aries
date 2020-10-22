@@ -34,11 +34,11 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost("aries_deletebyid")]
-        public virtual ApiReturnResult DeleteById([FromQuery] T entity)
+        public virtual ApiReturnResult DeleteById(long id)
         {
             return BoolResult(_freeSql
                 .Delete<T>()
-                .WherePrimaryKeyFromEntity(entity)
+                .WherePrimaryKey(id)
                 .ExecuteAffrows() != 0);
         }
 
