@@ -21,13 +21,44 @@ FreeSql 的 Natasha 扩展
 
 #### 引用 Provider
 
-该库是对 IFreesql 接口的一个扩展，同时也是一个抽象的实现，因此具体适配什么数据库，需要用户 手动引用 Freesql 的适配库。
+该库是对 IFreesql 接口的一个扩展，同时也是一个抽象的实现，因此具体适配什么数据库，需要用户 手动引用 Freesql 的适配库，例如 "FreeSql.Provider.PostgreSQL"。
+
 
 #### 信息初始化配置
+
+##### 控制台
+
 ```C#
 //初始化主键等信息
 TableInfomation.Initialize(freesql, typeof(Test), typeof(Test2), typeof(Test3)，.....);
+```  
+
+<br/>
+
+##### Web
+
+```C#
+
+// AddAriesPgSql / AddAriesMySql / AddAriesSqlServer 等等
+services.AddAriesPgSql(
+
+  //链接字符串
+  "Host=127.0.0.1;Port=5432;Username=postgres;Password=; Database=test;Pooling=true;Minimum Pool Size=1",
+  //对 freesql 的额外操作
+   freeSql => { freeSql.Aop.CurdBefore += Aop_CurdBefore; }
+
+ );
 ```
+
+对实体类进行扫描或者添加 
+
+```C#
+ //手动添加个别实体类
+ services.AddAriesEntities(typeof(Student), typeof(Teacher)....);
+ //直接扫描该程序集瞎的实体类
+ services.AddAriesAssembly("TestAssembly");
+```
+
 
 #### 字段使用范围初始化配置
 
@@ -39,17 +70,16 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
 
 ```  
 
-
 ### 查询
 
- - WhereWithEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
+ - WhereWithEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{keys[i]} == entity.{keys[i]})。
  - WhereWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
- - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == {value})， 生成 Where 主键 = xxx 的查询条件。
+ - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == entity.{PrimaryKey})， 生成 Where 主键 = xxx 的查询条件。
  
 ### 更新
 
  - UpdateAll(entity); 通过前端传来的实体，进行更新。
- - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
+ - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{key[i]}==entity.{key[i]})。
 
 
 ### 高度封装的扩展操作入口
@@ -65,7 +95,18 @@ AriesQuery<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询并删除实体
 AriesDelete<TEntity>(SqlModel<TEntity> model);
 ```  
+## 前端操作Model
 
+```C#
+var temp = new SqlModel();
+temp.QueryInstance.Instance.Id = 1;
+temp.ModifyInstance.Instance.Id = 1;
+temp.AddAscField("CreateTime");
+temp.AddFuzzy("Name","a");
+temp.AddUpdateField("Name");
+temp.AddWhereField("Age");
+console.log(temp);
+```
 
 ## 链表查询
 
