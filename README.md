@@ -72,14 +72,14 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
 
 ### 查询
 
- - WhereWithEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{field} == {value})。
+ - WhereWithEntity(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 Where 查询代码, 翻译成 Where(item=>item.{keys[i]} == entity.{keys[i]})。
  - WhereWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
- - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == {value})， 生成 Where 主键 = xxx 的查询条件。
+ - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == entity.{PrimaryKey})， 生成 Where 主键 = xxx 的查询条件。
  
 ### 更新
 
  - UpdateAll(entity); 通过前端传来的实体，进行更新。
- - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{field}==entity.{field})。
+ - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{key[i]}==entity.{key[i]})。
 
 
 ### 高度封装的扩展操作入口
