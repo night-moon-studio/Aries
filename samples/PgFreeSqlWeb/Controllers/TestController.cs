@@ -1,5 +1,6 @@
 ﻿using Aries;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using TestLib;
 
 namespace PgFreeSqlWeb.Controllers
@@ -8,9 +9,29 @@ namespace PgFreeSqlWeb.Controllers
     [ApiController]
     public class TestController : AriesCurdController<Test>
     {
+        //AriesOptimisticLock _lock;
         public TestController(IFreeSql freeSql) : base(freeSql)
         {
+            //_lock = new AriesOptimisticLock(freeSql);
+            //_lock.SpecifyLock(1,"test");
+        }
 
+        [HttpGet("testLock")]
+        public int TestLock()
+        {
+            Parallel.For(0, 100, (_,state) => {
+                AriesOptimisticLock _lock = new AriesOptimisticLock(_freeSql);
+                _lock.SpecifyLock(1, "test");
+                _lock.Execute(() =>
+                {
+                    var a =  _freeSql.Select<TestLock>().First();
+                    System.Diagnostics.Debug.WriteLine("TEST:A\t" + a.Score);
+                    _freeSql.Ado.ExecuteNonQuery("UPDATE public.\"TestLock\" SET \"Score\" = \"Score\" + 1 where \"Score\"=" + a.Score);
+                });
+            }
+            );
+            return 0;
+            // });
         }
 
         public override ApiReturnResult QuerySingle([FromBody] SqlModel<Test> query)
