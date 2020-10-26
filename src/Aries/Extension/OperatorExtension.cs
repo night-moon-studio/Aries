@@ -17,6 +17,10 @@ namespace Aries
                 {
 
                     handler.WhereWithModel(model.QueryModel);
+                    foreach (var item in model.GetWhereExpressions())
+                    {
+                        handler.Where(item);
+                    }
 
                 }
 
@@ -46,6 +50,10 @@ namespace Aries
             {
 
                 handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                foreach (var item in model.GetWhereExpressions())
+                {
+                    handler.Where(item);
+                }
 
             }
 
@@ -85,6 +93,10 @@ namespace Aries
             {
 
                 handler.WhereWithModel(model.QueryModel);
+                foreach (var item in model.GetWhereExpressions())
+                {
+                    handler.Where(item);
+                }
 
             }
 

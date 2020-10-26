@@ -106,7 +106,7 @@ namespace PgFreeSqlWeb.Controllers
         [HttpPost("updatebyfields")]
         public bool Post4([FromQuery]Test instance)
         {
-
+            
             return _freeSql.UpdateWithEntity(Request.Query.Keys, instance).WherePrimaryKeyFromEntity(instance).ExecuteAffrows()!=0;
 
         }

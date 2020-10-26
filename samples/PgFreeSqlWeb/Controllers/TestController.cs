@@ -13,6 +13,20 @@ namespace PgFreeSqlWeb.Controllers
 
         }
 
+        public override ApiReturnResult QuerySingle([FromBody] SqlModel<Test> query)
+        {
+            query.AddQueryCondition(item => item.Id == 1);
+            return base.QuerySingle(query);
+        }
+
+
+        public override ApiReturnResult Modify([FromBody] SqlModel<Test> opModel)
+        {
+            opModel.ModifyInstance.Instance.Name = "test";
+            opModel.AddModifyField(item => item.Name);
+            return base.Modify(opModel);
+        }
+
         [HttpDelete]
         public ApiReturnResult Test()
         {
