@@ -57,18 +57,20 @@ services.AddAriesPgSql(
 ```C#
  //手动添加个别实体类
  services.AddAriesEntities(typeof(Student), typeof(Teacher)....);
- //直接扫描该程序集瞎的实体类
+ //直接扫描该程序集下的实体类
  services.AddAriesAssembly("TestAssembly");
 ```
 
 
 #### 字段使用范围初始化配置
 
-PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作的字段限制，允许参与或不参与，详情请看方法注释。
+PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作的字段限制，允许参与或不参与，详情请看方法注释。 
+  
 ```C#
-//配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
- PropertiesCache<Test>.AllowSelectFields("Name","Age");
+ //配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
  //允许 Name / Age 返回。
+ PropertiesCache<Test>.AllowSelectFields("Name","Age");
+
 
 ```    
 
