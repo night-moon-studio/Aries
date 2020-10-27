@@ -64,37 +64,42 @@ namespace Aries
                             string targetMemberName = default;
                             //var member = item.ToString().Split('.')[1];
                             var methodExp = (MethodCallExpression)memberExpression.Expression;
-                            if (methodExp.Arguments[0].NodeType == ExpressionType.Quote)
+                            if (methodExp.Arguments[1].NodeType == ExpressionType.Quote)
                             {
-                                var unaryExp = (UnaryExpression)(methodExp.Arguments[0]);
+                                var unaryExp = (UnaryExpression)(methodExp.Arguments[1]);
                                 if (unaryExp.NodeType == ExpressionType.Quote)
                                 {
 
                                     var lbdExp = (LambdaExpression)(unaryExp.Operand);
-                                    var memberExp = (MemberExpression)(lbdExp.Body);
-                                    targetMemberName = memberExp.Member.Name;
-
+                                    if (lbdExp.Body.NodeType == ExpressionType.Convert)
+                                    {
+                                        var bodyExp = (UnaryExpression)lbdExp.Body;
+                                        if (bodyExp.Operand.NodeType == ExpressionType.MemberAccess)
+                                        {
+                                            var memberExp = (MemberExpression)(bodyExp.Operand);
+                                            targetMemberName = memberExp.Member.Name;
+                                        }
+                                    }
+                                   
                                 }
                             }
                             var scriptKey = memberExpression.Expression.ToString();
                             if (!tempCache.ContainsKey(scriptKey))
                             {
-                                if (methodExp.Object.NodeType == ExpressionType.Call)
+                                if (methodExp.NodeType == ExpressionType.Call)
                                 {
-                                    var callerExp = (MethodCallExpression)(methodExp.Object);
-                                    var joinTableName = callerExp.Method.GetGenericArguments()[0].Name;
-                                    var joinType = callerExp.Method.Name;
+                                    //var callerExp = (MethodCallExpression)(methodExp.Object);
+                                    var joinTableName = methodExp.Method.GetGenericArguments()[0].Name;
+                                    var joinType = methodExp.Method.Name;
                                     
                                     MemberExpression memberExp = default;
-                                    if (callerExp.Arguments[0].NodeType == ExpressionType.Convert)
+                                    if (methodExp.Arguments[0].NodeType == ExpressionType.Convert)
                                     {
-
-                                        memberExp = (MemberExpression)((UnaryExpression)(callerExp.Arguments[0])).Operand;
-
+                                        memberExp = (MemberExpression)((UnaryExpression)(methodExp.Arguments[0])).Operand;
                                     }
-                                    else if (callerExp.Arguments[0].NodeType == ExpressionType.MemberAccess)
+                                    else if (methodExp.Arguments[0].NodeType == ExpressionType.MemberAccess)
                                     {
-                                        memberExp = (MemberExpression)(callerExp.Arguments[0]);
+                                        memberExp = (MemberExpression)(methodExp.Arguments[0]);
                                     }
                                     if (memberExp != default)
                                     {

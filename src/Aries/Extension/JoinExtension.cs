@@ -10,20 +10,17 @@ namespace Aries
     public static class JoinExtension
     {
 
-        public static InnerJoin<OutEntity> AriesInnerJoin<OutEntity>(this object field)
+        public static OutEntity AriesInnerJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-
-            return new InnerJoin<OutEntity>();
+            return default(OutEntity);
         }
-        public static LeftJoin<OutEntity> AriesLeftJoin<OutEntity>(this object field)
+        public static OutEntity AriesLeftJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-
-            return new LeftJoin<OutEntity>();
+            return default(OutEntity);
         }
-        public static RightJoin<OutEntity> AriesRightJoin<OutEntity>(this object field)
+        public static OutEntity AriesRightJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-
-            return new RightJoin<OutEntity>();
+            return default(OutEntity);
         }
 
 

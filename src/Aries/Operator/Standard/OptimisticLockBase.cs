@@ -72,6 +72,7 @@ namespace Aries
             var temp = GetLock();
             if (temp == null)
             {
+
                 //创建锁
                 temp = CreateLock();
                 if (temp == null)
@@ -84,21 +85,37 @@ namespace Aries
 
 
             //如果锁超时
-            if (temp.IsLocked && NowTimeStampSecond() - temp.LockedTime > _timeOut)
-            {
-                //强行释放锁
-                ReleaseLock();
-                //重新获取锁
-                temp = GetLock();
-                
-            }
-
             if (temp.IsLocked)
             {
 
-                //如果被锁则返回
-                return OptimisticLockResult.HasLocked;
-                
+                if (NowTimeStampSecond() - temp.LockedTime > _timeOut)
+                {
+
+                    //强行释放锁
+                    ReleaseLock();
+                    //锁空闲则上锁
+                    if (!UpdateLock())
+                    {
+                        return OptimisticLockResult.HasLocked;
+                    }
+                    else
+                    {
+
+                        action();
+                        SucceedCount += 1;
+                        ReleaseLock();
+                        return OptimisticLockResult.Succeed;
+
+                    }
+
+                }
+                else
+                {
+                    //如果被锁则返回
+                    return OptimisticLockResult.HasLocked;
+                }
+
+
             }
             else
             {
@@ -119,6 +136,8 @@ namespace Aries
                 }
 
             }
+
+
 
         }
 

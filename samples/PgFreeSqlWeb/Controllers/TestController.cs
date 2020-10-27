@@ -20,16 +20,18 @@ namespace PgFreeSqlWeb.Controllers
         public int TestLock()
         {
             Parallel.For(0, 100, (_,state) => {
+
                 AriesOptimisticLock _lock = new AriesOptimisticLock(_freeSql);
-                _lock.SpecifyLock(1, "test");
+                _lock.SpecifyLock(uid:1, name:"test");
                 _lock.Execute(() =>
                 {
-                    var a =  _freeSql.Select<TestLock>().First();
-                    System.Diagnostics.Debug.WriteLine("TEST:A\t" + a.Score);
-                    _freeSql.Ado.ExecuteNonQuery("UPDATE public.\"TestLock\" SET \"Score\" = \"Score\" + 1 where \"Score\"=" + a.Score);
+                    var score =  _freeSql.Select<TestLock>().First();
+                    System.Diagnostics.Debug.WriteLine("TEST:当前分数\t" + score.Score);
+                    _freeSql.Ado.ExecuteNonQuery("UPDATE public.\"TestLock\" SET \"Score\" = \"Score\" + 1 where \"Score\"=" + score.Score);
+
                 });
-            }
-            );
+
+            });
             return 0;
             // });
         }
@@ -54,9 +56,9 @@ namespace PgFreeSqlWeb.Controllers
 
             return Result(_freeSql.Select<Test>().ToJoinList(item => new {
                 TestName = item.Name,
-                DomainId = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Id,
-                DomainName = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
-                TypeName = item.Type.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+                DomainId = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Id,
+                DomainName = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Name,
+                TypeName = item.Type.AriesInnerJoin<Test2>(c => c.Id).Name,
             }));
 
         }
