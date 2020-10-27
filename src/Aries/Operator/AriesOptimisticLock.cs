@@ -18,8 +18,17 @@
 
         public override AriesOptimisticLockModel CreateLock()
         {
-            var model = new AriesOptimisticLockModel() { Uid = this.Uid, Name = this.Name, LockedTime = NowTimeStampSecond() };
-            return _freeSql.AriesInsert(model) ? model : null;
+
+            try
+            {
+                var model = new AriesOptimisticLockModel() { Uid = this.Uid, Name = this.Name, LockedTime = NowTimeStampSecond() };
+                return _freeSql.AriesInsert(model) ? model : null;
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+            
         }
 
 
@@ -38,7 +47,7 @@
                 .Update<AriesOptimisticLockModel>()
                 .Set(item=>item.IsLocked == true)
                 .Set(item=>item.LockedTime == NowTimeStampSecond())
-                .Where(item => item.Uid == Uid && item.Name == Name).ExecuteAffrows()==1;
+                .Where(item => item.Uid == Uid && item.Name == Name && item.IsLocked == false).ExecuteAffrows()==1;
 
         }
 
