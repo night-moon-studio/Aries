@@ -61,16 +61,13 @@ services.AddAriesPgSql(
  services.AddAriesAssembly("TestAssembly");
 ```
 
-
 #### 字段使用范围初始化配置
 
-PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作的字段限制，允许参与或不参与，详情请看方法注释。 
-  
 ```C#
+ //PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作的字段限制，允许参与或不参与，详情请看方法注释。 
  //配置业务禁止返回的字段 作用于 ToLimitList / ToJoinList
  //允许 Name / Age 返回。
  PropertiesCache<Test>.AllowSelectFields("Name","Age");
-
 
 ```    
 
@@ -82,11 +79,15 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
  - WhereWithModel(queryModel); 通过前端传来的 Model 进行分页/排序/模糊查询，翻译成 Page() / Orderby("") / Where(item=>item.{field}.Contains({value}))。
  - WherePrimaryKeyFromEntity(entity); 翻译成 Freesql 中 Where(item=>item.{PrimaryKey} == entity.{PrimaryKey})， 生成 Where 主键 = xxx 的查询条件。
  
+<br/>  
+
 ### 更新
 
  - UpdateAll(entity); 通过前端传来的实体，进行更新。
  - UpdateWithModel(Request.Query.Keys,entity); 通过前端指定的 Key (字段名), 来添加对 entity 指定字段的 更新, 翻译成 Set(item=>item.{key[i]}==entity.{key[i]})。
 
+
+<br/>  
 
 ### 高度封装的扩展操作入口
 
@@ -101,6 +102,7 @@ AriesQuery<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询并删除实体
 AriesDelete<TEntity>(SqlModel<TEntity> model);
 ```    
+
 <br/>  
 
 ## 前端操作Model
