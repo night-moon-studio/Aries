@@ -15,7 +15,9 @@ FreeSql 的 Natasha 扩展
   NatashaInitializer.Initialize();
   //注册组件+预热组件 , 之后编译会更加快速
   await NatashaInitializer.InitializeAndPreheating();
-  ```
+  ```  
+  
+<br/>  
 
 ### 配置
 
@@ -68,7 +70,9 @@ PropertiesCache<Test> 泛型提供了对 更新/条件查询/字段返回 操作
  PropertiesCache<Test>.AllowSelectFields("Name","Age");
  //允许 Name / Age 返回。
 
-```  
+```    
+
+<br/>  
 
 ### 查询
 
@@ -94,7 +98,9 @@ AriesModify<TEntity>(SqlModel<TEntity> model);
 AriesQuery<TEntity>(SqlModel<TEntity> model);
 //通过 Aries 模型查询并删除实体
 AriesDelete<TEntity>(SqlModel<TEntity> model);
-```  
+```    
+<br/>  
+
 ## 前端操作Model
 
 ```C#
@@ -107,10 +113,9 @@ temp.AddUpdateField("Name");
 temp.AddWhereField("Age");
 console.log(temp);
 ```
+<br/>  
 
-## 链表查询
-
-### 使用ToJoinList
+### 外联查询
 
 ```C#
 _freeSql.Select<Test>().ToJoinList(item => new {
@@ -128,8 +133,15 @@ SELECT
 FROM "Test" a 
   INNER JOIN "Test2" AS Test2_AriesInnerJoin_Domain ON a."Domain" = Test2_AriesInnerJoin_Domain."Id" 
   INNER JOIN "Test2" AS Test2_AriesInnerJoin_Type ON a."Type" = Test2_AriesInnerJoin_Type."Id"
-```
+```  
 
+<br/>  
+
+### 发布日志
+
+  - 2020年10月27日，发布 v1.5.0 版本: 1、剪短外联查询的关系构建路径。 2、新增乐观锁操作 API, AriesOptimisticLock，用户可实现 OptimisticLockBase 来实现不同的乐观锁存储和更新等操作。  
+
+<br/>  
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_large)
