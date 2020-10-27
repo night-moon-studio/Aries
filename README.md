@@ -115,9 +115,9 @@ console.log(temp);
 ```C#
 _freeSql.Select<Test>().ToJoinList(item => new {
                 TestName = item.Name,
-                DomainId = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Id,
-                DomainName = item.Domain.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
-                TypeName = item.Type.AriesInnerJoin<Test2>().MapFrom(c => c.Id).Name,
+                DomainId = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Id,
+                DomainName = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Name,
+                TypeName = item.Type.AriesInnerJoin<Test2>(c => c.Id).Name,
 }));
 //翻译成：
 SELECT 
