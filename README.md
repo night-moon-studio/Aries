@@ -105,6 +105,8 @@ AriesDelete<TEntity>(SqlModel<TEntity> model);
 
 ## 前端操作Model
 
+引入 src/Aries.Javascript/AriesModel.js 脚本  
+
 ```C#
 var temp = new SqlModel();
 temp.QueryInstance.Instance.Id = 1;
@@ -125,8 +127,10 @@ _freeSql.Select<Test>().ToJoinList(item => new {
                 DomainId = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Id,
                 DomainName = item.Domain.AriesInnerJoin<Test2>(c => c.Id).Name,
                 TypeName = item.Type.AriesInnerJoin<Test2>(c => c.Id).Name,
-}));
-//翻译成：
+}));  
+
+//翻译成：  
+
 SELECT 
   a."Name" AS "TestName",
   Test2_AriesInnerJoin_Domain."Id" AS "DomainId",
@@ -134,7 +138,8 @@ SELECT
   Test2_AriesInnerJoin_Type."Name" AS "TypeName" 
 FROM "Test" a 
   INNER JOIN "Test2" AS Test2_AriesInnerJoin_Domain ON a."Domain" = Test2_AriesInnerJoin_Domain."Id" 
-  INNER JOIN "Test2" AS Test2_AriesInnerJoin_Type ON a."Type" = Test2_AriesInnerJoin_Type."Id"
+  INNER JOIN "Test2" AS Test2_AriesInnerJoin_Type ON a."Type" = Test2_AriesInnerJoin_Type."Id"  
+  
 ```  
 
 <br/>  
