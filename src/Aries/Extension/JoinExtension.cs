@@ -12,15 +12,15 @@ namespace Aries
 
         public static OutEntity AriesInnerJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-            return default(OutEntity);
+            return default;
         }
         public static OutEntity AriesLeftJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-            return default(OutEntity);
+            return default;
         }
         public static OutEntity AriesRightJoin<OutEntity>(this object field, Expression<Func<OutEntity, object>> expression)
         {
-            return default(OutEntity);
+            return default;
         }
 
 

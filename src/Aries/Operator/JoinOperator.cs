@@ -180,28 +180,4 @@ namespace Aries
         public static string FieldsScript;
     }
 
-
-
-
-    public class InnerJoin<OutEntity>
-    {
-        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
-        {
-            return default(OutEntity);
-        }
-    }
-    public class LeftJoin<OutEntity>
-    {
-        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
-        {
-            return default(OutEntity);
-        }
-    }
-    public class RightJoin<OutEntity>
-    {
-        public OutEntity MapFrom<TReturn>(Expression<Func<OutEntity, TReturn>> expression)
-        {
-            return default(OutEntity);
-        }
-    }
 }
