@@ -16,7 +16,7 @@ namespace Aries
         {
 
             var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
-            if (TableInfomation<TEntity>.PrimaryKey!=default)
+            if (TableInfomation<TEntity>.PrimaryKey!=default && TableInfomation<TEntity>.PrimaryKeyIsLong)
             {
 
                 var id = insert.ExecuteIdentity();

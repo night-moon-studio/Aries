@@ -1,4 +1,4 @@
-﻿using System;
+﻿using FreeSql.DataAnnotations;
 
 namespace TestLib
 {
@@ -20,7 +20,8 @@ namespace TestLib
         public string Address { get; set; }
     }
 
-    public class Test2
+    [Table(Name = "Test2")]
+    public class Test21
     {
         public long Id { get; set; }
         public string Name { get; set; }

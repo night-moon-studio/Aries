@@ -33,6 +33,7 @@ namespace PgFreeSqlWeb
                 });
 
             //≥ı ºªØ…®√Ë
+            //services.AddAriesEntities(typeof(Test),typeof(Test21));
             services.AddAriesAssembly("TestLib");
            
 

@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PgFreeSqlWeb", "samples\PgF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aries.Web", "src\Aries.Web\Aries.Web.csproj", "{30EC3ED9-81F9-4E1B-A3B8-F2F13ADBC28A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLib", "samples\TestLib\TestLib.csproj", "{13958353-A597-413A-BDBF-02455E8BE22E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLib", "samples\TestLib\TestLib.csproj", "{13958353-A597-413A-BDBF-02455E8BE22E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

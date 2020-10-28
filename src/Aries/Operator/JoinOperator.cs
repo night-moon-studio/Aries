@@ -1,44 +1,30 @@
 ﻿using FreeSql;
 using Natasha.CSharp;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 using System.Text;
 
 namespace Aries
 {
-    //public static class JoinOperator<TEntity, TReturn> where TEntity : class
-    //{
-
-    //    public static ImmutableDictionary<long, string> JoinExpressionMapping;
-    //    static JoinOperator()
-    //    {
-    //        JoinExpressionMapping = ImmutableDictionary.Create<long, string>();
-    //    }
-    //}
 
     public static class JoinOperator<TEntity> where TEntity : class
     {
 
-        public static ImmutableDictionary<long,string> JoinExpressionMapping;
+        public static readonly ConcurrentDictionary<string, string> JoinExpressionMapping;
         static JoinOperator()
         {
-            JoinExpressionMapping = ImmutableDictionary.Create<long, string>();
+            JoinExpressionMapping = new ConcurrentDictionary<string, string>();
         }
 
         public static IEnumerable<TReturn> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
         {
 
-            var code = expression.GetHashCode();
-
             //查询表达式树是否为之前处理过的
-            if (JoinAction<TEntity, TReturn>.Action==null)
+            if (JoinAction<TEntity, TReturn>.Action == null)
             {
 
-                Dictionary<string, string> tempCache = new Dictionary<string, string>();
                 //给匿名类创建一个代理类
                 StringBuilder fieldsScript = new StringBuilder();
                 StringBuilder joinScript = new StringBuilder();
@@ -47,51 +33,56 @@ namespace Aries
                 //获取匿名类成员
                 var members = ((NewExpression)expression.Body).Members;
 
-                
+
                 for (int i = 0; i < arguments.Count; i++)
                 {
-                    
+
                     if (arguments[i].NodeType == ExpressionType.MemberAccess)
                     {
-                       
+
                         var memberExpression = (MemberExpression)arguments[i];
+
                         var memberName = memberExpression.Member.Name;
+
                         // 方法类型参数
                         if (memberExpression.Expression.NodeType == ExpressionType.Convert ||
-                            memberExpression.Expression.NodeType == ExpressionType.Call)
+                        memberExpression.Expression.NodeType == ExpressionType.Call)
                         {
 
-                            string targetMemberName = default;
-                            //var member = item.ToString().Split('.')[1];
-                            var methodExp = (MethodCallExpression)memberExpression.Expression;
-                            if (methodExp.Arguments[1].NodeType == ExpressionType.Quote)
-                            {
-                                var unaryExp = (UnaryExpression)(methodExp.Arguments[1]);
-                                if (unaryExp.NodeType == ExpressionType.Quote)
-                                {
-
-                                    var lbdExp = (LambdaExpression)(unaryExp.Operand);
-                                    if (lbdExp.Body.NodeType == ExpressionType.Convert)
-                                    {
-                                        var bodyExp = (UnaryExpression)lbdExp.Body;
-                                        if (bodyExp.Operand.NodeType == ExpressionType.MemberAccess)
-                                        {
-                                            var memberExp = (MemberExpression)(bodyExp.Operand);
-                                            targetMemberName = memberExp.Member.Name;
-                                        }
-                                    }
-                                   
-                                }
-                            }
                             var scriptKey = memberExpression.Expression.ToString();
-                            if (!tempCache.ContainsKey(scriptKey))
+                            if (!JoinExpressionMapping.ContainsKey(scriptKey))
                             {
+                                string targetMemberName = default;
+                                //var member = item.ToString().Split('.')[1];
+                                var methodExp = (MethodCallExpression)memberExpression.Expression;
+                                if (methodExp.Arguments[1].NodeType == ExpressionType.Quote)
+                                {
+                                    var unaryExp = (UnaryExpression)(methodExp.Arguments[1]);
+                                    if (unaryExp.NodeType == ExpressionType.Quote)
+                                    {
+
+                                        var lbdExp = (LambdaExpression)(unaryExp.Operand);
+                                        if (lbdExp.Body.NodeType == ExpressionType.Convert)
+                                        {
+                                            var bodyExp = (UnaryExpression)lbdExp.Body;
+                                            if (bodyExp.Operand.NodeType == ExpressionType.MemberAccess)
+                                            {
+                                                var memberExp = (MemberExpression)(bodyExp.Operand);
+                                                targetMemberName = memberExp.Member.Name;
+                                            }
+                                        }
+
+                                    }
+                                }
+
+
                                 if (methodExp.NodeType == ExpressionType.Call)
                                 {
                                     //var callerExp = (MethodCallExpression)(methodExp.Object);
-                                    var joinTableName = methodExp.Method.GetGenericArguments()[0].Name;
+                                    var joinTableType = methodExp.Method.GetGenericArguments()[0];
+                                    var joinTableName = TableInfomation.GetRealTableName(joinTableType);
                                     var joinType = methodExp.Method.Name;
-                                    
+
                                     MemberExpression memberExp = default;
                                     if (methodExp.Arguments[0].NodeType == ExpressionType.Convert)
                                     {
@@ -119,14 +110,14 @@ namespace Aries
                                         }
 
                                         var joinAliasScript = $"{joinTableName}_{joinType}_{sourceMemberName}";
-                                        tempCache[scriptKey] = joinAliasScript;
+                                        JoinExpressionMapping[scriptKey] = joinAliasScript;
                                         joinScript.Append($"\"{joinTableName}\" AS {joinAliasScript} ON a.\"{sourceMemberName}\" = {joinAliasScript}.\"{targetMemberName}\"".Replace("\"", "\\\""));
                                         joinScript.AppendLine("\");");
 
                                     }
                                 }
                             }
-                            fieldsScript.Append($"{tempCache[scriptKey]}.\"{memberName}\" AS \"{members[i].Name}\",");
+                            fieldsScript.Append($"{JoinExpressionMapping[scriptKey]}.\"{memberName}\" AS \"{members[i].Name}\",");
 
                         }
                         else
@@ -160,13 +151,12 @@ namespace Aries
             }
             //调用 TReturn 的处理函数
             JoinAction<TEntity, TReturn>.Action(select);
-            var sql = select.ToSql(JoinAction<TEntity, TReturn>.FieldsScript);
             //返回执行结果
             return select.ToList<TReturn>(JoinAction<TEntity, TReturn>.FieldsScript);
             //return ProxyCaller<TEntity, TReturn>.ToList(code, select);
 
         }
-        
+
     }
 
     /// <summary>
