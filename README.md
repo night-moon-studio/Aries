@@ -151,8 +151,10 @@ _freeSql.Select<Test>().ToJoinList(item => new {
                 TypeName = item.Type.AriesInnerJoin<Test2>(c => c.Id).Name,
 }));  
 
-//翻译成：  
+//item.Domain.AriesInnerJoin<Test2>(c => c.Id).Name
+//item.Domain 内连接 Test2 表的 c.Id ， 并返回 Test2 表的 Name 字段。
 
+//翻译成：  
 SELECT 
   a."Name" AS "TestName",
   Test2_AriesInnerJoin_Domain."Id" AS "DomainId",
