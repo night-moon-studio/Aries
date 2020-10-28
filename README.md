@@ -19,14 +19,14 @@ FreeSql 的 Natasha 扩展
   
 <br/>  
 
-### 配置
+### 引用
 
-#### 引用 Provider
+该库是对 IFreesql 接口的一个扩展，同时也是一个抽象的实现，因此具体适配什么数据库，需要用户 手动引用 Freesql 的适配库，例如 "FreeSql.Provider.PostgreSQL"。  
 
-该库是对 IFreesql 接口的一个扩展，同时也是一个抽象的实现，因此具体适配什么数据库，需要用户 手动引用 Freesql 的适配库，例如 "FreeSql.Provider.PostgreSQL"。
+<br/>  
 
+### 配置  
 
-#### 信息初始化配置
 
 ##### 控制台
 
