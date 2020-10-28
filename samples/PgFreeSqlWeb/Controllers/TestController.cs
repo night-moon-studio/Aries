@@ -61,7 +61,7 @@ namespace PgFreeSqlWeb.Controllers
                 TestName = item.Name,
                 DomainId = item.Domain.AriesInnerJoin<Test21>(c => c.Id).Id,
                 DomainName = item.Domain.AriesInnerJoin<Test21>(c => c.Id).Name,
-                TypeName = item.Type.AriesInnerJoin<Test21>(c => c.Id).Name,
+                TypeName = item.Type.AriesInnerJoin<Test21>(c => c.Id).Name
             }));
 
         }
