@@ -119,7 +119,27 @@ temp.AddUpdateField("Name");
 temp.AddWhereField("Age");
 console.log(temp);
 ```
-<br/>  
+<br/>    
+
+### 乐观锁操作
+  
+```C#  
+
+AriesOptimisticLock lock = new AriesOptimisticLock(_freeSql);
+lock.SpecifyLock(uid:1, name:"业务名");
+lock.Execute(() =>
+{
+
+ var score =  _freeSql.Select<TestLock>().First();
+ //在并发情况下，每次显示的分数是连续+1的，无重复。 
+ //并发性能一般。
+ System.Diagnostics.Debug.WriteLine("TEST:当前分数\t" + score.Score); 
+ _freeSql.Ado.ExecuteNonQuery("UPDATE public.\"TestLock\" SET \"Score\" = \"Score\" + 1 where \"Score\"=" + score.Score);
+
+});
+
+```  
+<br/>    
 
 ### 外联查询
 
@@ -131,8 +151,10 @@ _freeSql.Select<Test>().ToJoinList(item => new {
                 TypeName = item.Type.AriesInnerJoin<Test2>(c => c.Id).Name,
 }));  
 
-//翻译成：  
+//item.Domain.AriesInnerJoin<Test2>(c => c.Id).Name
+//item.Domain 内连接 Test2 表的 c.Id ， 并返回 Test2 表的 Name 字段。
 
+//翻译成：  
 SELECT 
   a."Name" AS "TestName",
   Test2_AriesInnerJoin_Domain."Id" AS "DomainId",
