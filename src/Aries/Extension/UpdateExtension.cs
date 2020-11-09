@@ -19,7 +19,14 @@ namespace Aries
         public static IUpdate<TEntity> UpdateWithEntity<TEntity>(this IFreeSql freeSql, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
             var update = freeSql.Update<TEntity>();
-            HttpContextUpdateOperator<TEntity>.UpdateFieldsHandler(update, PropertiesCache<TEntity>.GetUpdateFields(collection), entity);
+            foreach (var item in collection)
+            {
+                var temp = HttpContextUpdateOperator<TEntity>.UpdateFieldsHandler(item, entity);
+                if (temp != default)
+                {
+                    update.Set(temp);
+                }
+            }
             return update;
         }
 

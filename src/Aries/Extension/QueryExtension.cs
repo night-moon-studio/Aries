@@ -1,5 +1,7 @@
 ﻿using FreeSql;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Aries
 {
@@ -13,15 +15,29 @@ namespace Aries
         /// <param name="freeSql"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static TEntity GetByPrimaryKey<TEntity>(this IFreeSql freeSql,TEntity entity) where TEntity : class
+        public static TEntity GetByPrimaryKey<TEntity>(this IFreeSql freeSql, TEntity entity) where TEntity : class
         {
             return freeSql.Select<TEntity>().WherePrimaryKeyFromEntity(entity).First();
         }
-        public static TEntity GetByPrimaryKey<TEntity,TPrimaryKey>(this IFreeSql freeSql, TPrimaryKey key) where TEntity : class
+        public static TEntity GetByPrimaryKey<TEntity, TPrimaryKey>(this IFreeSql freeSql, TPrimaryKey key) where TEntity : class
         {
             return freeSql.Select<TEntity>().WherePrimaryKey(key).First();
         }
 
+
+        public static Expression<Func<TEntity,bool>> GetWhereExpression<TEntity>(IEnumerable<string> collection, TEntity entity) where TEntity : class
+        {
+            Expression<Func<TEntity, bool>> exp = default;
+            foreach (var item in collection)
+            {
+                var temp = HttpContextQueryOperator<TEntity>.WhereHandler(item, entity);
+                if (temp != default)
+                {
+                    exp = exp == default? temp : exp.And(temp);
+                }
+            }
+            return exp;
+        }
 
         /// <summary>
         /// 根据集合指定的字段，和实体中的信息进行参数化查询处理
@@ -34,18 +50,41 @@ namespace Aries
         /// <returns></returns>
         public static ISelect<TEntity> WhereWithEntity<TEntity>(this ISelect<TEntity> select, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.SelectWhereHandler(select, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
-            return select;
+            return select.Where(GetWhereExpression(collection,entity));
         }
         public static IUpdate<TEntity> WhereWithEntity<TEntity>(this IUpdate<TEntity> update, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.UpdateWhereHandler(update, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
-            return update;
+            return update.Where(GetWhereExpression(collection, entity));
         }
         public static IDelete<TEntity> WhereWithEntity<TEntity>(this IDelete<TEntity> delete, IEnumerable<string> collection, TEntity entity) where TEntity : class
         {
-            HttpContextQueryOperator<TEntity>.DeleteWhereHandler(delete, PropertiesCache<TEntity>.GetWhereFields(collection), entity);
-            return delete;
+            return delete.Where(GetWhereExpression(collection, entity));
+        }
+
+
+        public static Expression<Func<TEntity, bool>> GetFuzzyExpression<TEntity, TQueryModel>(TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
+        {
+
+            var models = queryModel.Fuzzy;
+            Expression<Func<TEntity, bool>> exp = FuzzyQueryOperator<TEntity>.GetFuzzyExpression(models[0]);
+            for (int i = 1; i < queryModel.Fuzzy.Length; i++)
+            {
+
+                var temp = FuzzyQueryOperator<TEntity>.GetFuzzyExpression(models[i]);
+                if (temp!=default)
+                {
+                    if (models[i].IsOr)
+                    {
+                        exp = exp.Or(temp);
+                    }
+                    else
+                    {
+                        exp = exp.And(temp);
+                    }
+                }
+
+            }
+            return exp;
         }
 
 
@@ -63,13 +102,12 @@ namespace Aries
             QueryOperator<TEntity, TQueryModel>.SelectWhereHandler(select, queryModel);
             if (queryModel.Fuzzy != null)
             {
-                foreach (var model in queryModel.Fuzzy)
-                {
-                    select.FuzzyQuery(model);
-                }
+                return select.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }
             return select;
         }
+
+
 
 
         /// <summary>
@@ -83,13 +121,9 @@ namespace Aries
         /// <returns></returns>
         public static IUpdate<TEntity> WhereWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
-            //QueryOperator<TEntity, TQueryModel>.UpdateWhereHandler(update, queryModel);
             if (queryModel.Fuzzy != null)
             {
-                foreach (var model in queryModel.Fuzzy)
-                {
-                    update.FuzzyQuery(model);
-                }
+                return update.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }
             return update;
         }
@@ -108,10 +142,7 @@ namespace Aries
             //QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
             if (queryModel.Fuzzy != null)
             {
-                foreach (var model in queryModel.Fuzzy)
-                {
-                    delete.FuzzyQuery(model);
-                }
+                return delete.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }
             return delete;
         }

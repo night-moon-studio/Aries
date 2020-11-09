@@ -12,10 +12,12 @@ namespace Aries
     public static class JoinOperator<TEntity> where TEntity : class
     {
 
-        public static readonly ConcurrentDictionary<string, string> JoinExpressionMapping;
+        private static PrecisionCache<string> JoinExpressionMapping;
+        private static readonly ConcurrentDictionary<string, string> _joinDict;
         static JoinOperator()
         {
-            JoinExpressionMapping = new ConcurrentDictionary<string, string>();
+            _joinDict = new ConcurrentDictionary<string, string>();
+            JoinExpressionMapping = _joinDict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
         }
 
         public static IEnumerable<TReturn> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
@@ -50,7 +52,7 @@ namespace Aries
                         {
 
                             var scriptKey = memberExpression.Expression.ToString();
-                            if (!JoinExpressionMapping.ContainsKey(scriptKey))
+                            if (JoinExpressionMapping[scriptKey] == default)
                             {
                                 string targetMemberName = default;
                                 //var member = item.ToString().Split('.')[1];
@@ -110,7 +112,8 @@ namespace Aries
                                         }
 
                                         var joinAliasScript = $"{joinTableName}_{joinType}_{sourceMemberName}";
-                                        JoinExpressionMapping[scriptKey] = joinAliasScript;
+                                        _joinDict[scriptKey] = joinAliasScript;
+                                        JoinExpressionMapping = _joinDict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
                                         joinScript.Append($"\"{joinTableName}\" AS {joinAliasScript} ON a.\"{sourceMemberName}\" = {joinAliasScript}.\"{targetMemberName}\"".Replace("\"", "\\\""));
                                         joinScript.AppendLine("\");");
 
