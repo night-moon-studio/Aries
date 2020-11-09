@@ -1,6 +1,7 @@
 ﻿public class FuzzyModel
 {
-    public string FieldName { get; set; }
+    public string FuzzyField { get; set; }
     public string FuzzyValue { get; set; }
-
+    public bool IgnoreCase { get; set; }
+    public bool IsOr { get; set; }
 }
