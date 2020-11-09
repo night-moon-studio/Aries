@@ -6,7 +6,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
-		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="1.10.1" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="1.10.3" />
 	</ItemGroup>
 
 	<ItemGroup>

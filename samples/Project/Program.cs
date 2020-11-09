@@ -33,7 +33,7 @@ namespace Project
             QueryModel queryModel = new QueryModel();
             queryModel.Size = 2;
             queryModel.Orders = new OrderModel[] { new OrderModel() { FieldName = "Id", IsDesc = true } };
-            queryModel.Fuzzy = new FuzzyModel[] { new FuzzyModel { FieldName = "Name", FuzzyValue = "44" } };
+            //queryModel.Fuzzy = new FuzzyModel[] { new FuzzyModel {  FuzzyField = "Name", FuzzyValue = "44" } };
 
             //外联查询
             Console.ReadKey();
