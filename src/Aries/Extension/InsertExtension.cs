@@ -14,8 +14,7 @@ namespace Aries
         /// <returns></returns>
         public static bool AriesInsert<TEntity>(this IFreeSql freeSql,params TEntity[] entity) where TEntity : class
         {
-
-            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.GetBlockInsertFields().ToArray());
+            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertCoulmns);
             if (TableInfomation<TEntity>.PrimaryKey!=default && TableInfomation<TEntity>.PrimaryKeyIsLong)
             {
 
