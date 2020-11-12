@@ -10,25 +10,31 @@ namespace Aries
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="freeSql">freesql 句柄</param>
-        /// <param name="entity">要被插入的实体类</param>
+        /// <param name="entities">要被插入的实体类</param>
         /// <returns></returns>
-        public static bool AriesInsert<TEntity>(this IFreeSql freeSql,params TEntity[] entity) where TEntity : class
+        public static bool AriesInsert<TEntity>(this IFreeSql freeSql,params TEntity[] entities) where TEntity : class
         {
-            var insert = freeSql.Insert(entity).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertCoulmns);
-            if (TableInfomation<TEntity>.PrimaryKey!=default && TableInfomation<TEntity>.PrimaryKeyIsLong)
+
+            if (entities!=null && entities.Length>0)
             {
 
-                var id = insert.ExecuteIdentity();
-                TableInfomation<TEntity>.SetPrimaryKey(entity[entity.Length-1], id);
-                return id != 0;
+                var insert = freeSql.Insert(entities).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertCoulmns);
+                if (TableInfomation<TEntity>.PrimaryKey != default && TableInfomation<TEntity>.PrimaryKeyIsLong)
+                {
 
-            }
-            else
-            {
+                    var id = insert.ExecuteIdentity();
+                    TableInfomation<TEntity>.SetPrimaryKey(entities[entities.Length - 1], id);
+                    return id != 0;
 
-                return insert.ExecuteAffrows() == entity.Length;
-               
+                }
+                else
+                {
+
+                    return insert.ExecuteAffrows() == entities.Length;
+
+                }
             }
+            return true;
 
         }
 
