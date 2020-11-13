@@ -14,13 +14,38 @@ SqlModel.prototype.ModifyInstance.Instance = {};
 SqlModel.prototype.ModifyInstance.Fields = [];
  
 
-//增加模糊查询
+//增加模糊查询 默认忽略大小写查询 使用 OR 逻辑拼接
 SqlModel.prototype.AddFuzzy = function (field,value) 
 {
 
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value });
+    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : true, IsOr : true });
 
 }
+SqlModel.prototype.AddAndFuzzy = function (field,value) 
+{
+
+    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : false });
+
+}
+SqlModel.prototype.AddIgnoreAndFuzzy = function (field,value) 
+{
+
+    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : false });
+
+}
+SqlModel.prototype.AddOrFuzzy = function (field,value) 
+{
+
+    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : true });
+
+}
+SqlModel.prototype.AddIgnoreOrFuzzy = function (field,value) 
+{
+
+    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : true });
+
+}
+
 
 
 //增加升序字段
@@ -55,4 +80,3 @@ SqlModel.prototype.AddUpdateField = function (field) {
     this.ModifyInstance.Fields.push(field);
 
 }
-
