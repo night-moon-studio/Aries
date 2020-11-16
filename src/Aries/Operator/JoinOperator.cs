@@ -24,7 +24,7 @@ namespace Aries
             //查询表达式树是否为之前处理过的
             if (JoinAction<TEntity, TReturn>.Action == null)
             {
-
+                int alias = 97;
                 //给匿名类创建一个代理类
                 StringBuilder fieldsScript = new StringBuilder();
                 StringBuilder joinScript = new StringBuilder();
@@ -79,8 +79,8 @@ namespace Aries
                                 if (methodExp.NodeType == ExpressionType.Call)
                                 {
                                     //var callerExp = (MethodCallExpression)(methodExp.Object);
-                                    var joinTableType = methodExp.Method.GetGenericArguments()[0];
-                                    var joinTableName = TableInfomation.GetRealTableName(joinTableType);
+                                    var joinTableType = methodExp.Method.GetGenericArguments()[0].GetDevelopName();
+                                    //var joinTableName = TableInfomation.GetRealTableName(joinTableType);
                                     var joinType = methodExp.Method.Name;
 
                                     MemberExpression memberExp = default;
@@ -98,21 +98,18 @@ namespace Aries
 
                                         if (joinType == "AriesInnerJoin")
                                         {
-                                            joinScript.Append("obj.InnerJoin(\"");
+                                            joinScript.Append($"obj.InnerJoin<{joinTableType}>((a,b)=>a.{sourceMemberName} == b.{targetMemberName});");
                                         }
                                         else if (joinType == "AriesLeftJoin")
                                         {
-                                            joinScript.Append("obj.LeftJoin(\"");
+                                            joinScript.Append($"obj.LeftJoin<{joinTableType}>((a,b)=>a.{sourceMemberName} == b.{targetMemberName});");
                                         }
                                         else if (joinType == "AriesRightJoin")
                                         {
-                                            joinScript.Append("obj.RightJoin(\"");
+                                            joinScript.Append($"obj.RightJoin<{joinTableType}>((a,b)=>a.{sourceMemberName} == b.{targetMemberName});");
                                         }
-
-                                        var joinAliasScript = $"{joinTableName}_{joinType}_{sourceMemberName}";
-                                        JoinExpressionMapping[scriptKey] = joinAliasScript;
-                                        joinScript.Append($"\"{joinTableName}\" AS {joinAliasScript} ON a.\"{sourceMemberName}\" = {joinAliasScript}.\"{targetMemberName}\"".Replace("\"", "\\\""));
-                                        joinScript.AppendLine("\");");
+                                        alias += 1;
+                                        JoinExpressionMapping[scriptKey] = ((char)alias).ToString();
 
                                     }
                                 }
