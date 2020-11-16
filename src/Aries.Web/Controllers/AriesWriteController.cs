@@ -7,10 +7,10 @@ namespace Microsoft.AspNetCore.Mvc
     /// 新增路由 需要被继承
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AriesAddAndQueryController<T> : AriesQueryController<T> where T : class
+    public class AriesWriteController<T> : AriesModifyController<T> where T : class
     {
 
-        public AriesAddAndQueryController(IFreeSql freeSql):base(freeSql)
+        public AriesWriteController(IFreeSql freeSql):base(freeSql)
         {
            
         }

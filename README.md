@@ -1,4 +1,4 @@
-# Aries 原 FreeSql.Natasha.Extension 项目
+# Aries
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_shield)
 
 FreeSql 的 Natasha 扩展

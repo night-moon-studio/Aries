@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp2.2</TargetFramework>
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="1.10.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Aries.Web\Aries.Web.csproj" />
+		<ProjectReference Include="..\TestLib\TestLib.csproj" />
+	</ItemGroup>
+
+</Project>

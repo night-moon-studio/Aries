@@ -1,87 +1,53 @@
 ﻿using FreeSql;
 using Natasha.CSharp;
 using System;
-using System.Collections.Immutable;
+using System.Collections.Concurrent;
+using System.Linq.Expressions;
 
 namespace Aries
 {
+
     public static class FuzzyQueryOperator<TEntity> where TEntity : class
     {
-
-        public static ImmutableDictionary<string, Action<ISelect<TEntity>, string>> FuzzyQueryHandlerMapping;
-        public static ImmutableDictionary<string, Action<IUpdate<TEntity>, string>> FuzzyModifyHandlerMapping;
-        public static ImmutableDictionary<string, Action<IDelete<TEntity>, string>> FuzzyDeleteHandlerMapping;
+        private static PrecisionCache<Func<FuzzyModel, Expression<Func<TEntity, bool>>>> FuzzyQueryHandlerMapping;
+        private static readonly ConcurrentDictionary<string, Func<FuzzyModel,Expression<Func<TEntity,bool>>>> _dict;
         static FuzzyQueryOperator()
         {
-            FuzzyQueryHandlerMapping = ImmutableDictionary.Create<string, Action<ISelect<TEntity>, string>>();
-            FuzzyModifyHandlerMapping = ImmutableDictionary.Create<string, Action<IUpdate<TEntity>, string>>();
-            FuzzyDeleteHandlerMapping = ImmutableDictionary.Create<string, Action<IDelete<TEntity>, string>>();
+            _dict = new ConcurrentDictionary<string, Func<FuzzyModel, Expression<Func<TEntity, bool>>>>();
+            FuzzyQueryHandlerMapping = _dict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
+
         }
 
 
-        public static void FuzzyQueryModel(ISelect<TEntity> select, FuzzyModel model)
+        public static Expression<Func<TEntity, bool>> GetFuzzyExpression(FuzzyModel model)
         {
-
-            if (FuzzyQueryHandlerMapping.TryGetValue(model.FieldName, out var fuzzyAction))
+            var func = FuzzyQueryHandlerMapping[model.FuzzyField];
+            if (func!=default)
             {
-
-                fuzzyAction(select, model.FuzzyValue);
+                return func(model);
 
             }
-            else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
+            else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FuzzyField) &&
+                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FuzzyField))
             {
-                Action<ISelect<TEntity>, string> action = NDelegate
+
+                var action = NDelegate
                     .DefaultDomain()
-                    .Action<ISelect<TEntity>, string>($"arg1.Where(obj=>obj.{model.FieldName}.Contains(arg2));");
-                FuzzyQueryHandlerMapping = FuzzyQueryHandlerMapping.Add(model.FieldName, action);
-                action(select, model.FuzzyValue);
+                    .Func<FuzzyModel, Expression<Func<TEntity, bool>>>($@"
+Expression<Func<{typeof(TEntity).GetDevelopName()},bool>> exp = default;
+if(arg.IgnoreCase) {{
+    exp = obj => obj.{model.FuzzyField}.Contains(arg.FuzzyValue,StringComparison.CurrentCultureIgnoreCase);
+}} else {{
+    exp = obj => obj.{model.FuzzyField}.Contains(arg.FuzzyValue);
+}}
+return exp;
+");
+                _dict[model.FuzzyField] = action;
+                FuzzyQueryHandlerMapping = _dict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
+                return action(model);
             }
-
+            return default;
         }
 
-
-        public static void FuzzyQueryModel(IUpdate<TEntity> update, FuzzyModel model)
-        {
-
-            if (FuzzyModifyHandlerMapping.TryGetValue(model.FieldName, out var fuzzyAction))
-            {
-
-                fuzzyAction(update, model.FuzzyValue);
-
-            }
-            else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
-            {
-                Action<IUpdate<TEntity>, string> action = NDelegate
-                    .DefaultDomain()
-                    .Action<IUpdate<TEntity>, string>($"arg1.Where(obj=>obj.{model.FieldName}.Contains(arg2));");
-                FuzzyModifyHandlerMapping = FuzzyModifyHandlerMapping.Add(model.FieldName, action);
-                action(update, model.FuzzyValue);
-            }
-
-        }
-
-
-        public static void FuzzyQueryModel(IDelete<TEntity> delete, FuzzyModel model)
-        {
-
-            if (FuzzyDeleteHandlerMapping.TryGetValue(model.FieldName, out var fuzzyAction))
-            {
-
-                fuzzyAction(delete, model.FuzzyValue);
-
-            }
-            else if (PropertiesCache<TEntity>.PropMembers.Contains(model.FieldName) &&
-                !PropertiesCache<TEntity>.GetBlockWhereFields().Contains(model.FieldName))
-            {
-                Action<IDelete<TEntity>, string> action = NDelegate
-                    .DefaultDomain()
-                    .Action<IDelete<TEntity>, string>($"arg1.Where(obj=>obj.{model.FieldName}.Contains(arg2));");
-                FuzzyDeleteHandlerMapping = FuzzyDeleteHandlerMapping.Add(model.FieldName, action);
-                action(delete, model.FuzzyValue);
-            }
-
-        }
     }
 }

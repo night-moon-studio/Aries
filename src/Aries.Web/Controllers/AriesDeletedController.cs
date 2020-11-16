@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Mvc
     /// 删除路由，需要被继承
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AriesDeletedController<T> : AriesModifyController<T> where T : class
+    public class AriesDeletedController<T> : AriesQueryController<T> where T : class
     {
 
         public AriesDeletedController(IFreeSql freeSql):base(freeSql)

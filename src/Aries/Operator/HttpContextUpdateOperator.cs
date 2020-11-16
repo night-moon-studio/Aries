@@ -1,8 +1,10 @@
-﻿using FreeSql;
+﻿using BTFindTree;
+using FreeSql;
 using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Aries
@@ -13,36 +15,30 @@ namespace Aries
     /// <typeparam name="TEntity"></typeparam>
     public static class HttpContextUpdateOperator<TEntity> where TEntity : class
     {
-        public static readonly Action<IUpdate<TEntity>, IEnumerable<string>, TEntity> UpdateFieldsHandler;
+        public static readonly Func<string, TEntity, Expression<Func<TEntity, bool>>> UpdateFieldsHandler;
         static HttpContextUpdateOperator()
         {
 
             var stringBuilder = new StringBuilder();
-            var props = typeof(TEntity).GetProperties().Select(item=>item.Name);
-            stringBuilder.AppendLine("foreach(var field in arg2){");
+            var propNames = typeof(TEntity).GetProperties().Select(item=>item.Name);
             var allowList = PropertiesCache<TEntity>.GetAllowUpdateFields();
-            foreach (var item in props)
+            stringBuilder.AppendLine($"Expression<Func<{typeof(TEntity).GetDevelopName()},bool>> exp = default;");
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (var name in propNames)
             {
 
-                if (item!=TableInfomation<TEntity>.PrimaryKey)
+                if (allowList.Contains(name))
                 {
-
-                    if (allowList.Contains(item))
-                    {
-                        stringBuilder.AppendLine($"if(field == \"{item}\"){{ arg1.Set(obj=>obj.{item}==arg3.{item}); }}");
-                        stringBuilder.Append("else ");
-                    }
-                   
+                    dict[name] = $"exp = obj => obj.{name} == arg2.{name};";
                 }
-                
+
             }
-            stringBuilder.Length -= 5;
-            stringBuilder.Append("}");
-            var result = stringBuilder.ToString();
+            stringBuilder.AppendLine(BTFTemplate.GetGroupPrecisionPointBTFScript(dict, "arg1"));
+            stringBuilder.AppendLine("return exp;");
 
             UpdateFieldsHandler += NDelegate
     .DefaultDomain()
-    .Action<IUpdate<TEntity>, IEnumerable<string>, TEntity>(result);
+    .UnsafeFunc<string, TEntity, Expression<Func<TEntity, bool>>>(stringBuilder.ToString());
 
         }
     }

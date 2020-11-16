@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;</TargetFrameworks>
+	  <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0;</TargetFrameworks>
 	  <Product>FreeSql.PgSql.Natasha.Extension</Product>
 	  <Description>基于 Freesql 和 Natasha 的 SQL ORM扩展。</Description>
 	  <Copyright>NMSAzulX</Copyright>
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <PackageReleaseNotes>正式版  使用Freesql 1.10.1 支持 netcore3.1 runtime</PackageReleaseNotes>
-	  <Version>1.5.0.1</Version>
+	  <PackageReleaseNotes>正式版  使用 Freesql 1.10.3 支持 netcore3.1 runtime 和 .NET5</PackageReleaseNotes>
+	  <Version>1.6.2</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
@@ -20,12 +20,9 @@
 
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.Natasha.CSharp.All" Version="2.0.1.1" />
-    <PackageReference Include="FreeSql" Version="1.10.1" />
+    <PackageReference Include="FreeSql" Version="1.10.3" />
+    <PackageReference Include="NMS.DynamicCache" Version="1.4.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Operator\Utils\" />
-  </ItemGroup>
 
 </Project>

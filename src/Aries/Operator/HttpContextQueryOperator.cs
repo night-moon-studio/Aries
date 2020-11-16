@@ -1,48 +1,40 @@
-﻿using FreeSql;
+﻿using BTFindTree;
+using FreeSql;
 using Natasha.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace Aries
 {
     public static class HttpContextQueryOperator<TEntity> where TEntity : class
     {
-        public static readonly Action<ISelect<TEntity>, IEnumerable<string>, TEntity> SelectWhereHandler;
-        public static readonly Action<IUpdate<TEntity>, IEnumerable<string>, TEntity> UpdateWhereHandler;
-        public static readonly Action<IDelete<TEntity>, IEnumerable<string>, TEntity> DeleteWhereHandler;
+        public static readonly Func<string, TEntity, Expression<Func<TEntity,bool>>> WhereHandler;
         static HttpContextQueryOperator()
         {
 
             var stringBuilder = new StringBuilder();
-            var props = typeof(TEntity).GetProperties().Select(item=>item.Name);
-            stringBuilder.AppendLine("foreach(var field in arg2){");
+            var propNames = typeof(TEntity).GetProperties().Select(item=>item.Name);
             var blockWhereList = PropertiesCache<TEntity>.GetBlockWhereFields();
-            foreach (var item in props)
+            stringBuilder.AppendLine($"Expression<Func<{typeof(TEntity).GetDevelopName()},bool>> exp = default;");
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (var name in propNames)
             {
 
-                if (!blockWhereList.Contains(item))
+                if (!blockWhereList.Contains(name))
                 {
-                    stringBuilder.AppendLine($"if(field == \"{item}\"){{  arg1.Where(obj=>obj.{item}==arg3.{item});  }}");
-                    stringBuilder.Append("else ");
+                    dict[name] = $"exp = obj => obj.{name} == arg2.{name};";
                 }
                 
             }
-            stringBuilder.Length -= 5;
-            stringBuilder.Append("}");
+            stringBuilder.AppendLine(BTFTemplate.GetGroupPrecisionPointBTFScript(dict,"arg1"));
+            stringBuilder.AppendLine("return exp;");
             var result = stringBuilder.ToString();
-            DeleteWhereHandler += NDelegate
+            WhereHandler += NDelegate
    .DefaultDomain()
-   .Action<IDelete<TEntity>, IEnumerable<string>, TEntity>(result);
-
-            UpdateWhereHandler += NDelegate
-    .DefaultDomain()
-    .Action<IUpdate<TEntity>, IEnumerable<string>, TEntity>(result);
-
-            SelectWhereHandler += NDelegate
-    .DefaultDomain()
-    .Action<ISelect<TEntity>, IEnumerable<string>, TEntity>(result);
+   .UnsafeFunc<string, TEntity, Expression<Func<TEntity, bool>>>(result);
 
 
         }

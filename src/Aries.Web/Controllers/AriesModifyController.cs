@@ -25,8 +25,12 @@ namespace Microsoft.AspNetCore.Mvc
         [HttpPost("aries_modify")]
         public virtual ApiReturnResult Modify([FromBody] SqlModel<T> opModel)
         {
-
-            return Result(_freeSql.AriesModify(opModel).ExecuteAffrows());
+            var result = _freeSql.AriesModify(opModel).ExecuteAffrows();
+            if (result>0)
+            {
+                return Result(result);
+            }
+            return BoolResult(false);
 
         }
 

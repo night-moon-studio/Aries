@@ -1,7 +1,5 @@
 ﻿using FreeSql;
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
@@ -17,7 +15,7 @@ namespace Aries
         private readonly static HashSet<string> _allowUpdateFields;
         private readonly static HashSet<string> _blockInsertFields;
         public static string[] AllowUpdateColumns;
-
+        public static string[] BlockInsertCoulmns;
         static PropertiesCache()
         {
 
@@ -33,6 +31,7 @@ namespace Aries
             _allowUpdateFields = new HashSet<string>(PropMembers);
             _blockSelectFields = new HashSet<string>();
             AllowUpdateColumns = _allowUpdateFields.ToArray();
+            BlockInsertCoulmns = _blockInsertFields.ToArray();
         }
 
         public static HashSet<string> GetBlockWhereFields()
@@ -81,6 +80,7 @@ namespace Aries
         public static void BlockAllInsertFields()
         {
             _blockInsertFields.UnionWith(PropMembers);
+            BlockInsertCoulmns = _blockInsertFields.ToArray();
         }
         #endregion
 
@@ -113,6 +113,7 @@ namespace Aries
         public static void AllowAllInsertFields()
         {
             _blockInsertFields.Clear();
+            BlockInsertCoulmns = _blockInsertFields.ToArray();
         }
         #endregion
 
@@ -150,6 +151,7 @@ namespace Aries
         public static void AllowInsertFields(params string[] fields)
         {
             _blockInsertFields.ExceptWith(fields);
+            BlockInsertCoulmns = _blockInsertFields.ToArray();
         }
         #endregion
 
@@ -186,6 +188,7 @@ namespace Aries
         public static void BlockInsertFields(params string[] fields)
         {
             _blockInsertFields.UnionWith(fields);
+            BlockInsertCoulmns = _blockInsertFields.ToArray();
         }
         #endregion
         

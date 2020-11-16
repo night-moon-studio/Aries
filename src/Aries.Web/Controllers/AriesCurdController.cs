@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Mvc
     /// CURD路由
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AriesCurdController<T> : AriesDeletedController<T> where T : class
+    public class AriesCurdController<T> : AriesWriteController<T> where T : class
     {
 
         public AriesCurdController(IFreeSql freeSql):base(freeSql)
@@ -16,25 +16,29 @@ namespace Microsoft.AspNetCore.Mvc
         }
 
         /// <summary>
-        /// 增加实体
+        /// 根据 Aries 操作模型删除实体
         /// </summary>
-        /// <param name="instance"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost("aries_add")]
-        public virtual ApiReturnResult Add(T instance)
+        [HttpPost("aries_delete")]
+        public virtual ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
         {
-            return BoolResult(_freeSql.AriesInsert(instance));
+            return Result(_freeSql.AriesDelete(model).ExecuteAffrows());
         }
 
+
         /// <summary>
-        /// 增加实体
+        /// 根据实体主键删除实体
         /// </summary>
-        /// <param name="instance"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        [HttpPost("aries_add_list")]
-        public virtual ApiReturnResult AddList(params T[] instance)
+        [HttpPost("aries_deletebyid")]
+        public virtual ApiReturnResult DeleteById(long id)
         {
-            return BoolResult(_freeSql.AriesInsert(instance));
+            return BoolResult(_freeSql
+                .Delete<T>()
+                .WherePrimaryKey(id)
+                .ExecuteAffrows() != 0);
         }
 
     }
