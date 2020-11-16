@@ -111,7 +111,8 @@ namespace Aries
                                             joinScript.Append($"obj.RightJoin<{joinTableType}>((a,b)=>a.{sourceMemberName} == b.{targetMemberName});");
                                         }
                                         alias += 1;
-                                        JoinExpressionMapping[scriptKey] = ((char)alias).ToString();
+                                        _joinDict[scriptKey] = ((char)alias).ToString();
+                                        JoinExpressionMapping = _joinDict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
 
                                     }
                                 }
