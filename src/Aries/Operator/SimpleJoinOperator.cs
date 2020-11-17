@@ -9,79 +9,20 @@ using System.Text;
 namespace Aries
 {
 
-    public static class JoinOperator<TEntity> where TEntity : class
+    public static class SimpleJoinOperator<TEntity> where TEntity : class
     {
 
         private static PrecisionCache<string> JoinExpressionMapping;
         private static readonly ConcurrentDictionary<string, string> _joinDict;
-        static JoinOperator()
+        static SimpleJoinOperator()
         {
             _joinDict = new ConcurrentDictionary<string, string>();
             JoinExpressionMapping = _joinDict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
         }
+
         public static IEnumerable<TReturn> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
         {
-            //给匿名类创建一个代理类
-            StringBuilder fieldsScript = new StringBuilder();
-            StringBuilder joinScript = new StringBuilder();
-            // 获取构造函数参数
-            var arguments = ((NewExpression)expression.Body).Arguments;
-            //获取匿名类成员
-            var members = ((NewExpression)expression.Body).Members;
 
-
-            for (int i = 0; i < arguments.Count; i++)
-            {
-                if (arguments[i].NodeType == ExpressionType.MemberAccess)
-                {
-
-                    var memberExpression = (MemberExpression)arguments[i];
-                    var memberName = memberExpression.Member.Name;
-
-                    if (memberExpression.Expression.NodeType == ExpressionType.Convert ||
-                        memberExpression.Expression.NodeType == ExpressionType.Call)
-                    {
-                        var callExp = ((MethodCallExpression)memberExpression.Expression);
-                        var exp = callExp.Arguments[0];
-                        var method = callExp.Method;
-                        var type = method.DeclaringType;
-                        var targetType = method.DeclaringType.GetGenericArguments()[1];
-                        if (type.Name.StartsWith("AriesInnerJoin"))
-                        {
-                            ////var action = NDelegate
-                            ////    .DefaultDomain()
-                            ////    .Action<ISelect<TEntity>,Expression>
-                        }
-                        else if (type.Name.StartsWith("AriesLeftJoin"))
-                        {
-
-                        }
-                        else if (type.Name.StartsWith("AriesRightJoin"))
-                        {
-
-                        }
-
-                    }
-                    else
-                    {
-                        if (members[i].Name == memberName)
-                        {
-
-                            fieldsScript.Append($"a.\"{memberName}\",");
-                        }
-                        else
-                        {
-                            fieldsScript.Append($"a.\"{memberName}\" AS \"{members[i].Name}\",");
-                        }
-                    }
-                }
-            }
-            return default;
-        }
-        #region MyRegion
-        /*
-        public static IEnumerable<TReturn> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
-        {
             //查询表达式树是否为之前处理过的
             if (JoinAction<TEntity, TReturn>.Action == null)
             {
@@ -222,12 +163,19 @@ namespace Aries
             return select.ToList<TReturn>(JoinAction<TEntity, TReturn>.FieldsScript);
             //return ProxyCaller<TEntity, TReturn>.ToList(code, select);
 
-        }*/
-        #endregion
-
+        }
 
     }
 
-
+    /// <summary>
+    /// 存放与返回值相关的外联查询处理函数
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TReturn"></typeparam>
+    public static class JoinAction<TEntity, TReturn> where TEntity : class
+    {
+        public static Action<ISelect<TEntity>> Action;
+        public static string FieldsScript;
+    }
 
 }

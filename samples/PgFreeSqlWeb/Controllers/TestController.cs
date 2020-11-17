@@ -59,14 +59,27 @@ namespace PgFreeSqlWeb.Controllers
         public ApiReturnResult Test()
         {
 
-            return Result(_freeSql.Select<Test>().ToJoinList(item => new {
+            return Result(_freeSql.Select<Test>().ToSimpleJoinList(item => new {
                 TestName = item.Name,
-                DomainId = item.Domain.AriesInnerJoin<Test21>(c => c.Id).Id,
-                DomainName = item.Domain.AriesInnerJoin<Test21>(c => c.Id).Name,
-                TypeName = item.Type.AriesInnerJoin<Test21>(c => c.Id).Name
+                DomainId = item.Domain.AriesInnerJoin<Test21>(t2 => t2.Id, t2 => t2.Id == 2).Id,
+                DomainName = item.Domain.AriesInnerJoin<Test21>(t2 => t2.Id, t2 => t2.Id == 2).Name,
+                TypeName = item.Type.AriesInnerJoin<Test3>(t3 => t3.Id).TypeName
             }));
 
         }
+
+        //[HttpDelete("a")]
+        //public ApiReturnResult Test2()
+        //{
+
+        //    return Result(_freeSql.Select<Test>().ToJoinList(item => new {
+        //        TestName = item.Name,
+        //        DomainId = AriesInnerJoin<Test,Test21>.Condition((a,t2) =>a.Domain == t2.Id && t2.Id == 2).Id,
+        //        DomainName = AriesInnerJoin<Test, Test21>.Condition((a, t2) => a.Domain == t2.Id && t2.Id == 2).Name,
+        //        TypeName = AriesInnerJoin<Test, Test3>.Condition((a, t3) => a.Type == t3.Id).TypeName
+        //    }));
+
+        //}
 
         //[HttpPost("join")]
         //public ApiReturnPageResult GetJoinList(SqlModel<Test> sqlModel)
