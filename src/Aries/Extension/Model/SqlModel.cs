@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 public class SqlModel<T> where T : class
 {
     public QueryModel QueryModel { get; set; }
-    public OperatorModel<T> QueryInstance { get; set; }
+    public QueryInstanceModel<T> QueryInstance { get; set; }
     public OperatorModel<T> ModifyInstance { get; set; }
 
     private readonly List<Expression<Func<T, bool>>> _whereList;
