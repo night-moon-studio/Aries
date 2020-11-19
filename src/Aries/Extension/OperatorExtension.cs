@@ -14,25 +14,27 @@ namespace Aries
 
 
                 var handler = freesql.UpdateWithEntity(model.ModifyInstance.Fields, model.ModifyInstance.Instance);
-                if (model.QueryModel != null)
+                var instance = model.QueryInstance;
+                if (instance != null)
                 {
 
-                    handler.WhereWithModel(model.QueryModel);
+                    if (instance.Contains != null && instance.Contains.Length > 0)
+                    {
+                        handler.Where(InQueryOperator<TEntity>.InHandler(instance.Contains));
+                    }
+                    handler.WhereWithEntity(instance.Fields, instance.Instance);
                     foreach (var item in model.GetWhereExpressions())
                     {
                         handler.Where(item);
                     }
 
                 }
-
-
-                if (model.QueryInstance != null)
+                if (model.QueryModel != null)
                 {
 
-                    handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                    handler.WhereWithModel(model.QueryModel);
 
                 }
-
 
                 return handler;
             }
@@ -54,7 +56,7 @@ namespace Aries
                 {
                     handler.Where(InQueryOperator<TEntity>.InHandler(instance.Contains));
                 }
-                handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                handler.WhereWithEntity(instance.Fields, instance.Instance);
                 foreach (var item in model.GetWhereExpressions())
                 {
                     handler.Where(item);
@@ -94,24 +96,27 @@ namespace Aries
         {
 
             var handler = freesql.Delete<TEntity>();
-            if (model.QueryModel!=null)
+            var instance = model.QueryInstance;
+            if (instance != null)
             {
 
-                handler.WhereWithModel(model.QueryModel);
+                if (instance.Contains != null && instance.Contains.Length > 0)
+                {
+                    handler.Where(InQueryOperator<TEntity>.InHandler(instance.Contains));
+                }
+                handler.WhereWithEntity(instance.Fields, instance.Instance);
                 foreach (var item in model.GetWhereExpressions())
                 {
                     handler.Where(item);
                 }
 
             }
-
-
-            if (model.QueryInstance!=null)
+            if (model.QueryModel != null)
             {
 
-                handler.WhereWithEntity(model.QueryInstance.Fields, model.QueryInstance.Instance);
+                handler.WhereWithModel(model.QueryModel);
 
-            }   
+            }
             return handler;
         }
 
