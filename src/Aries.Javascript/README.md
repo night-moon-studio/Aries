@@ -52,6 +52,9 @@
           "name": "string",
           "address": "string"
         },
+        
+        //Id 在 1，2，3 范围内的数据
+        "contains":[ 1,2,3]
       
         //需要查询实体中的哪些字段 比如：只查询 Domain 值 (数组类型)
         "fields": ["Domain"]
