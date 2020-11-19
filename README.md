@@ -171,7 +171,9 @@ FROM "Test" a
 ### 发布日志
 
   - 2020年10月27日，发布 v1.5.0 版本: 1、剪短外联查询的关系构建路径。 2、新增乐观锁操作 API, AriesOptimisticLock，用户可实现 OptimisticLockBase 来实现不同的乐观锁存储和更新等操作。  
-
+  
+  - 2020年11月19日，发布 v1.6.7 版本: 1、修改别名支持，使用 Freesql 默认的 Join 规则。2、QueryInstance 模型增加 主键 Contains 批量操作。 3、修复 Update/Delete 查询模型的支持。
+  
 <br/>  
 
 ## License
