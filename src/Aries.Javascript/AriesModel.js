@@ -7,12 +7,22 @@ SqlModel.prototype.QueryModel.Total = false;
 SqlModel.prototype.QueryModel.Orders = [];
 SqlModel.prototype.QueryModel.Fuzzy = [];
 SqlModel.prototype.QueryInstance = {};
+SqlModel.prototype.Contains = [];
 SqlModel.prototype.QueryInstance.Instance = {};
 SqlModel.prototype.QueryInstance.Fields = [];
 SqlModel.prototype.ModifyInstance = {};
 SqlModel.prototype.ModifyInstance.Instance = {};
 SqlModel.prototype.ModifyInstance.Fields = [];
  
+
+//增加 In 集合查询
+SqlModel.prototype.In = function (value) 
+{
+
+    this.QueryModel.QueryInstance.Contains.push(value);
+    
+}
+
 
 //增加模糊查询 默认忽略大小写查询 使用 OR 逻辑拼接
 SqlModel.prototype.AddFuzzy = function (field,value) 
