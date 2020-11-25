@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<script src="AriesModel.js" >
+
+
+
+</script>
+
+<script>
+
+    var instance = GetAriesProxy();
+    instance.QueryModel.Page=10;
+    instance.AddIgnoreAndFuzzy("Name","fuzzyValue");
+    instance.QueryInstance.Instance.Id = 10;
+    instance.ModifyInstance.Instance.Name = "a";
+    instance.ModifyInstance.Instance.Age = 10;
+    instance.ModifyInstance.Instance.Name ="b";
+    console.log(instance.ModifyInstance.Instance.Name);
+    console.log(instance);
+    console.log(JSON.stringify(instance));
+
+</script>
+</html>

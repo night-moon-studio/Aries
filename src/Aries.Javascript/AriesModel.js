@@ -1,92 +1,98 @@
-function SqlModel() {
+
+
+function GetAriesProxy() {
+
+    var sqlModel = {
+        QueryModel: {
+            Page: 0,
+            Size: 0,
+            Total: true,
+            Orders: [],
+            Fuzzy: []
+        },
+        QueryInstance: {
+            Instance: {},
+            Contains: [],
+            Fields: []
+        },
+        ModifyInstance: {
+            Instance: {},
+            Fields: []
+        },
+        In: function (value) {
+
+            this.QueryInstance.Contains.push(value);
+
+        },
+        AddFuzzy: function (field, value) {
+
+            this.QueryModel.Fuzzy.push({ FieldName: field, FuzzyValue: value, IgnoreCase: true, IsOr: true });
+
+        },
+        AddAndFuzzy: function (field, value) {
+
+            this.QueryModel.Fuzzy.push({ FieldName: field, FuzzyValue: value, IgnoreCase: false, IsOr: false });
+
+        },
+        AddIgnoreAndFuzzy: function (field, value) {
+
+            this.QueryModel.Fuzzy.push({ FieldName: field, FuzzyValue: value, IgnoreCase: false, IsOr: false });
+
+        },
+        AddOrFuzzy: function (field, value) {
+
+            this.QueryModel.Fuzzy.push({ FieldName: field, FuzzyValue: value, IgnoreCase: false, IsOr: true });
+
+        },
+        AddIgnoreOrFuzzy: function (field, value) {
+
+            this.QueryModel.Fuzzy.push({ FieldName: field, FuzzyValue: value, IgnoreCase: false, IsOr: true });
+
+        },
+
+        //增加升序字段
+        AddAscField: function (field) {
+
+            this.QueryModel.Orders.push({ FieldName: field, IsDesc: false });
+
+        },
+
+        //增加降序字段
+        AddDescField: function (field) {
+
+            this.QueryModel.Orders.push({ FieldName: field, IsDesc: true });
+
+        }
+
+
+    };
+
+    sqlModel.ModifyInstance.Instance = new Proxy(sqlModel.ModifyInstance.Instance, {
+        
+        set(target, key, value, receiver) {
+
+            if(sqlModel.ModifyInstance.Fields.indexOf(key) == -1)
+            {
+                sqlModel.ModifyInstance.Fields.push(key);
+            }
+            Reflect.set(target, key, value, receiver);
+
+        }
+    });
+
+    sqlModel.QueryInstance.Instance = new Proxy(sqlModel.QueryInstance.Instance, {
+
+        set(target, key, value, receiver) {
+
+            if(sqlModel.QueryInstance.Fields.indexOf(key) == -1)
+            {
+                sqlModel.QueryInstance.Fields.push(key);
+            }
+            Reflect.set(target, key, value, receiver);
+
+        }
+    });
+
+    return sqlModel;
 }
-SqlModel.prototype.QueryModel = {};
-SqlModel.prototype.QueryModel.Page = 0;
-SqlModel.prototype.QueryModel.Size = 0;
-SqlModel.prototype.QueryModel.Total = false;
-SqlModel.prototype.QueryModel.Orders = [];
-SqlModel.prototype.QueryModel.Fuzzy = [];
-SqlModel.prototype.QueryInstance = {};
-SqlModel.prototype.Contains = [];
-SqlModel.prototype.QueryInstance.Instance = {};
-SqlModel.prototype.QueryInstance.Fields = [];
-SqlModel.prototype.ModifyInstance = {};
-SqlModel.prototype.ModifyInstance.Instance = {};
-SqlModel.prototype.ModifyInstance.Fields = [];
- 
 
-//增加 In 集合查询
-SqlModel.prototype.In = function (value) 
-{
-
-    this.QueryModel.QueryInstance.Contains.push(value);
-    
-}
-
-
-//增加模糊查询 默认忽略大小写查询 使用 OR 逻辑拼接
-SqlModel.prototype.AddFuzzy = function (field,value) 
-{
-
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : true, IsOr : true });
-
-}
-SqlModel.prototype.AddAndFuzzy = function (field,value) 
-{
-
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : false });
-
-}
-SqlModel.prototype.AddIgnoreAndFuzzy = function (field,value) 
-{
-
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : false });
-
-}
-SqlModel.prototype.AddOrFuzzy = function (field,value) 
-{
-
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : true });
-
-}
-SqlModel.prototype.AddIgnoreOrFuzzy = function (field,value) 
-{
-
-    this.QueryModel.Fuzzy.push({FieldName: field, FuzzyValue : value,IgnoreCase : false, IsOr : true });
-
-}
-
-
-
-//增加升序字段
-SqlModel.prototype.AddAscField = function (field) 
-{
-
-    this.QueryModel.Orders.push({ FieldName: field, IsDesc: false });
-
-}
-
-
-//增加降序字段
-SqlModel.prototype.AddDescField = function (field) 
-{
-
-    this.QueryModel.Orders.push({ FieldName: field, IsDesc: true });
-
-}
-
-
-//增加条件查询字段
-SqlModel.prototype.AddWhereField = function (field) {
-
-    this.QueryInstance.Fields.push(field);
-
-}
-
-
-//增加被更新的字段
-SqlModel.prototype.AddUpdateField = function (field) {
-
-    this.ModifyInstance.Fields.push(field);
-
-}
