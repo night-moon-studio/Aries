@@ -1,7 +1,6 @@
 # Aries
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_shield)
 
-FreeSql 的 Natasha 扩展
+基于 FreeSql 的 Natasha 扩展，兼容 FreeSql 兼容的数据库。
 
 ## 前端传值结构（Aries 模型）
 
@@ -177,6 +176,14 @@ FROM "Test" a
   - 2020年11月19日，发布 v1.6.7 版本: 1、修改别名支持，使用 Freesql 默认的 Join 规则。2、QueryInstance 模型增加 主键 Contains 批量操作。 3、修复 Update/Delete 查询模型的支持。
   
 <br/>  
+
+
+### 赞助：
+
+<img width=200 height=200 src="https://images.gitee.com/uploads/images/2020/1201/163955_a29c0b44_1478282.png" title="Scan and donate"/><img width=200 height=200 src="https://images.gitee.com/uploads/images/2020/1201/164809_5a67d5e2_1478282.png" title="Scan and donate"/>
+
+<br/>  
+
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnight-moon-studio%2FAries?ref=badge_large)
