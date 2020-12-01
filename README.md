@@ -4,7 +4,9 @@
 FreeSql 的 Natasha 扩展
 
 ## 前端传值结构（Aries 模型）
-![Struct](https://github.com/night-moon-studio/Aries/blob/master/images/Aries1.png)  
+
+[Model](https://github.com/night-moon-studio/Aries/tree/master/src/Aries.Javascript)  
+
 
 ## 使用
 
