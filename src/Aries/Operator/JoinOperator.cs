@@ -12,12 +12,12 @@ namespace Aries
     public static class JoinOperator<TEntity> where TEntity : class
     {
 
-        private static PrecisionCache<string> JoinExpressionMapping;
+        private static DynamicDictionaryBase<string,string> JoinExpressionMapping;
         private static readonly ConcurrentDictionary<string, string> _joinDict;
         static JoinOperator()
         {
             _joinDict = new ConcurrentDictionary<string, string>();
-            JoinExpressionMapping = _joinDict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
+            JoinExpressionMapping = _joinDict.PrecisioTree();
         }
         public static IEnumerable<TReturn> ToList<TReturn>(ISelect<TEntity> select, Expression<Func<TEntity, TReturn>> expression)
         {

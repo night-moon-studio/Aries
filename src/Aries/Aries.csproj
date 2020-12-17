@@ -8,7 +8,7 @@
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <PackageReleaseNotes>正式版  使用 Freesql 1.10.3 支持 netcore3.1 和 .NET5 runtime , 增强 Join 操作</PackageReleaseNotes>
-	  <Version>1.6.7</Version>
+	  <Version>1.7.0-alpha1</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
@@ -16,16 +16,13 @@
 	  <Company>NMSAzulX</Company>
 	  <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
 	  <Authors>NMSAzulX</Authors>
+	  <FileVersion>1.7.0</FileVersion>
+	  <AssemblyVersion>1.7.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Operator\JoinOperator.cs" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <PackageReference Include="FreeSql" Version="1.10.3" />
-    <PackageReference Include="NMS.DynamicCache" Version="1.4.4.1" />
+    <PackageReference Include="FreeSql" Version="2.0.105" />
+    <PackageReference Include="NMS.DynamicDictionary" Version="1.0.0" />
   </ItemGroup>
 
 

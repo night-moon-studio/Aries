@@ -9,12 +9,12 @@ namespace Aries
 
     public static class FuzzyQueryOperator<TEntity> where TEntity : class
     {
-        private static PrecisionCache<Func<FuzzyModel, Expression<Func<TEntity, bool>>>> FuzzyQueryHandlerMapping;
+        private static DynamicDictionaryBase<string,Func<FuzzyModel, Expression<Func<TEntity, bool>>>> FuzzyQueryHandlerMapping;
         private static readonly ConcurrentDictionary<string, Func<FuzzyModel,Expression<Func<TEntity,bool>>>> _dict;
         static FuzzyQueryOperator()
         {
             _dict = new ConcurrentDictionary<string, Func<FuzzyModel, Expression<Func<TEntity, bool>>>>();
-            FuzzyQueryHandlerMapping = _dict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
+            FuzzyQueryHandlerMapping = _dict.PrecisioTree();
 
         }
 
@@ -43,7 +43,7 @@ if(arg.IgnoreCase) {{
 return exp;
 ");
                 _dict[model.FuzzyField] = action;
-                FuzzyQueryHandlerMapping = _dict.PrecisioTree(DynamicCache.DyanamicCacheDirection.KeyToValue);
+                FuzzyQueryHandlerMapping = _dict.PrecisioTree();
                 return action(model);
             }
             return default;

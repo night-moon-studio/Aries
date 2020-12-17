@@ -17,22 +17,8 @@ namespace Aries
 
             if (entities!=null && entities.Length>0)
             {
-
-                var insert = freeSql.Insert(entities).IgnoreColumns(PropertiesCache<TEntity>.BlockInsertCoulmns);
-                if (TableInfomation<TEntity>.PrimaryKey != default && TableInfomation<TEntity>.PrimaryKeyIsLong)
-                {
-
-                    var id = insert.ExecuteIdentity();
-                    TableInfomation<TEntity>.SetPrimaryKey(entities[entities.Length - 1], id);
-                    return id != 0;
-
-                }
-                else
-                {
-
-                    return insert.ExecuteAffrows() == entities.Length;
-
-                }
+                return InsertOperator<TEntity>.Insert(freeSql, entities);
+               
             }
             return true;
 
