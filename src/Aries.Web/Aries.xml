@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Aries.Web</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesAddController`1">
+            <summary>
+            新增路由 需要被继承
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesAddController`1.Add(`0)">
+            <summary>
+            增加实体
+            </summary>
+            <param name="instance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesAddController`1.AddList(`0[])">
+            <summary>
+            增加实体集合
+            </summary>
+            <param name="instances"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesCurdController`1">
+            <summary>
+            CURD路由
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesCurdController`1.DeleteByCondition(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型删除实体
+            </summary>
+            <param name="model">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesCurdController`1.DeleteById(System.Int64)">
+            <summary>
+            根据实体主键删除实体
+            </summary>
+            <param name="id">主键Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesDeletedController`1">
+            <summary>
+            删除路由，需要被继承
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesDeletedController`1.DeleteByCondition(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型删除实体
+            </summary>
+            <param name="model">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesDeletedController`1.DeleteById(System.Int64)">
+            <summary>
+            根据实体主键删除实体
+            </summary>
+            <param name="id">主键Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.BoolResult(System.Boolean,System.Int64,System.String)">
+            <summary>
+            分页 - 用布尔类型操作返回值
+            </summary>
+            <param name="value">true/false代表返回成功与否</param>
+            <param name="totle">总条数</param>
+            <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.Result(System.Object,System.Int64,System.String)">
+            <summary>
+            分页 - 返回对象，若对象为空，则返回错误信息
+            </summary>
+            <param name="value">需要传送的对象</param>
+            <param name="totle"></param>
+            <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.BoolResult(System.Boolean,System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.Result(System.Object,System.String)" -->
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.Error(System.String,System.Int32,System.Object)">
+            <summary>
+            返回提示信息
+            </summary>
+            <param name="msg">提示信息</param>
+            <param name="status">状态码，默认1</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesJsonResultController.Error(System.Int32,System.String,System.Object)">
+            <summary>
+            返回提示信息
+            </summary>
+            <param name="value">提示信息</param>
+            <param name="status">状态码，默认1</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesModifyController`1">
+            <summary>
+            更新路由 需要被继承
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesModifyController`1.Modify(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型更新实体
+            </summary>
+            <param name="opModel">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesModifyController`1.Modify(`0)">
+            <summary>
+            根据实体中的主键更新整个实体
+            </summary>
+            <param name="model">要被更新的实体</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesQueryController`1">
+            <summary>
+            查询路由 需要被继承
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesQueryController`1.QueryList(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型 进行列表查询
+            </summary>
+            <param name="queryModel">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesQueryController`1.QuerySingle(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型 进行单个实体查询
+            </summary>
+            <param name="queryModel">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesQueryController`1.QueryCount(SqlModel{`0})">
+            <summary>
+            根据 Aries 操作模型 进行数量查询
+            </summary>
+            <param name="queryModel">Aries 操作模型</param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.AriesWriteController`1">
+            <summary>
+            新增路由 需要被继承
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesWriteController`1.Add(`0)">
+            <summary>
+            增加实体
+            </summary>
+            <param name="instance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.AriesWriteController`1.AddList(`0[])">
+            <summary>
+            增加实体集合
+            </summary>
+            <param name="instances"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonResult.Msg">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonResult.Data">
+            <summary>
+            返回对象
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonResult.Code">
+            <summary>
+            状态码
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonPageResult.Msg">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonPageResult.Data">
+            <summary>
+            返回对象
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.AriesJsonPageResult.Code">
+            <summary>
+            状态码
+            </summary>
+        </member>
+    </members>
+</doc>

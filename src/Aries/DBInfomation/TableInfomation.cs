@@ -26,8 +26,8 @@ public static class TableInfomation
             {
                 _realTableNameMapping[item] = NDelegate
                    .UseDomain(domain)
-                   .Func<IFreeSql,string>($"TableInfomation<{item.GetDevelopName()}>.Initialize(arg);return TableInfomation<{item.GetDevelopName()}>.TableName;")(freeSql);
-               
+                   .Func<IFreeSql, string>($"TableInfomation<{item.GetDevelopName()}>.Initialize(arg);return TableInfomation<{item.GetDevelopName()}>.TableName;")(freeSql);
+
             }
 
         }
@@ -55,18 +55,54 @@ public static class TableInfomation<TEntity> where TEntity : class
 
     public static void Initialize(IFreeSql freeSql)
     {
-
-        var tableAttr = typeof(TEntity).GetCustomAttribute<TableAttribute>();
-        if (tableAttr!=default)
+        var type = typeof(TEntity);
+        var tableAttr = type.GetCustomAttribute<TableAttribute>();
+        if (tableAttr != default)
         {
             TableName = tableAttr.Name;
         }
         else
         {
-            TableName = typeof(TEntity).Name;
-        }  
+            TableName = type.Name;
+        }
 
         var table = freeSql.DbFirst.GetTableByName(TableName);
+        if (table == null)
+        {
+
+            //同步结构
+            AriesPrimaryKeyAttribute primaryKey = type.GetCustomAttribute<AriesPrimaryKeyAttribute>();
+            if (primaryKey == null)
+            {
+                PropertyInfo memberInfo = type.GetProperty("Id") ?? type.GetProperty("id") ?? type.GetProperty("_id");
+                if (memberInfo != null && memberInfo.PropertyType == typeof(long))
+                {
+                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(memberInfo.Name).IsPrimary(true).IsIdentity(true));
+                }
+            }
+            else
+            {
+
+                if (primaryKey.KeyName != null)
+                {
+                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(primaryKey.KeyName).IsPrimary(true).IsIdentity(true));
+                }
+
+            }
+            var  descInfo = type.GetProperty("Description") ?? type.GetProperty("Desc") ?? type.GetProperty("desc");
+            if (descInfo != null && descInfo.PropertyType == typeof(string))
+            {
+                freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(descInfo.Name).StringLength(-1));
+            }
+            var contentInfo = type.GetProperty("Content") ?? type.GetProperty("content");
+            if (contentInfo != null && contentInfo.PropertyType == typeof(string))
+            {
+                freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(contentInfo.Name).StringLength(-1));
+            }
+
+            freeSql.CodeFirst.SyncStructure(type, TableName);
+
+        }
         if (table != null)
         {
             foreach (var column in table.Columns)
@@ -76,7 +112,7 @@ public static class TableInfomation<TEntity> where TEntity : class
                 {
 
                     PrimaryKey = column.Name;
-                    PrimaryKeyIsLong = typeof(TEntity).GetProperty(PrimaryKey).PropertyType == typeof(long);  
+                    PrimaryKeyIsLong = type.GetProperty(PrimaryKey).PropertyType == typeof(long);
 
                     if (PrimaryKeyIsLong)
                     {
@@ -84,7 +120,7 @@ public static class TableInfomation<TEntity> where TEntity : class
                         GetPrimaryKey = NDelegate.DefaultDomain().Func<TEntity, long>($"return arg.{PrimaryKey};");
                     }
 
-                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).IsIdentity(true));
+                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(column.Name).IsPrimary(true).IsIdentity(true));
 
                 }
                 else if (column.CsType == typeof(string))
@@ -99,7 +135,6 @@ public static class TableInfomation<TEntity> where TEntity : class
 
             }
         }
-        
 
     }
 

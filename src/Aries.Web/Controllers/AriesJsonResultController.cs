@@ -3,7 +3,7 @@
 namespace Microsoft.AspNetCore.Mvc
 {
 
-    public class ResultController : ControllerBase
+    public class AriesJsonResultController : ControllerBase
     {
 
         /// <summary>
@@ -13,9 +13,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="totle">总条数</param>
         /// <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param>
         /// <returns></returns>
-        protected ApiReturnPageResult BoolResult(bool value, long totle, string message = null)
+        protected AriesJsonPageResult BoolResult(bool value, long totle, string message = null)
         {
-            ApiReturnPageResult _result = new ApiReturnPageResult();
+            AriesJsonPageResult _result = new AriesJsonPageResult();
             _result.Totle = totle;
             if (value)
             {
@@ -36,9 +36,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="totle"></param>
         /// <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param>
         /// <returns></returns>
-        protected ApiReturnPageResult Result(object value, long totle, string message = null)
+        protected AriesJsonPageResult Result(object value, long totle, string message = null)
         {
-            ApiReturnPageResult _result = new ApiReturnPageResult();
+            AriesJsonPageResult _result = new AriesJsonPageResult();
             _result.Totle = totle;
             if (value != null)
             {
@@ -59,9 +59,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="value">true/false代表返回成功与否</param>
         /// <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param
         /// <returns></returns>
-        protected ApiReturnResult BoolResult(bool value, string message = null)
+        protected AriesJsonResult BoolResult(bool value, string message = null)
         {
-            ApiReturnResult _result = new ApiReturnResult();
+            AriesJsonResult _result = new AriesJsonResult();
             if (value)
             {
                 _result.Code = 0;
@@ -80,9 +80,9 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="value">需要传送的对象</param>
         /// <param name="message">正确提示，默认：操作成功！错误提示，默认：操作失败！</param
         /// <returns></returns>
-        protected ApiReturnResult Result(object value, string message = null)
+        protected AriesJsonResult Result(object value, string message = null)
         {
-            ApiReturnResult _result = new ApiReturnResult();
+            AriesJsonResult _result = new AriesJsonResult();
             if (value != null)
             {
                 _result.Data = value;
@@ -102,13 +102,13 @@ namespace Microsoft.AspNetCore.Mvc
         /// <summary>
         /// 返回提示信息
         /// </summary>
-        /// <param name="value">提示信息</param>
+        /// <param name="msg">提示信息</param>
         /// <param name="status">状态码，默认1</param>
         /// <returns></returns>
-        protected ApiReturnResult Error(string value, int status = 1, object data = null)
+        protected AriesJsonResult Error(string msg, int status = 1, object data = null)
         {
-            ApiReturnResult _result = new ApiReturnResult();
-            _result.Msg = value;
+            AriesJsonResult _result = new AriesJsonResult();
+            _result.Msg = msg;
             _result.Data = data;
             _result.Code = status;
             return _result;
@@ -119,10 +119,10 @@ namespace Microsoft.AspNetCore.Mvc
         /// <param name="value">提示信息</param>
         /// <param name="status">状态码，默认1</param>
         /// <returns></returns>
-        protected ApiReturnResult Error(int status, string value, object data = null)
+        protected AriesJsonResult Error(int status, string msg, object data = null)
         {
-            ApiReturnResult _result = new ApiReturnResult();
-            _result.Msg = value;
+            AriesJsonResult _result = new AriesJsonResult();
+            _result.Msg = msg;
             _result.Data = data;
             _result.Code = status;
             return _result;

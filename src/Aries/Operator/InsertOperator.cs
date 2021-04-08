@@ -19,7 +19,7 @@ namespace Aries
                     .Func<IFreeSql, TEntity[], bool>($@"
                         var insert = arg1.Insert(arg2).IgnoreColumns(PropertiesCache<{typeof(TEntity).GetDevelopName()}>.BlockInsertCoulmns);
                         var id = insert.ExecuteIdentity();
-                        entities[entities.Length - 1].{TableInfomation<TEntity>.PrimaryKey} = id;
+                        arg2[arg2.Length - 1].{TableInfomation<TEntity>.PrimaryKey} = id;
                         return id != 0;
                     ");
 
@@ -32,7 +32,7 @@ namespace Aries
                    .UseDomain(typeof(TEntity).GetDomain())
                    .Func<IFreeSql, TEntity[], bool>($@"
                         var insert = arg1.Insert(arg2).IgnoreColumns(PropertiesCache<{typeof(TEntity).GetDevelopName()}>.BlockInsertCoulmns);
-                        return insert.ExecuteAffrows() == entities.Length;
+                        return insert.ExecuteAffrows() == arg2.Length;
                     ");
 
             }

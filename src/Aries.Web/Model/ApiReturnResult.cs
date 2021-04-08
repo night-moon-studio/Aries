@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Microsoft.AspNetCore.Mvc
 {
-    public struct ApiReturnResult
+    public struct AriesJsonResult
     {
         /// <summary>
         /// 消息

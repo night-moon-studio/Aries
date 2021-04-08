@@ -30,14 +30,29 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return AddAriesFreeSql(services, DataType.PostgreSQL, connectionString, callBack);
         }
-        public static IServiceCollection AddAriesFreeSql(this IServiceCollection services, DataType sqlType,string connectionString,Action<IFreeSql> callBack=null)
+        public static IServiceCollection AddAriesFreeSql(this IServiceCollection services, DataType sqlType, string connectionString, Action<IFreeSql> callBack = null)
         {
             FreeSqlHandler = new FreeSql.FreeSqlBuilder()
                 .UseConnectionString(sqlType, connectionString)
                 .Build();
             callBack?.Invoke(FreeSqlHandler);
             services.AddSingleton(FreeSqlHandler);
+            TableInfomation.Initialize(FreeSqlHandler, typeof(AriesOptimisticLockModel));
             return services;
+        }
+
+
+        public static IServiceCollection AddIAriesModel<Interface>(this IServiceCollection services)
+        {
+
+            if (FreeSqlHandler == default)
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
+
+            AddAriesAssembly<Interface>(services, Assembly.GetAssembly(typeof(Interface)));
+            AddAriesAssembly<Interface>(services, Assembly.GetEntryAssembly());
+            return AddAriesAssembly<Interface>(services, Assembly.GetExecutingAssembly());
         }
 
 
@@ -53,21 +68,81 @@ namespace Microsoft.Extensions.DependencyInjection
 
         }
 
-
-        public static IServiceCollection AddAriesAssembly(this IServiceCollection services, string path)
+        public static IServiceCollection AddAriesAssemblyPath(this IServiceCollection services, string path)
         {
 
             if (FreeSqlHandler == default)
-	        {
-               throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
-	        }   
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
 
-
-            NatashaInitializer.InitializeAndPreheating();
             var assembly = Assembly.Load(path);
-            var types = assembly.GetTypes();
+            return AddAriesAssembly(services, assembly);
 
-            TableInfomation.Initialize(FreeSqlHandler, types);
+        }
+        public static IServiceCollection AddAriesAssemblyPath<Interface>(this IServiceCollection services, string path)
+        {
+
+            if (FreeSqlHandler == default)
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
+
+            var assembly = Assembly.Load(path);
+            return AddAriesAssembly<Interface>(services, assembly);
+
+        }
+
+
+        public static IServiceCollection AddAriesAssembly(this IServiceCollection services, Assembly assembly)
+        {
+
+            if (FreeSqlHandler == default)
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
+
+            var types = assembly.GetTypes();
+            for (int i = 0; i < types.Length; i++)
+            {
+                try
+                {
+
+                    TableInfomation.Initialize(FreeSqlHandler, types);
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
+            return services;
+
+        }
+        public static IServiceCollection AddAriesAssembly<Interface>(this IServiceCollection services, Assembly? assembly)
+        {
+
+            if (FreeSqlHandler == default)
+            {
+                throw new System.Exception("请优先注册 AriesFreeSql : services.AddAriesFreeSql(type,conn)");
+            }
+
+            var types = assembly.GetTypes();
+            for (int i = 0; i < types.Length; i++)
+            {
+                try
+                {
+                    if (types[i].IsImplementFrom<Interface>())
+                    {
+                        TableInfomation.Initialize(FreeSqlHandler, types[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+            }
             return services;
 
         }

@@ -19,10 +19,10 @@ namespace Microsoft.AspNetCore.Mvc
         /// <summary>
         /// 根据 Aries 操作模型删除实体
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Aries 操作模型</param>
         /// <returns></returns>
         [HttpPost("aries_delete")]
-        public virtual ApiReturnResult DeleteByCondition([FromBody] SqlModel<T> model)
+        public virtual AriesJsonResult DeleteByCondition([FromBody] SqlModel<T> model)
         {
             return Result(_freeSql.AriesDelete(model).ExecuteAffrows());
         }
@@ -31,15 +31,12 @@ namespace Microsoft.AspNetCore.Mvc
         /// <summary>
         /// 根据实体主键删除实体
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="id">主键Id</param>
         /// <returns></returns>
-        [HttpPost("aries_deletebyid")]
-        public virtual ApiReturnResult DeleteById(long id)
+        [HttpGet("aries_deletebyid")]
+        public virtual AriesJsonResult DeleteById(long id)
         {
-            return BoolResult(_freeSql
-                .Delete<T>()
-                .WherePrimaryKey(id)
-                .ExecuteAffrows() != 0);
+            return BoolResult(_freeSql.AriesDeleteByPrimaryKey<T>(id));
         }
 
     }

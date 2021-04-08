@@ -17,11 +17,11 @@ namespace Aries
         /// <returns></returns>
         public static TEntity GetByPrimaryKey<TEntity>(this IFreeSql freeSql, TEntity entity) where TEntity : class
         {
-            return freeSql.Select<TEntity>().WherePrimaryKeyFromEntity(entity).First();
+            return freeSql.Select<TEntity>().WhereByPrimaryKeyFromEntity(entity).First();
         }
         public static TEntity GetByPrimaryKey<TEntity, TPrimaryKey>(this IFreeSql freeSql, TPrimaryKey key) where TEntity : class
         {
-            return freeSql.Select<TEntity>().WherePrimaryKey(key).First();
+            return freeSql.Select<TEntity>().WhereByPrimaryKey(key).First();
         }
 
 
@@ -100,7 +100,7 @@ namespace Aries
         public static ISelect<TEntity> WhereWithModel<TEntity, TQueryModel>(this ISelect<TEntity> select, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             QueryOperator<TEntity, TQueryModel>.SelectWhereHandler(select, queryModel);
-            if (queryModel.Fuzzy != null)
+            if (queryModel.Fuzzy != null && queryModel.Fuzzy.Length != 0)
             {
                 return select.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }
@@ -121,7 +121,7 @@ namespace Aries
         /// <returns></returns>
         public static IUpdate<TEntity> WhereWithModel<TEntity, TQueryModel>(this IUpdate<TEntity> update, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
-            if (queryModel.Fuzzy != null)
+            if (queryModel.Fuzzy != null && queryModel.Fuzzy.Length != 0)
             {
                 return update.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }
@@ -140,7 +140,7 @@ namespace Aries
         public static IDelete<TEntity> WhereWithModel<TEntity, TQueryModel>(this IDelete<TEntity> delete, TQueryModel queryModel) where TEntity : class where TQueryModel : QueryModel, new()
         {
             //QueryOperator<TEntity, TQueryModel>.DeleteWhereHandler(delete, queryModel);
-            if (queryModel.Fuzzy != null)
+            if (queryModel.Fuzzy != null && queryModel.Fuzzy.Length != 0)
             {
                 return delete.Where(GetFuzzyExpression<TEntity, TQueryModel>(queryModel));
             }

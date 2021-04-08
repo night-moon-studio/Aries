@@ -28,7 +28,7 @@ namespace Aries
                         foreach (var item in queryModel.Orders)
                         {
 
-                            if (!blockWhereList.Contains(item.FieldName) && PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName))
+                            if (!blockWhereList.Contains(item.FieldName) && (PropertiesCache<TEntity>.PropMembers.Contains(item.FieldName) || TableInfomation<TEntity>.PrimaryKey == item.FieldName))
                             {
 
                                 orderBuilder.Append($"a.\"{item.FieldName}\" ");
