@@ -16,7 +16,18 @@ public static class TableInfomation
         _realTableNameMapping = new ConcurrentDictionary<Type, string>();
     }
 
-    public static void Initialize(IFreeSql freeSql, params Type[] types)
+    internal static bool _useNewIdentity;
+    public static void UseNewPgsqlIdentity()
+    {
+        _useNewIdentity = true;
+    }
+
+    /// <summary>
+    /// 对类型进行初始化配置
+    /// </summary>
+    /// <param name="freeSql"></param>
+    /// <param name="types"></param>
+    public static void InitializeTypes(IFreeSql freeSql, params Type[] types)
     {
 
         var domain = DomainManagement.Random;
@@ -34,13 +45,52 @@ public static class TableInfomation
         domain.Dispose();
 
     }
-
+    /// <summary>
+    /// 获取真实表名
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public static string GetRealTableName(Type type)
     {
         return _realTableNameMapping[type];
     }
+    /// <summary>
+    /// 对程序集进行初始化配置
+    /// </summary>
+    /// <param name="freeSql"></param>
+    /// <param name="assembly"></param>
+    public static void InitializeAssembly(IFreeSql freeSql, Assembly assembly)
+    {
 
+        var types = assembly.GetTypes();
+        InitializeTypes(freeSql, types);
 
+    }
+    /// <summary>
+    /// 根据程序集中的类所实现的接口来进行初始化配置
+    /// </summary>
+    /// <typeparam name="Interface"></typeparam>
+    /// <param name="freeSql"></param>
+    /// <param name="assembly"></param>
+    public static void InitializeAssembly<Interface>(IFreeSql freeSql, Assembly assembly)
+    {
+        var types = assembly.GetTypes();
+        for (int i = 0; i < types.Length; i++)
+        {
+            try
+            {
+                if (types[i].IsImplementFrom<Interface>())
+                {
+                    InitializeTypes(freeSql, types[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+    }
 }
 
 public static class TableInfomation<TEntity> where TEntity : class
@@ -101,6 +151,10 @@ public static class TableInfomation<TEntity> where TEntity : class
             }
 
             freeSql.CodeFirst.SyncStructure(type, TableName);
+            if (TableInfomation._useNewIdentity)
+            {
+                CreateNewPrimaryKey(freeSql, TableName);
+            }
 
         }
         if (table != null)
@@ -136,6 +190,23 @@ public static class TableInfomation<TEntity> where TEntity : class
             }
         }
 
+    }
+
+    /// <summary>
+    /// 设置 PGSQL 表自增主键约束
+    /// </summary>
+    /// <param name="sqlHandler"></param>
+    /// <param name="type"></param>
+    public static void CreateNewPrimaryKey(IFreeSql sqlHandler, string tableName)
+    {
+        var result1 = sqlHandler.Ado.ExecuteNonQuery($@"
+ALTER TABLE public.""{tableName}"" DROP COLUMN ""Id"";
+
+ALTER TABLE public.""{tableName}""ADD COLUMN ""Id"" 
+bigint NOT NULL GENERATED ALWAYS AS IDENTITY
+(INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 );
+
+ALTER TABLE public.""{tableName}"" ADD CONSTRAINT ""{tableName}_zz_pkey"" PRIMARY KEY(""Id""); ");
     }
 
 }

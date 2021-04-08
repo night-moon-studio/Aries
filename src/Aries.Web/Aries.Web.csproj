@@ -9,7 +9,7 @@
 		<PackageId>NMS.Aries.Web</PackageId>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<PackageReleaseNotes>正式发布</PackageReleaseNotes>
-		<Version>1.9.0</Version>
+		<Version>2.0.0</Version>
 		<PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 		<PackageTags>Natasha;Freesql;Web;Aries;NMS;</PackageTags>
@@ -18,8 +18,8 @@
 		<PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
 		<Authors>AzulX</Authors>
 		<IsPackable>true</IsPackable>
-		<FileVersion>1.9.0.0</FileVersion>
-		<AssemblyVersion>1.9.0.0</AssemblyVersion>
+		<FileVersion>2.0.0.0</FileVersion>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.1|AnyCPU'">

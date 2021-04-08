@@ -3,12 +3,12 @@
   <PropertyGroup>
 	  <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0;</TargetFrameworks>
 	  <Product>FreeSql.PgSql.Natasha.Extension</Product>
-	  <Description>基于 Freesql 和 Natasha 的 SQL ORM扩展。</Description>
+	  <Description>无</Description>
 	  <Copyright>NMSAzulX</Copyright>
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-	  <PackageReleaseNotes>正式版  使用 Freesql 1.10.3 支持 netcore3.1 和 .NET5 runtime , 增强 Join 操作</PackageReleaseNotes>
-	  <Version>1.9.0</Version>
+	  <PackageReleaseNotes>无</PackageReleaseNotes>
+	  <Version>2.0.0</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
@@ -16,13 +16,13 @@
 	  <Company>NMSAzulX</Company>
 	  <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
 	  <Authors>NMSAzulX</Authors>
-	  <FileVersion>1.9.0</FileVersion>
-	  <AssemblyVersion>1.9.0</AssemblyVersion>
+	  <FileVersion>2.0.0.0</FileVersion>
+	  <AssemblyVersion>2.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FreeSql" Version="2.3.200" />
-    <PackageReference Include="NMS.DynamicDictionary" Version="1.1.0" />
+    <PackageReference Include="NMS.DynamicDictionary" Version="1.1.0.1" />
   </ItemGroup>
 
 
