@@ -103,19 +103,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             var types = assembly.GetTypes();
-            for (int i = 0; i < types.Length; i++)
-            {
-                try
-                {
-
-                    TableInfomation.Initialize(FreeSqlHandler, types);
-                }
-                catch (Exception ex)
-                {
-
-                }
-
-            }
+            TableInfomation.Initialize(FreeSqlHandler, types);
             return services;
 
         }
