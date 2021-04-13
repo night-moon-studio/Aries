@@ -121,13 +121,14 @@ public static class TableInfomation<TEntity> where TEntity : class
         {
 
             //同步结构
+            PropertyInfo primaryInfo = default;
             AriesPrimaryKeyAttribute primaryKey = type.GetCustomAttribute<AriesPrimaryKeyAttribute>();
             if (primaryKey == null)
             {
-                PropertyInfo memberInfo = type.GetProperty("Id") ?? type.GetProperty("id") ?? type.GetProperty("_id");
-                if (memberInfo != null && memberInfo.PropertyType == typeof(long))
+                primaryInfo = type.GetProperty("Id") ?? type.GetProperty("id") ?? type.GetProperty("_id");
+                if (primaryInfo != null && primaryInfo.PropertyType == typeof(long))
                 {
-                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(memberInfo.Name).IsPrimary(true).IsIdentity(true));
+                    freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(primaryInfo.Name).IsPrimary(true).IsIdentity(true));
                 }
             }
             else
@@ -151,7 +152,7 @@ public static class TableInfomation<TEntity> where TEntity : class
             }
 
             freeSql.CodeFirst.SyncStructure(type, TableName);
-            if (TableInfomation._useNewIdentity)
+            if (primaryInfo != default && primaryInfo.DeclaringType == typeof(long) && TableInfomation._useNewIdentity)
             {
                 CreateNewPrimaryKey(freeSql, TableName);
             }

@@ -21,7 +21,7 @@ namespace Aries
 
             PropMembers = new HashSet<string>(typeof(TEntity).GetProperties().Select(item => item.Name));
             _blockInsertFields = new HashSet<string>();
-            if (TableInfomation<TEntity>.PrimaryKey != default)
+            if (TableInfomation<TEntity>.PrimaryKey != default && TableInfomation<TEntity>.PrimaryKeyIsLong)
 	        {
                 PropMembers.Remove(TableInfomation<TEntity>.PrimaryKey);
                 _blockInsertFields.Add(TableInfomation<TEntity>.PrimaryKey);
