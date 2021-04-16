@@ -8,7 +8,7 @@
 	  <PackageId>NMS.Aries</PackageId>
 	  <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	  <PackageReleaseNotes>无</PackageReleaseNotes>
-	  <Version>2.0.2</Version>
+	  <Version>2.0.3</Version>
 	  <PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
 	  <PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
 	  <PackageTags>Natasha;Freesql;Pgsql;Aries</PackageTags>
@@ -16,8 +16,8 @@
 	  <Company>NMSAzulX</Company>
 	  <PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
 	  <Authors>NMSAzulX</Authors>
-	  <FileVersion>2.0.2.0</FileVersion>
-	  <AssemblyVersion>2.0.2.0</AssemblyVersion>
+	  <FileVersion>2.0.3.0</FileVersion>
+	  <AssemblyVersion>2.0.3.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -126,7 +126,7 @@ public static class TableInfomation<TEntity> where TEntity : class
             if (primaryKey == null)
             {
                 primaryInfo = type.GetProperty("Id") ?? type.GetProperty("id") ?? type.GetProperty("_id");
-                if (primaryInfo != null && primaryInfo.PropertyType == typeof(long))
+                if (primaryInfo != null && (primaryInfo.PropertyType == typeof(long) || primaryInfo.PropertyType == typeof(int)))
                 {
                     freeSql.CodeFirst.ConfigEntity<TEntity>(config => config.Property(primaryInfo.Name).IsPrimary(true).IsIdentity(true));
                 }
@@ -152,7 +152,7 @@ public static class TableInfomation<TEntity> where TEntity : class
             }
 
             freeSql.CodeFirst.SyncStructure(type, TableName);
-            if (primaryInfo != default && primaryInfo.DeclaringType == typeof(long) && TableInfomation._useNewIdentity)
+            if (primaryInfo != default && (primaryInfo.PropertyType == typeof(long) || primaryInfo.PropertyType == typeof(int)) && TableInfomation._useNewIdentity)
             {
                 CreateNewPrimaryKey(freeSql, TableName);
             }
