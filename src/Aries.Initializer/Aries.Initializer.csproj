@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net5.0;</TargetFrameworks>
+		<Product>FreeSql.PgSql.Natasha.Extension</Product>
+		<Description>使用该库可以进行 CodeFisrt 和 DbFirst 操作, 自动对 Id / Content 设置主键和长度等.</Description>
+		<Copyright>NMSAzulX</Copyright>
+		<PackageId>NMS.Aries.Initializer</PackageId>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<PackageReleaseNotes>发布第一版</PackageReleaseNotes>
+		<Version>0.1.1</Version>
+		<PackageLicenseUrl>https://github.com/night-moon-studio/Aries/blob/master/LICENSE</PackageLicenseUrl>
+		<PackageProjectUrl>https://github.com/night-moon-studio/Aries</PackageProjectUrl>
+		<PackageTags>Freesql;Pgsql;Aries</PackageTags>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<Company>NMSAzulX</Company>
+		<PackageIconUrl>https://avatars2.githubusercontent.com/u/51699821</PackageIconUrl>
+		<Authors>NMSAzulX</Authors>
+		<FileVersion>0.1.1</FileVersion>
+		<AssemblyVersion>0.1.1</AssemblyVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="FreeSql" Version="2.5.100" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+	</ItemGroup>
+	
+</Project>
